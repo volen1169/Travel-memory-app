@@ -60,284 +60,435 @@ def inject_custom_css():
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        html, body, [class*="css"]  {
+            font-family: 'Inter', sans-serif;
+        }
+
         .stApp {
             background:
-                radial-gradient(circle at top left, rgba(59,130,246,0.08), transparent 22%),
-                radial-gradient(circle at top right, rgba(14,165,233,0.08), transparent 20%),
-                linear-gradient(180deg, #f8fbff 0%, #f4f7fb 55%, #eef3f9 100%);
+                radial-gradient(circle at top left, rgba(96,165,250,0.16), transparent 26%),
+                radial-gradient(circle at top right, rgba(45,212,191,0.12), transparent 22%),
+                linear-gradient(180deg, #f8fbff 0%, #f3f7fc 52%, #edf3fb 100%);
             color: #0f172a;
         }
 
         .main .block-container {
-            max-width: 1260px;
-            padding-top: 1.25rem;
-            padding-bottom: 2.75rem;
+            max-width: 1280px;
+            padding-top: 1.2rem;
+            padding-bottom: 3rem;
         }
 
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
-            border-right: 1px solid rgba(148, 163, 184, 0.18);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,249,255,0.98) 100%);
+            border-right: 1px solid rgba(148, 163, 184, 0.14);
+            box-shadow: 10px 0 30px rgba(15, 23, 42, 0.04);
         }
 
         [data-testid="stSidebar"] .block-container {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
+            padding-top: 1.4rem;
+            padding-bottom: 1.4rem;
         }
 
         .hero-card {
+            position: relative;
+            overflow: hidden;
             background:
-                radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 22%),
-                linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #38bdf8 100%);
-            border-radius: 30px;
-            padding: 34px 38px;
+                radial-gradient(circle at 84% 18%, rgba(255,255,255,0.22), transparent 16%),
+                radial-gradient(circle at 18% 105%, rgba(255,255,255,0.16), transparent 18%),
+                linear-gradient(135deg, #0f172a 0%, #1d4ed8 54%, #38bdf8 100%);
+            border-radius: 34px;
+            padding: 34px 38px 32px 38px;
             color: white;
-            box-shadow: 0 22px 60px rgba(37, 99, 235, 0.22);
-            margin-bottom: 1.25rem;
+            box-shadow: 0 24px 70px rgba(37, 99, 235, 0.22);
+            margin-bottom: 1.4rem;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.10) 45%, transparent 70%);
+            transform: translateX(-120%);
+            animation: shine 6.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-120%); }
+            55% { transform: translateX(120%); }
+            100% { transform: translateX(120%); }
         }
 
         .hero-kicker {
-            display: inline-block;
-            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
             border-radius: 999px;
             background: rgba(255,255,255,0.14);
-            border: 1px solid rgba(255,255,255,0.14);
-            font-size: 0.84rem;
-            font-weight: 700;
-            margin-bottom: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.16);
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 0.95rem;
+            backdrop-filter: blur(8px);
         }
 
         .hero-title {
             font-size: 3rem;
             font-weight: 900;
             line-height: 1.02;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.55rem;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.6rem;
         }
 
         .hero-subtitle {
-            font-size: 1.04rem;
-            line-height: 1.7;
+            font-size: 1.03rem;
+            line-height: 1.75;
             max-width: 920px;
-            color: rgba(255,255,255,0.92);
+            color: rgba(255,255,255,0.94);
+        }
+
+        .sidebar-card,
+        .section-card,
+        .panel-card,
+        .tm-metric,
+        .summary-card,
+        .detail-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,255,0.96));
+            border: 1px solid rgba(226,232,240,0.95);
+            border-radius: 24px;
+            padding: 18px 18px 16px 18px;
+            box-shadow: 0 12px 34px rgba(15,23,42,0.05);
+            margin-bottom: 14px;
+        }
+
+        .sidebar-card::before,
+        .section-card::before,
+        .panel-card::before,
+        .tm-metric::before,
+        .summary-card::before,
+        .detail-item::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(191,219,254,0.55), rgba(255,255,255,0.9));
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .sidebar-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.45rem;
+        }
+
+        .sidebar-subtitle,
+        .sidebar-list,
+        .section-subtitle,
+        .panel-subtitle,
+        .tm-metric-note {
+            color: #64748b;
+        }
+
+        .sidebar-check {
+            color: #0f172a;
+            font-weight: 800;
+            margin-bottom: 0.65rem;
+        }
+
+        .sidebar-list {
+            padding-left: 1.1rem;
+            margin: 0;
+            line-height: 1.75;
         }
 
         .tm-metric {
-            background: rgba(255,255,255,0.96);
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
+            border: 1px solid rgba(226, 232, 240, 0.94);
+            border-radius: 26px;
             padding: 22px 22px 18px 22px;
-            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
-            min-height: 132px;
+            min-height: 136px;
+            box-shadow: 0 14px 38px rgba(15, 23, 42, 0.055);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .tm-metric:hover,
+        .summary-card:hover,
+        .detail-item:hover,
+        .panel-card:hover,
+        .section-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 46px rgba(37, 99, 235, 0.10);
+            border-color: rgba(96,165,250,0.26);
         }
 
         .tm-metric-label {
             color: #475569;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             margin-bottom: 0.65rem;
         }
 
         .tm-metric-value {
             color: #0f172a;
-            font-size: 2.45rem;
+            font-size: 2.55rem;
             font-weight: 900;
-            line-height: 1.02;
-            letter-spacing: -0.02em;
+            line-height: 1.0;
+            letter-spacing: -0.05em;
             margin-bottom: 0.35rem;
         }
 
         .tm-metric-note {
-            color: #64748b;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.92rem;
+            line-height: 1.45;
         }
 
         .section-card {
-            background: rgba(255,255,255,0.9);
-            border: 1px solid rgba(226,232,240,0.9);
-            border-radius: 26px;
-            padding: 24px 26px;
-            box-shadow: 0 12px 30px rgba(15,23,42,0.05);
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
+            border: 1px solid rgba(226,232,240,0.96);
+            border-radius: 28px;
+            padding: 22px 24px 18px 24px;
+            box-shadow: 0 12px 36px rgba(15,23,42,0.05);
             margin-bottom: 1rem;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
         }
 
         .section-title {
             color: #0f172a;
-            font-size: 1.75rem;
-            font-weight: 850;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.2rem;
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.25rem;
         }
 
         .section-subtitle {
-            color: #64748b;
             font-size: 0.98rem;
-            line-height: 1.65;
+            line-height: 1.6;
         }
 
         .panel-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,251,255,0.96) 100%);
-            border: 1px solid rgba(226,232,240,0.9);
-            border-radius: 26px;
-            padding: 20px 22px 16px 22px;
-            box-shadow: 0 14px 34px rgba(15,23,42,0.05);
-            margin-bottom: 1rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,252,0.96));
+            border: 1px solid rgba(226,232,240,0.96);
+            border-radius: 28px;
+            padding: 22px 22px 18px 22px;
+            box-shadow: 0 12px 34px rgba(15,23,42,0.05);
+            min-height: 100%;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
         }
 
         .panel-title {
             color: #0f172a;
             font-size: 1.28rem;
-            font-weight: 800;
+            font-weight: 900;
+            letter-spacing: -0.03em;
             margin-bottom: 0.25rem;
         }
 
         .panel-subtitle {
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-bottom: 1rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 0.3rem;
+        }
+
+        .summary-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
+            border: 1px solid rgba(226, 232, 240, 0.96);
+            border-radius: 24px;
+            padding: 18px 18px 16px 18px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.05);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .summary-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 0.6rem;
+        }
+
+        .summary-card-name {
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .summary-card-count {
+            color: #2563eb;
+            background: linear-gradient(180deg, rgba(219,234,254,0.8), rgba(239,246,255,0.95));
+            border: 1px solid rgba(147,197,253,0.45);
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .summary-card-value {
+            color: #0f172a;
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.0;
+            margin-bottom: 0.22rem;
+        }
+
+        .summary-card-note {
             color: #64748b;
-            font-size: 0.94rem;
-            margin-bottom: 0.9rem;
+            font-size: 0.9rem;
+        }
+
+        .list-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .detail-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.98));
+            border: 1px solid rgba(226,232,240,0.96);
+            border-radius: 24px;
+            padding: 16px 17px 15px 17px;
+            box-shadow: 0 12px 32px rgba(15,23,42,0.05);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .detail-main {
+            color: #0f172a;
+            font-size: 1.08rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px 16px;
+        }
+
+        .detail-field-label {
+            color: #64748b;
+            font-size: 0.76rem;
+            font-weight: 800;
+            margin-bottom: 0.15rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-field-value {
+            color: #0f172a;
+            font-size: 0.98rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .detail-price {
+            color: #0f172a;
+            font-size: 1.04rem;
+            font-weight: 900;
         }
 
         .empty-state {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 260px;
-            text-align: center;
-            background:
-                radial-gradient(circle at top, rgba(59,130,246,0.08), transparent 35%),
-                linear-gradient(180deg, #f8fbff 0%, #f1f7ff 100%);
-            border: 1px dashed rgba(96,165,250,0.45);
-            color: #1e3a8a;
+            min-height: 240px;
             border-radius: 24px;
+            background:
+                linear-gradient(180deg, rgba(248,250,252,0.95), rgba(241,245,249,0.92));
+            border: 1px dashed rgba(148,163,184,0.38);
+            color: #64748b;
+            text-align: center;
+            line-height: 1.8;
+            font-weight: 600;
             padding: 24px;
-            font-size: 1rem;
-            line-height: 1.7;
-            font-weight: 700;
         }
 
-        .sidebar-card {
-            background: rgba(255,255,255,0.92);
-            border: 1px solid rgba(226,232,240,0.85);
-            border-radius: 22px;
-            padding: 18px 18px 14px 18px;
-            box-shadow: 0 10px 26px rgba(15,23,42,0.05);
-            margin-bottom: 1rem;
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 10px;
+            padding-bottom: 0.2rem;
         }
 
-        .sidebar-title {
-            font-size: 1.65rem;
-            font-weight: 900;
-            line-height: 1.1;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .sidebar-subtitle {
+        .stTabs [data-baseweb="tab"] {
+            height: 48px;
+            white-space: nowrap;
+            background: rgba(255,255,255,0.76);
+            border-radius: 999px;
+            border: 1px solid rgba(226,232,240,0.98);
             color: #334155;
-            font-size: 0.98rem;
-            line-height: 1.7;
-        }
-
-        .sidebar-check {
-            color: #0f172a;
             font-weight: 800;
-            margin-bottom: 0.75rem;
+            padding: 0 18px;
+            transition: all 170ms ease;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.04);
         }
 
-        .sidebar-list {
-            color: #475569;
-            font-size: 0.96rem;
-            line-height: 1.9;
-            margin: 0;
-            padding-left: 1.1rem;
+        .stTabs [aria-selected="true"] {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: #1d4ed8 !important;
+            border-color: rgba(96,165,250,0.30) !important;
+            box-shadow: 0 10px 22px rgba(37,99,235,0.10);
         }
 
-        div[data-testid="stButton"] > button {
-            border-radius: 14px;
-            height: 3rem;
-            border: 1px solid rgba(59,130,246,0.22);
-            background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
-            color: #0f172a;
-            font-weight: 700;
-            box-shadow: 0 10px 24px rgba(15,23,42,0.05);
-        }
-
-        div[data-testid="stRadio"] > label,
-        .stSelectbox label,
-        .stTextInput label,
-        .stNumberInput label,
-        .stDateInput label,
-        .stTimeInput label {
+        .stSelectbox label, .stDateInput label, .stTimeInput label,
+        .stTextInput label, .stNumberInput label, .stRadio label {
             font-weight: 700 !important;
             color: #334155 !important;
         }
 
-        div[data-testid="stDataFrame"] {
-            border-radius: 22px;
-            overflow: hidden;
-            border: 1px solid rgba(226,232,240,0.9);
-            box-shadow: 0 12px 28px rgba(15,23,42,0.04);
-            background: white;
-        }
-
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 0.6rem;
-            border-bottom: none;
-        }
-
-        .stTabs [data-baseweb="tab"] {
-            background: rgba(255,255,255,0.78);
-            border: 1px solid rgba(226,232,240,0.9);
+        .stButton > button, .stDownloadButton > button {
             border-radius: 999px;
-            padding: 0.65rem 1.15rem;
-            height: auto;
-            box-shadow: 0 6px 20px rgba(15,23,42,0.04);
+            border: 1px solid rgba(147,197,253,0.45);
+            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+            color: #0f172a;
+            font-weight: 800;
+            box-shadow: 0 10px 24px rgba(37,99,235,0.08);
+            transition: all 170ms ease;
         }
 
-        .stTabs [aria-selected="true"] {
-            background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
-            border-color: rgba(96,165,250,0.55) !important;
-        }
-
-        .stRadio > div {
-            gap: 1.1rem;
+        .stButton > button:hover, .stDownloadButton > button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 26px rgba(37,99,235,0.14);
+            border-color: rgba(96,165,250,0.42);
         }
 
         @media (max-width: 900px) {
-            .hero-title { font-size: 2.25rem; }
-            .hero-card { padding: 26px 22px; }
-            .tm-metric-value { font-size: 2rem; }
-            .section-title { font-size: 1.45rem; }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .summary-grid,
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
-
-
-
-def is_quota_error(exc: Exception) -> bool:
-    text = str(exc).lower()
-    return "quota exceeded" in text or "429" in text or "rate limit" in text
-
-
-def call_with_retry(func, *args, max_retries: int = 5, base_sleep: float = 1.2, **kwargs):
-    last_error = None
-    for attempt in range(max_retries):
-        try:
-            return func(*args, **kwargs)
-        except APIError as e:
-            last_error = e
-            if not is_quota_error(e) or attempt == max_retries - 1:
-                raise
-            sleep_s = base_sleep * (2 ** attempt) + random.uniform(0, 0.5)
-            time.sleep(sleep_s)
-        except Exception as e:
-            last_error = e
-            raise
-    if last_error:
-        raise last_error
 
 
 @st.cache_resource(show_spinner=False)
@@ -584,7 +735,10 @@ def render_summary_cards(summary_df: pd.DataFrame):
             </div>
             """
         )
-    st.markdown(f'<div class="summary-grid">{"".join(cards)}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="summary-grid">{"".join(cards)}</div>',
+        unsafe_allow_html=True,
+    )
 
 
 def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None):
@@ -596,6 +750,7 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
     cards = []
     for _, row in df.iterrows():
         row_dict = row.to_dict()
+
         main_value = ""
         for candidate in ["ชื่อ", "ชื่อโรงแรม", "ประเภท", "ประเทศ", "ชื่อทริป"]:
             val = str(row_dict.get(candidate, "")).strip()
@@ -635,7 +790,10 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
             """
         )
 
-    st.markdown(f'<div class="list-stack">{"".join(cards)}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="list-stack">{"".join(cards)}</div>',
+        unsafe_allow_html=True,
+    )
     st.caption(f"จำนวนรายการ: {len(df)}")
 
 
@@ -705,7 +863,7 @@ def render_dashboard(data_dict: dict):
 
     left, right = st.columns([1.05, 0.95], gap="large")
     with left:
-        panel_open("สรุปค่าใช้จ่ายรายหมวด", "เปลี่ยนจากตารางเป็นการ์ด เพื่อให้ดูง่ายและสวยขึ้น")
+        panel_open("สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ SaaS ช่วยให้อ่านเร็วและดูทันสมัยกว่าเดิม")
         render_summary_cards(summary_df)
         panel_close()
     with right:
@@ -714,10 +872,13 @@ def render_dashboard(data_dict: dict):
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
             st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
         else:
-            st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>',
+                unsafe_allow_html=True
+            )
         panel_close()
 
-    section_header("รายละเอียดแต่ละหมวด", "แสดงข้อมูลแต่ละรายการแบบการ์ด แทนการใช้ตาราง")
+    section_header("รายละเอียดแต่ละหมวด", "แสดงข้อมูลเป็นการ์ดสไตล์ startup dashboard แทนการใช้ตาราง")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
