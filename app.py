@@ -61,156 +61,260 @@ def inject_custom_css():
         """
         <style>
         .stApp {
-            background: linear-gradient(180deg, #f6f8fc 0%, #ffffff 45%, #f7f9fd 100%);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.08), transparent 22%),
+                radial-gradient(circle at top right, rgba(14,165,233,0.08), transparent 20%),
+                linear-gradient(180deg, #f8fbff 0%, #f4f7fb 55%, #eef3f9 100%);
+            color: #0f172a;
         }
-        [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-            border-right: 1px solid rgba(100, 116, 139, 0.12);
-        }
+
         .main .block-container {
-            padding-top: 2rem;
-            padding-bottom: 2.5rem;
-            max-width: 1280px;
+            max-width: 1260px;
+            padding-top: 1.25rem;
+            padding-bottom: 2.75rem;
         }
+
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+            border-right: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        [data-testid="stSidebar"] .block-container {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+
         .hero-card {
-            background: linear-gradient(135deg, #172554 0%, #1d4ed8 55%, #38bdf8 100%);
-            border-radius: 24px;
-            padding: 28px 30px;
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 22%),
+                linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #38bdf8 100%);
+            border-radius: 30px;
+            padding: 34px 38px;
             color: white;
-            box-shadow: 0 16px 40px rgba(37, 99, 235, 0.18);
+            box-shadow: 0 22px 60px rgba(37, 99, 235, 0.22);
             margin-bottom: 1.25rem;
         }
+
+        .hero-kicker {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 0.84rem;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+        }
+
         .hero-title {
-            font-size: 2.6rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 0.4rem;
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.55rem;
         }
+
         .hero-subtitle {
-            opacity: 0.9;
-            font-size: 1.02rem;
+            font-size: 1.04rem;
+            line-height: 1.7;
+            max-width: 920px;
+            color: rgba(255,255,255,0.92);
         }
-        .section-card {
-            background: rgba(255,255,255,0.92);
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 22px;
-            padding: 18px 20px 12px 20px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-            margin-bottom: 1rem;
-        }
+
         .tm-metric {
-            background: white;
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            border-radius: 20px;
-            padding: 18px 18px 14px 18px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-            min-height: 122px;
+            background: rgba(255,255,255,0.96);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 24px;
+            padding: 22px 22px 18px 22px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+            min-height: 132px;
         }
+
         .tm-metric-label {
             color: #475569;
             font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 0.65rem;
         }
+
         .tm-metric-value {
             color: #0f172a;
-            font-size: 2.1rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 0.2rem;
+            font-size: 2.45rem;
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
         }
+
         .tm-metric-note {
             color: #64748b;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
+
+        .section-card {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 26px;
+            padding: 24px 26px;
+            box-shadow: 0 12px 30px rgba(15,23,42,0.05);
+            margin-bottom: 1rem;
+        }
+
         .section-title {
             color: #0f172a;
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 1.75rem;
+            font-weight: 850;
+            letter-spacing: -0.02em;
             margin-bottom: 0.2rem;
         }
+
         .section-subtitle {
             color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
+            font-size: 0.98rem;
+            line-height: 1.65;
         }
+
         .panel-card {
-            background: rgba(255,255,255,0.92);
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 22px;
-            padding: 18px 18px 12px 18px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-            height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,251,255,0.96) 100%);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 26px;
+            padding: 20px 22px 16px 22px;
+            box-shadow: 0 14px 34px rgba(15,23,42,0.05);
+            margin-bottom: 1rem;
         }
+
         .panel-title {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
             color: #0f172a;
-            font-size: 1.1rem;
+            font-size: 1.28rem;
             font-weight: 800;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.25rem;
         }
+
         .panel-subtitle {
             color: #64748b;
-            font-size: 0.92rem;
-            margin-bottom: 0.95rem;
+            font-size: 0.94rem;
+            margin-bottom: 0.9rem;
         }
+
         .empty-state {
-            border-radius: 18px;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px dashed rgba(59, 130, 246, 0.24);
-            padding: 22px 18px;
-            color: #1e3a8a;
-            font-weight: 700;
-            min-height: 260px;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 260px;
             text-align: center;
+            background:
+                radial-gradient(circle at top, rgba(59,130,246,0.08), transparent 35%),
+                linear-gradient(180deg, #f8fbff 0%, #f1f7ff 100%);
+            border: 1px dashed rgba(96,165,250,0.45);
+            color: #1e3a8a;
+            border-radius: 24px;
+            padding: 24px;
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 700;
         }
+
+        .sidebar-card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(226,232,240,0.85);
+            border-radius: 22px;
+            padding: 18px 18px 14px 18px;
+            box-shadow: 0 10px 26px rgba(15,23,42,0.05);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.65rem;
+            font-weight: 900;
+            line-height: 1.1;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-subtitle {
+            color: #334155;
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        .sidebar-check {
+            color: #0f172a;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-list {
+            color: #475569;
+            font-size: 0.96rem;
+            line-height: 1.9;
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+
+        div[data-testid="stButton"] > button {
+            border-radius: 14px;
+            height: 3rem;
+            border: 1px solid rgba(59,130,246,0.22);
+            background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+            color: #0f172a;
+            font-weight: 700;
+            box-shadow: 0 10px 24px rgba(15,23,42,0.05);
+        }
+
+        div[data-testid="stRadio"] > label,
+        .stSelectbox label,
+        .stTextInput label,
+        .stNumberInput label,
+        .stDateInput label,
+        .stTimeInput label {
+            font-weight: 700 !important;
+            color: #334155 !important;
+        }
+
         div[data-testid="stDataFrame"] {
-            border: 1px solid rgba(148,163,184,.16);
-            border-radius: 18px;
+            border-radius: 22px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(15,23,42,.05);
+            border: 1px solid rgba(226,232,240,0.9);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.04);
             background: white;
         }
+
         .stTabs [data-baseweb="tab-list"] {
-            gap: 0.5rem;
+            gap: 0.6rem;
+            border-bottom: none;
         }
+
         .stTabs [data-baseweb="tab"] {
-            height: 42px;
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(226,232,240,0.9);
             border-radius: 999px;
-            padding: 0 16px;
-            background: rgba(255,255,255,.75);
-            border: 1px solid rgba(148,163,184,.16);
+            padding: 0.65rem 1.15rem;
+            height: auto;
+            box-shadow: 0 6px 20px rgba(15,23,42,0.04);
         }
+
         .stTabs [aria-selected="true"] {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            color: #1d4ed8;
+            background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+            border-color: rgba(96,165,250,0.55) !important;
         }
+
         .stRadio > div {
-            gap: 0.75rem;
+            gap: 1.1rem;
         }
-        .stButton button, .stDownloadButton button {
-            border-radius: 999px;
-            border: 0;
-            font-weight: 700;
-            padding: 0.6rem 1.2rem;
-            box-shadow: 0 8px 20px rgba(37,99,235,.16);
-        }
-        .stForm {
-            background: rgba(255,255,255,0.8);
-            border: 1px solid rgba(148,163,184,.16);
-            border-radius: 22px;
-            padding: 1rem 1rem 0.2rem 1rem;
-            box-shadow: 0 8px 24px rgba(15,23,42,.05);
+
+        @media (max-width: 900px) {
+            .hero-title { font-size: 2.25rem; }
+            .hero-card { padding: 26px 22px; }
+            .tm-metric-value { font-size: 2rem; }
+            .section-title { font-size: 1.45rem; }
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
 
 
 def is_quota_error(exc: Exception) -> bool:
@@ -474,12 +578,30 @@ def display_table(df: pd.DataFrame, currency_cols: list[str] | None = None):
 
 
 def render_sidebar_info():
-    st.sidebar.markdown("## ?? Travel Memory")
-    st.sidebar.markdown("จัดเก็บทริป ค่าใช้จ่าย และการเดินทางผ่าน Google Sheets แบบดูง่ายขึ้น")
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("**เช็กเบื้องต้นเมื่อเปิดแอปไม่ขึ้น**")
-    st.sidebar.markdown("1. sheet_id ถูกต้อง\n2. ชื่อแต่ละชีตถูกต้อง\n3. share ให้ service account แล้ว\n4. เปิด Google Sheets API / Drive API แล้ว")
-    if st.sidebar.button("?? Refresh data", use_container_width=True):
+    st.sidebar.markdown(
+        """
+        <div class="sidebar-card">
+            <div class="sidebar-title">Travel Memory</div>
+            <div class="sidebar-subtitle">จัดเก็บทริป ค่าใช้จ่าย ที่พัก และการเดินทางผ่าน Google Sheets ในหน้าตาที่อ่านง่ายขึ้น</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.sidebar.markdown(
+        """
+        <div class="sidebar-card">
+            <div class="sidebar-check">เช็กเบื้องต้นเมื่อเปิดแอปไม่ขึ้น</div>
+            <ol class="sidebar-list">
+                <li>sheet_id ถูกต้อง</li>
+                <li>ชื่อแต่ละชีตถูกต้อง</li>
+                <li>แชร์ให้ service account แล้ว</li>
+                <li>เปิด Google Sheets API และ Drive API แล้ว</li>
+            </ol>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.sidebar.button("Refresh data", use_container_width=True):
         load_all_data.clear()
         st.rerun()
 
@@ -499,7 +621,7 @@ def render_top_metrics(data_dict: dict):
 
 
 def render_dashboard(data_dict: dict):
-    section_header("?? Dashboard", "สรุปทริปแบบอ่านง่าย พร้อมค่าใช้จ่ายและรายละเอียดแต่ละหมวด")
+    section_header("Dashboard", "สรุปทริปแบบอ่านง่าย พร้อมค่าใช้จ่ายและรายละเอียดแต่ละหมวด")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -521,11 +643,11 @@ def render_dashboard(data_dict: dict):
 
     left, right = st.columns([1.1, 0.9], gap="large")
     with left:
-        panel_open("?? สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
+        panel_open("สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
         display_table(summary_df, currency_cols=["ยอดรวม"])
         panel_close()
     with right:
-        panel_open("?? กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
+        panel_open("กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
             st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
@@ -533,7 +655,7 @@ def render_dashboard(data_dict: dict):
             st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
         panel_close()
 
-    section_header("?? รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
+    section_header("รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
@@ -551,7 +673,7 @@ def render_places_form(existing_trip_names: list[str]):
         st.session_state.pop("places_new_trip_name", None)
         st.session_state.pop("places_trip_name", None)
 
-    section_header("?? เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
+    section_header("เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
     col1, col2 = st.columns(2)
     with col1:
         country, city = render_country_city_dropdown(prefix="places")
@@ -593,7 +715,7 @@ def render_transport_form(existing_trip_names: list[str]):
         st.session_state.pop("transport_new_trip_name", None)
         st.session_state.pop("transport_trip_name", None)
 
-    section_header("?? เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
+    section_header("เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
     trip_mode = st.radio(
         "เลือกวิธีกรอกชื่อทริป",
         ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
@@ -667,7 +789,7 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
 
 
 def render_all_tables(data_dict: dict):
-    section_header("?? ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
+    section_header("ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
     tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(tabs, SHEET_ALIASES):
         with tab:
@@ -684,8 +806,8 @@ def main():
     st.markdown(
         """
         <div class="hero-card">
-            <div class="hero-title">?? Travel Memory Dashboard</div>
-            <div class="hero-subtitle">เก็บประวัติทริป ค่าใช้จ่าย การเดินทาง ที่พัก และข้อมูลอื่น ๆ ผ่าน Google Sheets ในรูปแบบที่อ่านง่ายขึ้น</div>
+            <div class="hero-kicker">Travel planner • Expense tracker</div><div class="hero-title">Travel Memory Dashboard</div>
+            <div class="hero-subtitle">เก็บประวัติทริป ค่าใช้จ่าย การเดินทาง ที่พัก และข้อมูลอื่น ๆ ผ่าน Google Sheets ในรูปแบบที่อ่านง่าย สะอาด และดูทันทีว่าแต่ละทริปใช้งบไปเท่าไร</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -711,7 +833,7 @@ def main():
     if page == "Dashboard":
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
-        section_header("? เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
+        section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
         input_tabs = st.tabs(["?? สถานที่", "?? การเดินทาง", "?? ที่พัก", "?? อาหารและของกิน", "?? แพ็กเกจและซิม", "?? ค่าใช้จ่ายอื่นๆ"])
         with input_tabs[0]:
             render_places_form(existing_trip_names)
