@@ -8,7 +8,7 @@ from gspread.exceptions import APIError
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-st.set_page_config(page_title="🌍 🌍 Travel Memory Dashboard", layout="wide")
+st.set_page_config(page_title="🌍 Travel Memory Dashboard", layout="wide")
 
 SHEET_ID = st.secrets["google_sheets"]["sheet_id"]
 
@@ -54,6 +54,43 @@ SECTION_ICONS = {
 }
 
 COST_SHEETS = ["Transport", "Hotels", "Food", "Packages", "Others"]
+
+
+def call_with_retry(func, *args, retries: int = 5, base_delay: float = 1.2, **kwargs):
+    """
+    Retry Google Sheets operations when rate-limited or temporarily unavailable.
+    """
+    last_error = None
+
+    for attempt in range(retries):
+        try:
+            return func(*args, **kwargs)
+        except APIError as e:
+            last_error = e
+            status_code = getattr(getattr(e, "response", None), "status_code", None)
+            error_text = str(e).lower()
+
+            is_retryable = (
+                status_code in {429, 500, 502, 503, 504}
+                or "quota" in error_text
+                or "rate limit" in error_text
+                or "too many requests" in error_text
+            )
+
+            if not is_retryable or attempt == retries - 1:
+                raise
+
+            sleep_time = base_delay * (2 ** attempt) + random.uniform(0, 0.4)
+            time.sleep(sleep_time)
+        except Exception as e:
+            last_error = e
+            if attempt == retries - 1:
+                raise
+            time.sleep(base_delay * (2 ** attempt))
+
+    if last_error:
+        raise last_error
+
 
 
 def inject_custom_css():
@@ -405,6 +442,40 @@ def inject_custom_css():
         .stTextInput label, .stNumberInput label, .stRadio label {
             font-weight: 700 !important;
             color: #334155 !important;
+        }
+
+
+        /* Input glow on focus */
+        .stTextInput input:focus,
+        .stNumberInput input:focus,
+        .stDateInput input:focus,
+        .stTimeInput input:focus,
+        textarea:focus {
+            border-color: rgba(99, 102, 241, 0.55) !important;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.12),
+                0 8px 24px rgba(99, 102, 241, 0.10) !important;
+            outline: none !important;
+            transition: all 160ms ease;
+        }
+
+        div[data-baseweb="select"] > div:focus-within {
+            border-color: rgba(99, 102, 241, 0.55) !important;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.12),
+                0 8px 24px rgba(99, 102, 241, 0.10) !important;
+            transition: all 160ms ease;
+            border-radius: 16px;
+        }
+
+        .stTextInput input,
+        .stNumberInput input,
+        .stDateInput input,
+        .stTimeInput input,
+        textarea,
+        div[data-baseweb="select"] > div {
+            border-radius: 16px !important;
+            transition: all 160ms ease !important;
         }
 
         .stButton > button, .stDownloadButton > button {
