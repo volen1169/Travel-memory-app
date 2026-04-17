@@ -552,7 +552,242 @@ def inject_custom_css():
             overflow: hidden;
         }
 
-        .chart-shell::before {
+        
+        .trip-cover {
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            padding: 26px 28px 24px 28px;
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.24), transparent 20%),
+                linear-gradient(135deg, #0f172a 0%, #1d4ed8 52%, #38bdf8 100%);
+            color: white;
+            box-shadow: 0 22px 48px rgba(37,99,235,0.18);
+            margin-bottom: 1rem;
+        }
+
+        .trip-cover-title {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.35rem;
+        }
+
+        .trip-cover-subtitle {
+            color: rgba(255,255,255,0.92);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .trip-cover-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .trip-meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.16);
+            font-weight: 700;
+            font-size: 0.84rem;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin: 0.4rem 0 1rem 0;
+        }
+
+        .mini-kpi {
+            border-radius: 22px;
+            padding: 16px 18px 14px 18px;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.045);
+        }
+
+        .mini-kpi-label {
+            color: var(--muted);
+            font-size: 0.84rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .mini-kpi-value {
+            color: var(--text);
+            font-size: 1.28rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+        }
+
+        .budget-shell {
+            position: relative;
+            padding: 18px 18px 16px 18px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,252,0.96));
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.045);
+            margin-top: 0.8rem;
+        }
+
+        .budget-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 0.55rem;
+        }
+
+        .budget-title {
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 900;
+        }
+
+        .budget-meta {
+            color: var(--muted);
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .budget-bar {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            background: rgba(226,232,240,0.95);
+            overflow: hidden;
+            margin-bottom: 0.7rem;
+        }
+
+        .budget-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #7dd3fc 0%, #60a5fa 35%, #6366f1 70%, #8b5cf6 100%);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.22);
+        }
+
+        .budget-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 0.7rem;
+        }
+
+        .insight-card {
+            border-radius: 22px;
+            padding: 18px 18px 16px 18px;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.045);
+        }
+
+        .insight-label {
+            color: var(--muted);
+            font-size: 0.84rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-value {
+            color: var(--text);
+            font-size: 1.18rem;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 0.2rem;
+        }
+
+        .insight-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .timeline-stack {
+            display: grid;
+            gap: 14px;
+            margin-top: 0.8rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 18px 18px 16px 66px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.045);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 22px;
+            top: 20px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #7dd3fc 0%, #6366f1 100%);
+            box-shadow: 0 8px 18px rgba(99,102,241,0.22);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 35px;
+            top: 48px;
+            bottom: -18px;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(125,211,252,0.7), rgba(99,102,241,0.16));
+        }
+
+        .timeline-date {
+            color: #3155ff;
+            font-size: 0.84rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 900;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-note {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 0.65rem;
+        }
+
+        .search-shell {
+            margin-bottom: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .kpi-row, .insight-grid, .quick-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+.chart-shell::before {
             content: "";
             position: absolute;
             inset: 0;
@@ -932,6 +1167,272 @@ def render_top_metrics(data_dict: dict):
         metric_card("ค่าใช้จ่ายรวม", f"฿ {total_cost:,.2f}", "รวมทุกหมวดค่าใช้จ่าย")
 
 
+
+def parse_trip_datetime(value: str):
+    try:
+        return pd.to_datetime(value, errors="coerce")
+    except Exception:
+        return pd.NaT
+
+
+def get_trip_places_df(data_dict: dict, trip_name: str) -> pd.DataFrame:
+    places_df = data_dict["Places"]
+    if places_df.empty:
+        return pd.DataFrame(columns=places_df.columns)
+    return places_df[places_df["ชื่อทริป"].astype(str).str.strip() == trip_name].copy()
+
+
+def build_timeline(data_dict: dict, trip_name: str) -> pd.DataFrame:
+    trip_places = get_trip_places_df(data_dict, trip_name)
+    if trip_places.empty:
+        return pd.DataFrame(columns=["ประเทศ", "เมือง", "วัน-เวลา", "datetime"])
+
+    trip_places["datetime"] = trip_places["วัน-เวลา"].astype(str).apply(parse_trip_datetime)
+    trip_places = trip_places.sort_values("datetime", na_position="last")
+    return trip_places
+
+
+def get_trip_overview_stats(data_dict: dict, trip_name: str) -> dict:
+    timeline_df = build_timeline(data_dict, trip_name)
+    summary_df = build_cost_summary(data_dict, trip_name)
+
+    if timeline_df.empty:
+        first_date = None
+        last_date = None
+        country = "-"
+    else:
+        valid_dt = timeline_df["datetime"].dropna()
+        first_date = valid_dt.min() if not valid_dt.empty else None
+        last_date = valid_dt.max() if not valid_dt.empty else None
+        countries = [c.strip() for c in timeline_df["ประเทศ"].astype(str).tolist() if c.strip()]
+        country = countries[0] if countries else "-"
+
+    duration_days = 0
+    if first_date is not None and last_date is not None:
+        duration_days = int((last_date.date() - first_date.date()).days) + 1
+
+    top_row = None
+    if not summary_df.empty and summary_df["ยอดรวม"].sum() > 0:
+        top_row = summary_df.loc[summary_df["ยอดรวม"].idxmax()]
+
+    return {
+        "timeline_df": timeline_df,
+        "summary_df": summary_df,
+        "first_date": first_date,
+        "last_date": last_date,
+        "country": country,
+        "duration_days": duration_days,
+        "top_row": top_row,
+    }
+
+
+def render_trip_cover(trip_name: str, total_cost: float, overview: dict):
+    start = overview.get("first_date")
+    end = overview.get("last_date")
+    date_text = "ยังไม่มีช่วงวันที่"
+    if start is not None and end is not None:
+        if start.date() == end.date():
+            date_text = start.strftime("%d %b %Y")
+        else:
+            date_text = f"{start.strftime('%d %b %Y')} - {end.strftime('%d %b %Y')}"
+
+    duration_days = overview.get("duration_days", 0)
+    duration_text = f"{duration_days} วัน" if duration_days else "ยังไม่ทราบจำนวนวัน"
+    country = overview.get("country", "-")
+
+    st.markdown(
+        f"""
+        <div class="trip-cover">
+            <div class="trip-cover-title">{trip_name}</div>
+            <div class="trip-cover-subtitle">ภาพรวมของทริปนี้ พร้อมงบประมาณ ไทม์ไลน์ และ insight ที่ช่วยให้ดูทั้งทริปได้ในหน้าเดียว</div>
+            <div class="trip-cover-meta">
+                <div class="trip-meta-pill">🌍 {country}</div>
+                <div class="trip-meta-pill">🗓️ {date_text}</div>
+                <div class="trip-meta-pill">⏳ {duration_text}</div>
+                <div class="trip-meta-pill">💰 ฿ {total_cost:,.2f}</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_budget_progress(total_cost: float, budget_amount: float):
+    progress = 0 if budget_amount <= 0 else min(total_cost / budget_amount, 1.0)
+    percent = progress * 100
+    status = "อยู่ในงบ"
+    if budget_amount > 0 and total_cost > budget_amount:
+        status = "เกินงบแล้ว"
+    elif budget_amount > 0 and percent >= 80:
+        status = "ใกล้ชนงบ"
+
+    st.markdown(
+        f"""
+        <div class="budget-shell">
+            <div class="budget-top">
+                <div class="budget-title">Budget progress</div>
+                <div class="budget-meta">{status}</div>
+            </div>
+            <div class="budget-bar"><div class="budget-fill" style="width:{percent:.2f}%"></div></div>
+            <div class="budget-note">ใช้ไป ฿ {total_cost:,.2f} จากงบ ฿ {budget_amount:,.2f}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_insights(summary_df: pd.DataFrame, total_cost: float, overview: dict):
+    if summary_df.empty or total_cost <= 0:
+        st.info("ยังไม่มีข้อมูลเพียงพอสำหรับสร้าง insight")
+        return
+
+    top_row = overview.get("top_row")
+    duration_days = max(int(overview.get("duration_days", 0)), 1)
+    avg_per_day = total_cost / duration_days if duration_days else total_cost
+    categories_used = int((summary_df["ยอดรวม"] > 0).sum())
+
+    top_name = str(top_row["หมวด"]) if top_row is not None else "-"
+    top_amount = float(top_row["ยอดรวม"]) if top_row is not None else 0
+    top_pct = (top_amount / total_cost * 100) if total_cost > 0 else 0
+
+    st.markdown(
+        f"""
+        <div class="insight-grid">
+            <div class="insight-card">
+                <div class="insight-label">หมวดที่ใช้มากที่สุด</div>
+                <div class="insight-value">{top_name}</div>
+                <div class="insight-note">คิดเป็น ฿ {top_amount:,.2f} หรือ {top_pct:,.1f}% ของทั้งทริป</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-label">ค่าใช้จ่ายเฉลี่ยต่อวัน</div>
+                <div class="insight-value">฿ {avg_per_day:,.2f}</div>
+                <div class="insight-note">คำนวณจากจำนวนวันใน timeline ของทริปนี้</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-label">จำนวนหมวดที่มีการใช้จ่าย</div>
+                <div class="insight-value">{categories_used} หมวด</div>
+                <div class="insight-note">ช่วยบอกว่าทริปนี้มีความหลากหลายของค่าใช้จ่ายแค่ไหน</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_timeline(timeline_df: pd.DataFrame):
+    if timeline_df.empty:
+        st.info("ยังไม่มี timeline ของทริปนี้")
+        return
+
+    parts = ['<div class="timeline-stack">']
+    rows = timeline_df.to_dict("records")
+    for i, row in enumerate(rows):
+        dt = row.get("datetime")
+        if pd.isna(dt):
+            dt_text = str(row.get("วัน-เวลา", "")).strip() or "-"
+        else:
+            dt_text = pd.to_datetime(dt).strftime("%d %b %Y • %H:%M")
+
+        city = str(row.get("เมือง", "")).strip() or "-"
+        country = str(row.get("ประเทศ", "")).strip() or "-"
+        line = '<div class="timeline-line"></div>' if i < len(rows) - 1 else ''
+        parts.append(
+            f"""
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                {line}
+                <div class="timeline-date">{dt_text}</div>
+                <div class="timeline-title">{city}</div>
+                <div class="timeline-note">{country}</div>
+            </div>
+            """
+        )
+    parts.append("</div>")
+    st.markdown("".join(parts), unsafe_allow_html=True)
+
+
+def render_quick_add():
+    st.markdown('<div class="quick-grid">', unsafe_allow_html=True)
+    c1, c2, c3 = st.columns(3, gap="large")
+    with c1:
+        if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True):
+            st.session_state["quick_add_target"] = "🍜 อาหารและของกิน"
+            st.session_state["page_override"] = "เพิ่มข้อมูล"
+            st.rerun()
+    with c2:
+        if st.button("➕ เพิ่มการเดินทาง", use_container_width=True):
+            st.session_state["quick_add_target"] = "✈️ การเดินทาง"
+            st.session_state["page_override"] = "เพิ่มข้อมูล"
+            st.rerun()
+    with c3:
+        if st.button("➕ เพิ่มที่พัก", use_container_width=True):
+            st.session_state["quick_add_target"] = "🏨 ที่พัก"
+            st.session_state["page_override"] = "เพิ่มข้อมูล"
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_donut_chart(summary_df: pd.DataFrame):
+    from streamlit.components.v1 import html as st_html
+
+    chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
+    if chart_df.empty:
+        st.markdown('<div class="empty-state">ยังไม่มีข้อมูลพอสำหรับ donut chart</div>', unsafe_allow_html=True)
+        return
+
+    labels = chart_df["หมวด"].astype(str).tolist()
+    values = to_number(chart_df["ยอดรวม"]).tolist()
+
+    donut_html = f"""
+    <div class="chart-shell">
+      <div id="travel_donut_chart" style="width:100%;height:320px;"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script>
+      const donutEl = document.getElementById('travel_donut_chart');
+      const donutChart = echarts.init(donutEl);
+      const donutOption = {{
+        animation: true,
+        animationDuration: 900,
+        tooltip: {{
+          trigger: 'item',
+          backgroundColor: 'rgba(10,37,64,0.94)',
+          borderWidth: 0,
+          textStyle: {{ color: '#fff', fontFamily: 'Inter' }},
+          formatter: function(p) {{
+            return `<div style="padding:2px 4px;"><b>${{p.name}}</b><br/>฿ ${{Number(p.value).toLocaleString(undefined, {{minimumFractionDigits:2, maximumFractionDigits:2}})}}<br/>${{p.percent}}%</div>`;
+          }}
+        }},
+        legend: {{
+          bottom: 0,
+          left: 'center',
+          textStyle: {{ color: '#5b6b7f', fontFamily: 'Inter', fontWeight: 600 }}
+        }},
+        series: [{{
+          type: 'pie',
+          radius: ['52%', '74%'],
+          center: ['50%', '44%'],
+          avoidLabelOverlap: true,
+          itemStyle: {{
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 3
+          }},
+          label: {{ show: false }},
+          emphasis: {{
+            scale: true,
+            scaleSize: 8
+          }},
+          data: { [{"name": l, "value": v} for l, v in zip(labels, values)] }
+        }}]
+      }};
+      donutChart.setOption(donutOption);
+      window.addEventListener('resize', function() {{ donutChart.resize(); }});
+    </script>
+    """
+    st_html(donut_html, height=340)
+
+
 def render_dashboard(data_dict: dict):
     from streamlit.components.v1 import html as st_html
 
@@ -941,11 +1442,37 @@ def render_dashboard(data_dict: dict):
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
         return
 
-    selected_trip = st.selectbox("เลือกชื่อทริป", trip_names)
+    search_col, filter_col = st.columns([1.2, 0.8], gap="large")
+    with search_col:
+        trip_search = st.text_input("🔍 ค้นหาชื่อทริป", placeholder="เช่น Taipei, Tokyo, Singapore", key="trip_search")
+    with filter_col:
+        countries = sorted({c.strip() for c in data_dict["Places"]["ประเทศ"].astype(str).tolist() if c.strip()}) if not data_dict["Places"].empty else []
+        country_filter = st.selectbox("🌍 กรองตามประเทศ", ["ทั้งหมด"] + countries, key="country_filter")
+
+    filtered_trip_names = trip_names
+    if trip_search:
+        filtered_trip_names = [t for t in filtered_trip_names if trip_search.lower() in t.lower()]
+
+    if country_filter != "ทั้งหมด" and not data_dict["Places"].empty:
+        country_trip_names = sorted({
+            row["ชื่อทริป"].strip()
+            for _, row in data_dict["Places"].iterrows()
+            if str(row.get("ประเทศ", "")).strip() == country_filter and str(row.get("ชื่อทริป", "")).strip()
+        })
+        filtered_trip_names = [t for t in filtered_trip_names if t in country_trip_names]
+
+    if not filtered_trip_names:
+        st.warning("ไม่พบทริปที่ตรงกับคำค้นหรือ filter")
+        return
+
+    selected_trip = st.selectbox("เลือกชื่อทริป", filtered_trip_names)
     total_cost = compute_trip_total(data_dict, selected_trip)
-    places_df = data_dict["Places"]
-    trip_places = places_df[places_df["ชื่อทริป"].astype(str).str.strip() == selected_trip] if not places_df.empty else pd.DataFrame(columns=places_df.columns)
-    summary_df = build_cost_summary(data_dict, selected_trip)
+    trip_places = get_trip_places_df(data_dict, selected_trip)
+    overview = get_trip_overview_stats(data_dict, selected_trip)
+    summary_df = overview["summary_df"]
+    timeline_df = overview["timeline_df"]
+
+    render_trip_cover(selected_trip, total_cost, overview)
 
     c1, c2, c3 = st.columns(3, gap="large")
     with c1:
@@ -955,15 +1482,32 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
-    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
-    left, right = st.columns([1.08, 0.92], gap="large")
-    with left:
+    quick_left, quick_right = st.columns([1.05, 0.95], gap="large")
+    with quick_left:
+        panel_open("⚡ Quick add", "เพิ่มรายการที่ใช้บ่อยได้ทันที โดยไม่ต้องเลื่อนหาฟอร์มนาน")
+        render_quick_add()
+        panel_close()
+    with quick_right:
+        panel_open("🎯 ตั้งงบทริป", "กำหนดงบประมาณต่อทริปเพื่อดู progress ได้ทันที")
+        budget_amount = st.number_input("งบของทริป (บาท)", min_value=0.0, step=1000.0, value=20000.0, key=f"budget_{selected_trip}")
+        render_budget_progress(total_cost, budget_amount)
+        panel_close()
+
+    analytics_left, analytics_right = st.columns([1.05, 0.95], gap="large")
+    with analytics_left:
         panel_open("💳 สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
         render_summary_cards(summary_df)
         panel_close()
 
-    with right:
+    with analytics_right:
+        panel_open("🍩 Donut chart", "ดูสัดส่วนค่าใช้จ่ายแต่ละหมวดในภาพรวมแบบเร็วที่สุด")
+        render_donut_chart(summary_df)
+        panel_close()
+
+    chart_left, chart_right = st.columns([1.05, 0.95], gap="large")
+    with chart_left:
         panel_open("📈 กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
@@ -1043,13 +1587,17 @@ def render_dashboard(data_dict: dict):
             """
             st_html(chart_html, height=340)
         else:
-            st.markdown(
-                '<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>',
-                unsafe_allow_html=True
-            )
+            st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
         panel_close()
 
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    with chart_right:
+        panel_open("🧠 Smart insight", "สรุปประเด็นสำคัญของทริปนี้ให้อ่านจบได้เร็วในไม่กี่วินาที")
+        render_insights(summary_df, total_cost, overview)
+        panel_close()
+
+    panel_open("🗓️ Timeline ของทริป", "เรียงลำดับสถานที่ตามเวลา ช่วยให้มองเห็น flow ของทริปแบบวันต่อวัน")
+    render_timeline(timeline_df)
+    panel_close()
 
     section_header("🗂️ รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
@@ -1234,7 +1782,10 @@ def main():
     render_top_metrics(data_dict)
     st.markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
     st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
-    page = st.radio("เมนู", ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด"], horizontal=True)
+    default_page = st.session_state.pop("page_override", None)
+    page_options = ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด"]
+    default_index = page_options.index(default_page) if default_page in page_options else 0
+    page = st.radio("เมนู", page_options, horizontal=True, index=default_index)
     st.markdown('</div>', unsafe_allow_html=True)
     existing_trip_names = get_trip_names(data_dict)
 
@@ -1242,7 +1793,11 @@ def main():
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
         section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
-        input_tabs = st.tabs(["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"])
+        input_tab_names = ["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"]
+        quick_target = st.session_state.pop("quick_add_target", None)
+        if quick_target and quick_target in input_tab_names:
+            st.info(f"พร้อมเพิ่มข้อมูลในหมวด {quick_target}")
+        input_tabs = st.tabs(input_tab_names)
         with input_tabs[0]:
             render_places_form(existing_trip_names)
         with input_tabs[1]:
