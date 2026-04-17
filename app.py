@@ -8,8 +8,9 @@ from gspread.exceptions import APIError
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 from io import BytesIO
+from zipfile import ZipFile, ZIP_DEFLATED
 
-st.set_page_config(page_title="?? Travel Memory Dashboard", layout="wide")
+st.set_page_config(page_title="🌍 Travel Memory Dashboard", layout="wide")
 
 SHEET_ID = st.secrets["google_sheets"]["sheet_id"]
 
@@ -46,12 +47,12 @@ DISPLAY_NAMES = {
 }
 
 SECTION_ICONS = {
-    "Places": "??",
-    "Transport": "??",
-    "Hotels": "??",
-    "Food": "??",
-    "Packages": "??",
-    "Others": "??",
+    "Places": "📍",
+    "Transport": "✈️",
+    "Hotels": "🏨",
+    "Food": "🍜",
+    "Packages": "📶",
+    "Others": "💸",
 }
 
 COST_SHEETS = ["Transport", "Hotels", "Food", "Packages", "Others"]
@@ -808,6 +809,21 @@ def inject_custom_css():
             line-height: 1.55;
         }
 
+        .emoji-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.9rem;
+        }
+
+        .emoji-section-title img {
+            width: 24px;
+            height: 24px;
+            display: block;
+            flex: 0 0 auto;
+        }
+
+
 
         @media (max-width: 900px) {
             .kpi-row, .insight-grid, .quick-grid {
@@ -1143,6 +1159,28 @@ def form_shell_close():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
+def twemoji_url(emoji: str) -> str:
+    codepoints = []
+    for ch in emoji:
+        cp = ord(ch)
+        if cp == 0xFE0F:
+            continue
+        codepoints.append(f"{cp:x}")
+    return "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/" + "-".join(codepoints) + ".svg"
+
+
+def emoji_title(emoji: str, title: str):
+    st.markdown(
+        f"""
+        <div class="emoji-section-title">
+            <img src="{twemoji_url(emoji)}" alt="{title}">
+            <div class="section-title" style="margin-bottom:0;">{title}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def section_header(title: str, subtitle: str = ""):
     st.markdown(
         f"""
@@ -1270,7 +1308,7 @@ def render_sidebar_info():
         """,
         unsafe_allow_html=True,
     )
-    if st.sidebar.button("?? Refresh data", use_container_width=True):
+    if st.sidebar.button("🔄 Refresh data", use_container_width=True):
         load_all_data.clear()
         st.rerun()
 
@@ -1368,10 +1406,10 @@ def render_trip_cover(trip_name: str, total_cost: float, overview: dict):
             <div class="trip-cover-title">{trip_name}</div>
             <div class="trip-cover-subtitle">ภาพรวมของทริปนี้ พร้อมงบประมาณ ไทม์ไลน์ และ insight ที่ช่วยให้ดูทั้งทริปได้ในหน้าเดียว</div>
             <div class="trip-cover-meta">
-                <div class="trip-meta-pill">?? {country}</div>
-                <div class="trip-meta-pill">??? {date_text}</div>
-                <div class="trip-meta-pill">? {duration_text}</div>
-                <div class="trip-meta-pill">?? ฿ {total_cost:,.2f}</div>
+                <div class="trip-meta-pill">🌍 {country}</div>
+                <div class="trip-meta-pill">🗓️ {date_text}</div>
+                <div class="trip-meta-pill">⏳ {duration_text}</div>
+                <div class="trip-meta-pill">💰 ฿ {total_cost:,.2f}</div>
             </div>
         </div>
         """,
@@ -1446,9 +1484,7 @@ def render_timeline(timeline_df: pd.DataFrame):
         st.info("ยังไม่มี timeline ของทริปนี้")
         return
 
-    parts = ['<div class="timeline-stack">']
-    rows = timeline_df.to_dict("records")
-    for i, row in enumerate(rows):
+    for i, (_, row) in enumerate(timeline_df.iterrows()):
         dt = row.get("datetime")
         if pd.isna(dt):
             dt_text = str(row.get("วัน-เวลา", "")).strip() or "-"
@@ -1457,38 +1493,41 @@ def render_timeline(timeline_df: pd.DataFrame):
 
         city = str(row.get("เมือง", "")).strip() or "-"
         country = str(row.get("ประเทศ", "")).strip() or "-"
-        line = '<div class="timeline-line"></div>' if i < len(rows) - 1 else ''
-        parts.append(
-            f"""
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                {line}
-                <div class="timeline-date">{dt_text}</div>
-                <div class="timeline-title">{city}</div>
-                <div class="timeline-note">{country}</div>
-            </div>
-            """
-        )
-    parts.append("</div>")
-    st.markdown("".join(parts), unsafe_allow_html=True)
+
+        st.markdown('<div class="detail-item">', unsafe_allow_html=True)
+        c1, c2 = st.columns([0.12, 0.88], gap="small")
+        with c1:
+            st.markdown(
+                """
+                <div style="display:flex;justify-content:center;align-items:flex-start;height:100%;">
+                    <div style="width:18px;height:18px;border-radius:999px;background:linear-gradient(135deg,#7dd3fc 0%,#6366f1 100%);box-shadow:0 8px 18px rgba(99,102,241,0.22);margin-top:6px;"></div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with c2:
+            st.markdown(f'<div class="timeline-date">{dt_text}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="timeline-title">{city}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="timeline-note">{country}</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_quick_add():
     st.markdown('<div class="quick-grid">', unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3, gap="large")
     with c1:
-        if st.button("? เพิ่มค่าอาหาร", use_container_width=True):
-            st.session_state["quick_add_target"] = "?? อาหารและของกิน"
+        if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True):
+            st.session_state["quick_add_target"] = "🍜 อาหารและของกิน"
             st.session_state["page_override"] = "เพิ่มข้อมูล"
             st.rerun()
     with c2:
-        if st.button("? เพิ่มการเดินทาง", use_container_width=True):
-            st.session_state["quick_add_target"] = "?? การเดินทาง"
+        if st.button("➕ เพิ่มการเดินทาง", use_container_width=True):
+            st.session_state["quick_add_target"] = "✈️ การเดินทาง"
             st.session_state["page_override"] = "เพิ่มข้อมูล"
             st.rerun()
     with c3:
-        if st.button("? เพิ่มที่พัก", use_container_width=True):
-            st.session_state["quick_add_target"] = "?? ที่พัก"
+        if st.button("➕ เพิ่มที่พัก", use_container_width=True):
+            st.session_state["quick_add_target"] = "🏨 ที่พัก"
             st.session_state["page_override"] = "เพิ่มข้อมูล"
             st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1558,14 +1597,14 @@ def render_donut_chart(summary_df: pd.DataFrame):
 
 def render_quick_target_banner(target: str):
     target_map = {
-        "?? สถานที่": ("??", "สถานที่", "เลื่อนลงไปที่แท็บสถานที่เพื่อบันทึกประเทศ เมือง และวันเวลา"),
-        "?? การเดินทาง": ("??", "การเดินทาง", "เลื่อนลงไปที่แท็บการเดินทางเพื่อบันทึกไฟลท์ รถไฟ หรือค่าเดินทาง"),
-        "?? ที่พัก": ("??", "ที่พัก", "เลื่อนลงไปที่แท็บที่พักเพื่อเพิ่มโรงแรมและราคาที่พัก"),
-        "?? อาหารและของกิน": ("??", "อาหารและของกิน", "เลื่อนลงไปที่แท็บอาหารและของกินเพื่อเพิ่มรายการนี้ได้ทันที"),
-        "?? แพ็กเกจและซิม": ("??", "แพ็กเกจและซิม", "เลื่อนลงไปที่แท็บแพ็กเกจและซิมเพื่อเพิ่มรายการ"),
-        "?? ค่าใช้จ่ายอื่นๆ": ("??", "ค่าใช้จ่ายอื่นๆ", "เลื่อนลงไปที่แท็บค่าใช้จ่ายอื่นๆ เพื่อบันทึกรายการ"),
+        "📍 สถานที่": ("📍", "สถานที่", "เลื่อนลงไปที่แท็บสถานที่เพื่อบันทึกประเทศ เมือง และวันเวลา"),
+        "✈️ การเดินทาง": ("✈️", "การเดินทาง", "เลื่อนลงไปที่แท็บการเดินทางเพื่อบันทึกไฟลท์ รถไฟ หรือค่าเดินทาง"),
+        "🏨 ที่พัก": ("🏨", "ที่พัก", "เลื่อนลงไปที่แท็บที่พักเพื่อเพิ่มโรงแรมและราคาที่พัก"),
+        "🍜 อาหารและของกิน": ("🍜", "อาหารและของกิน", "เลื่อนลงไปที่แท็บอาหารและของกินเพื่อเพิ่มรายการนี้ได้ทันที"),
+        "📶 แพ็กเกจและซิม": ("📶", "แพ็กเกจและซิม", "เลื่อนลงไปที่แท็บแพ็กเกจและซิมเพื่อเพิ่มรายการ"),
+        "💸 ค่าใช้จ่ายอื่นๆ": ("💸", "ค่าใช้จ่ายอื่นๆ", "เลื่อนลงไปที่แท็บค่าใช้จ่ายอื่นๆ เพื่อบันทึกรายการ"),
     }
-    emoji, title, note = target_map.get(target, ("?", "เพิ่มข้อมูล", "เลือกแท็บที่ต้องการด้านล่าง"))
+    emoji, title, note = target_map.get(target, ("⚡", "เพิ่มข้อมูล", "เลือกแท็บที่ต้องการด้านล่าง"))
     st.markdown(
         f"""
         <div class="quick-target-banner">
@@ -1591,7 +1630,7 @@ def build_daily_summary(data_dict: dict, trip_name: str) -> pd.DataFrame:
             items.append({
                 "date": dt.date() if pd.notna(dt) else None,
                 "datetime": dt,
-                "type": "?? สถานที่",
+                "type": "📍 สถานที่",
                 "title": str(row.get("เมือง", "")).strip() or str(row.get("ประเทศ", "")).strip() or "สถานที่",
                 "amount": 0.0,
             })
@@ -1604,7 +1643,7 @@ def build_daily_summary(data_dict: dict, trip_name: str) -> pd.DataFrame:
             items.append({
                 "date": dt.date() if pd.notna(dt) else None,
                 "datetime": dt,
-                "type": "?? การเดินทาง",
+                "type": "✈️ การเดินทาง",
                 "title": str(row.get("สาย", "")).strip() or str(row.get("ประเภท", "")).strip() or "การเดินทาง",
                 "amount": float(to_number(pd.Series([row.get("ราคา", 0)])).iloc[0]),
             })
@@ -1704,29 +1743,51 @@ def render_trip_comparison(data_dict: dict, selected_trip: str):
     st.dataframe(top5[["ชื่อทริป", "ประเทศหลัก", "จำนวนวัน", "จำนวนสถานที่", "ค่าใช้จ่ายรวม_fmt"]], use_container_width=True, hide_index=True)
 
 
-def make_excel_export(selected_trip: str, data_dict: dict) -> bytes:
+def make_excel_export(selected_trip: str, data_dict: dict):
     output = BytesIO()
-    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        for key, df in data_dict.items():
-            filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip].copy() if "ชื่อทริป" in df.columns else df.copy()
-            filtered = filtered[[c for c in filtered.columns if not str(c).startswith("__")]]
-            filtered.to_excel(writer, index=False, sheet_name=key[:31])
-        build_cost_summary(data_dict, selected_trip).to_excel(writer, index=False, sheet_name="Summary")
-        build_daily_summary(data_dict, selected_trip).to_excel(writer, index=False, sheet_name="Daily")
+    excel_ready = False
+    filename = f"{selected_trip}_export.zip"
+    mime = "application/zip"
+
+    try:
+        import openpyxl  # noqa: F401
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            for key, df in data_dict.items():
+                filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip].copy() if "ชื่อทริป" in df.columns else df.copy()
+                filtered = filtered[[c for c in filtered.columns if not str(c).startswith("__")]]
+                filtered.to_excel(writer, index=False, sheet_name=key[:31])
+            build_cost_summary(data_dict, selected_trip).to_excel(writer, index=False, sheet_name="Summary")
+            build_daily_summary(data_dict, selected_trip).to_excel(writer, index=False, sheet_name="Daily")
+        excel_ready = True
+        filename = f"{selected_trip}_export.xlsx"
+        mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    except Exception:
+        zip_buffer = BytesIO()
+        with ZipFile(zip_buffer, "w", ZIP_DEFLATED) as zf:
+            for key, df in data_dict.items():
+                filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip].copy() if "ชื่อทริป" in df.columns else df.copy()
+                filtered = filtered[[c for c in filtered.columns if not str(c).startswith("__")]]
+                zf.writestr(f"{key}.csv", filtered.to_csv(index=False).encode("utf-8-sig"))
+            zf.writestr("Summary.csv", build_cost_summary(data_dict, selected_trip).to_csv(index=False).encode("utf-8-sig"))
+            zf.writestr("Daily.csv", build_daily_summary(data_dict, selected_trip).to_csv(index=False).encode("utf-8-sig"))
+        output = zip_buffer
+
     output.seek(0)
-    return output.getvalue()
+    return output.getvalue(), filename, mime, excel_ready
 
 
 def render_exports(selected_trip: str, data_dict: dict):
     summary_df = build_cost_summary(data_dict, selected_trip)
-    daily_df = build_daily_summary(data_dict, selected_trip)
     export_df = summary_df.copy()
-    excel_bytes = make_excel_export(selected_trip, data_dict)
+    export_bytes, export_filename, export_mime, excel_ready = make_excel_export(selected_trip, data_dict)
+
+    if not excel_ready:
+        st.info("สภาพแวดล้อมนี้ไม่มี openpyxl จึงส่งออกเป็น ZIP ที่รวม CSV ของแต่ละชีตแทน")
 
     c1, c2 = st.columns(2, gap="large")
     with c1:
         st.download_button(
-            "?? ดาวน์โหลด Summary CSV",
+            "⬇️ ดาวน์โหลด Summary CSV",
             data=export_df.to_csv(index=False).encode("utf-8-sig"),
             file_name=f"{selected_trip}_summary.csv",
             mime="text/csv",
@@ -1734,16 +1795,17 @@ def render_exports(selected_trip: str, data_dict: dict):
         )
     with c2:
         st.download_button(
-            "?? ดาวน์โหลด Excel ทั้งทริป",
-            data=excel_bytes,
-            file_name=f"{selected_trip}_export.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "⬇️ ดาวน์โหลดไฟล์ส่งออกของทริป",
+            data=export_bytes,
+            file_name=export_filename,
+            mime=export_mime,
             use_container_width=True,
         )
 
 
 def render_data_manager(data_dict: dict):
-    section_header("??? จัดการข้อมูล", "แก้ไขและลบข้อมูลที่บันทึกไว้ได้จากในแอป โดยอิงแถวจริงบน Google Sheets")
+    emoji_title("🛠️", "จัดการข้อมูล")
+    section_header("จัดการข้อมูล", "แก้ไขและลบข้อมูลที่บันทึกไว้ได้จากในแอป โดยอิงแถวจริงบน Google Sheets")
     sheet_key = st.selectbox("เลือกหมวดข้อมูล", list(SHEET_ALIASES.keys()), format_func=lambda x: f"{SECTION_ICONS[x]} {DISPLAY_NAMES[x]}")
     df = data_dict[sheet_key].copy()
 
@@ -1784,9 +1846,9 @@ def render_data_manager(data_dict: dict):
 
         c1, c2 = st.columns(2, gap="large")
         with c1:
-            update_clicked = st.form_submit_button("?? บันทึกการแก้ไข", use_container_width=True)
+            update_clicked = st.form_submit_button("💾 บันทึกการแก้ไข", use_container_width=True)
         with c2:
-            delete_clicked = st.form_submit_button("??? ลบรายการนี้", use_container_width=True)
+            delete_clicked = st.form_submit_button("🗑️ ลบรายการนี้", use_container_width=True)
 
     form_shell_close()
 
@@ -1803,7 +1865,8 @@ def render_data_manager(data_dict: dict):
 def render_dashboard(data_dict: dict):
     from streamlit.components.v1 import html as st_html
 
-    section_header("?? Dashboard", "สรุปทริปแบบ Mixpanel / Stripe / Linear ที่อ่านง่าย ดูโปร และเห็นภาพรวมเร็ว")
+    emoji_title("📊", "Dashboard")
+    section_header("Dashboard", "สรุปทริปแบบ Mixpanel / Stripe / Linear ที่อ่านง่าย ดูโปร และเห็นภาพรวมเร็ว")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -1811,10 +1874,10 @@ def render_dashboard(data_dict: dict):
 
     search_col, filter_col = st.columns([1.2, 0.8], gap="large")
     with search_col:
-        trip_search = st.text_input("?? ค้นหาชื่อทริป", placeholder="เช่น Taipei, Tokyo, Singapore", key="trip_search")
+        trip_search = st.text_input("🔍 ค้นหาชื่อทริป", placeholder="เช่น Taipei, Tokyo, Singapore", key="trip_search")
     with filter_col:
         countries = sorted({c.strip() for c in data_dict["Places"]["ประเทศ"].astype(str).tolist() if c.strip()}) if not data_dict["Places"].empty else []
-        country_filter = st.selectbox("?? กรองตามประเทศ", ["ทั้งหมด"] + countries, key="country_filter")
+        country_filter = st.selectbox("🌍 กรองตามประเทศ", ["ทั้งหมด"] + countries, key="country_filter")
 
     filtered_trip_names = trip_names
     if trip_search:
@@ -1855,11 +1918,11 @@ def render_dashboard(data_dict: dict):
 
     quick_left, quick_right = st.columns([1.05, 0.95], gap="large")
     with quick_left:
-        panel_open("? Quick add", "เพิ่มรายการที่ใช้บ่อยได้ทันที โดยไม่ต้องเลื่อนหาฟอร์มนาน")
+        panel_open("⚡ Quick add", "เพิ่มรายการที่ใช้บ่อยได้ทันที โดยไม่ต้องเลื่อนหาฟอร์มนาน")
         render_quick_add()
         panel_close()
     with quick_right:
-        panel_open("?? ตั้งงบทริป", "กำหนดงบประมาณต่อทริปและบันทึกถาวรลง Google Sheets")
+        panel_open("🎯 ตั้งงบทริป", "กำหนดงบประมาณต่อทริปและบันทึกถาวรลง Google Sheets")
         budget_amount = st.number_input("งบของทริป (บาท)", min_value=0.0, step=1000.0, value=float(stored_budget or 20000.0), key=f"budget_{selected_trip}")
         budget_note = st.text_input("โน้ตงบประมาณ", value=stored_note, key=f"budget_note_{selected_trip}")
         save_budget = st.button("บันทึกงบทริป", key=f"save_budget_{selected_trip}", use_container_width=True)
@@ -1871,18 +1934,18 @@ def render_dashboard(data_dict: dict):
 
     analytics_left, analytics_right = st.columns([1.05, 0.95], gap="large")
     with analytics_left:
-        panel_open("?? สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
+        panel_open("💳 สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
         render_summary_cards(summary_df)
         panel_close()
 
     with analytics_right:
-        panel_open("?? Donut chart", "ดูสัดส่วนค่าใช้จ่ายแต่ละหมวดในภาพรวมแบบเร็วที่สุด")
+        panel_open("🍩 Donut chart", "ดูสัดส่วนค่าใช้จ่ายแต่ละหมวดในภาพรวมแบบเร็วที่สุด")
         render_donut_chart(summary_df)
         panel_close()
 
     chart_left, chart_right = st.columns([1.05, 0.95], gap="large")
     with chart_left:
-        panel_open("?? กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
+        panel_open("📈 กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
             labels = chart_df["หมวด"].astype(str).tolist()
@@ -1965,32 +2028,33 @@ def render_dashboard(data_dict: dict):
         panel_close()
 
     with chart_right:
-        panel_open("?? Smart insight", "สรุปประเด็นสำคัญของทริปนี้ให้อ่านจบได้เร็วในไม่กี่วินาที")
+        panel_open("🧠 Smart insight", "สรุปประเด็นสำคัญของทริปนี้ให้อ่านจบได้เร็วในไม่กี่วินาที")
         render_insights(summary_df, total_cost, overview)
         panel_close()
 
-    panel_open("??? Timeline ของทริป", "เรียงลำดับสถานที่ตามเวลา ช่วยให้มองเห็น flow ของทริปแบบวันต่อวัน")
+    emoji_title("🗓️", "Timeline ของทริป")
+    panel_open("Timeline ของทริป", "เรียงลำดับสถานที่ตามเวลา ช่วยให้มองเห็น flow ของทริปแบบวันต่อวัน")
     render_timeline(timeline_df)
     panel_close()
 
 
     compare_left, compare_right = st.columns([1.0, 1.0], gap="large")
     with compare_left:
-        panel_open("??? มุมมองรายวัน", "สรุปแต่ละวันว่ามีกิจกรรมกี่รายการ และค่าใช้จ่ายประมาณเท่าไร")
+        panel_open("🗓️ มุมมองรายวัน", "สรุปแต่ละวันว่ามีกิจกรรมกี่รายการ และค่าใช้จ่ายประมาณเท่าไร")
         daily_df = build_daily_summary(data_dict, selected_trip)
         render_daily_summary(daily_df)
         panel_close()
     with compare_right:
-        panel_open("?? Export", "ดาวน์โหลดสรุปทริปในรูปแบบ CSV หรือ Excel เพื่อนำไปใช้งานต่อ")
+        panel_open("📤 Export", "ดาวน์โหลดสรุปทริปในรูปแบบ CSV หรือ Excel เพื่อนำไปใช้งานต่อ")
         render_exports(selected_trip, data_dict)
         panel_close()
 
-    panel_open("?? เปรียบเทียบทริป", "ดูว่าทริปนี้แพงกว่าหรือต่ำกว่าค่าเฉลี่ย และเทียบกับทริปอื่นอย่างไร")
+    panel_open("📊 เปรียบเทียบทริป", "ดูว่าทริปนี้แพงกว่าหรือต่ำกว่าค่าเฉลี่ย และเทียบกับทริปอื่นอย่างไร")
     render_trip_comparison(data_dict, selected_trip)
     panel_close()
 
 
-    section_header("??? รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
+    section_header("รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
 
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
@@ -2006,7 +2070,7 @@ def render_places_form(existing_trip_names: list[str]):
         st.session_state.pop("places_new_trip_name", None)
         st.session_state.pop("places_trip_name", None)
 
-    section_header("?? เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริปในหน้าตาที่อ่านง่ายขึ้น")
+    section_header("📍 เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริปในหน้าตาที่อ่านง่ายขึ้น")
     form_shell_open("ข้อมูลสถานที่", "เลือกประเทศ เมือง และตั้งชื่อทริปให้เรียบร้อยก่อนบันทึก")
 
     col1, col2 = st.columns(2, gap="large")
@@ -2050,7 +2114,7 @@ def render_transport_form(existing_trip_names: list[str]):
         st.session_state.pop("transport_new_trip_name", None)
         st.session_state.pop("transport_trip_name", None)
 
-    section_header("?? เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลาในฟอร์มที่ดูสะอาดขึ้น")
+    section_header("✈️ เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลาในฟอร์มที่ดูสะอาดขึ้น")
     form_shell_open("ข้อมูลการเดินทาง", "กรอกวิธีเดินทาง ราคา และเวลา เพื่อให้ระบบรวมค่าใช้จ่ายได้แม่นยำ")
 
     trip_mode = st.radio(
@@ -2091,7 +2155,7 @@ def render_transport_form(existing_trip_names: list[str]):
 
 
 def render_hotels_form(existing_trip_names: list[str]):
-    section_header("?? เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
+    section_header("🏨 เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
     form_shell_open("ข้อมูลที่พัก", "เพิ่มโรงแรมและราคาที่พักให้พร้อมใช้งานในแดชบอร์ด")
     with st.form("hotels_form", clear_on_submit=True):
         col1, col2 = st.columns(2, gap="large")
@@ -2188,7 +2252,7 @@ def main():
     elif page == "เพิ่มข้อมูล":
         section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
 
-        input_tab_names = ["?? สถานที่", "?? การเดินทาง", "?? ที่พัก", "?? อาหารและของกิน", "?? แพ็กเกจและซิม", "?? ค่าใช้จ่ายอื่นๆ"]
+        input_tab_names = ["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"]
         quick_target = st.session_state.pop("quick_add_target", None)
 
         if quick_target and quick_target in input_tab_names:
@@ -2204,18 +2268,18 @@ def main():
 
         st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
-        if current_section == "?? สถานที่":
+        if current_section == "📍 สถานที่":
             render_places_form(existing_trip_names)
-        elif current_section == "?? การเดินทาง":
+        elif current_section == "✈️ การเดินทาง":
             render_transport_form(existing_trip_names)
-        elif current_section == "?? ที่พัก":
+        elif current_section == "🏨 ที่พัก":
             render_hotels_form(existing_trip_names)
-        elif current_section == "?? อาหารและของกิน":
-            render_simple_cost_form("Food", "?? เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
-        elif current_section == "?? แพ็กเกจและซิม":
-            render_simple_cost_form("Packages", "?? เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
-        elif current_section == "?? ค่าใช้จ่ายอื่นๆ":
-            render_simple_cost_form("Others", "?? เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
+        elif current_section == "🍜 อาหารและของกิน":
+            render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
+        elif current_section == "📶 แพ็กเกจและซิม":
+            render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
+        elif current_section == "💸 ค่าใช้จ่ายอื่นๆ":
+            render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     elif page == "ดูข้อมูลทั้งหมด":
         render_all_tables(data_dict)
     else:
