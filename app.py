@@ -787,6 +787,8 @@ def inject_custom_css():
             grid-template-columns: 68px minmax(0, 1fr);
             gap: 16px;
             align-items: start;
+            opacity: 0;
+            animation: timelineFadeUp 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .timeline-rail {
@@ -820,9 +822,40 @@ def inject_custom_css():
                 0 0 0 6px rgba(99,102,241,0.08),
                 0 10px 24px rgba(99,102,241,0.22);
             margin-top: 8px;
+            animation: timelineDotPulse 2.8s ease-out infinite;
         }
 
-        .timeline-card {
+        
+        @keyframes timelineFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.985);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes timelineDotPulse {
+            0% {
+                box-shadow:
+                    0 0 0 0 rgba(99,102,241,0.22),
+                    0 10px 24px rgba(99,102,241,0.22);
+            }
+            70% {
+                box-shadow:
+                    0 0 0 12px rgba(99,102,241,0.0),
+                    0 10px 24px rgba(99,102,241,0.22);
+            }
+            100% {
+                box-shadow:
+                    0 0 0 0 rgba(99,102,241,0.0),
+                    0 10px 24px rgba(99,102,241,0.22);
+            }
+        }
+
+.timeline-card {
             position: relative;
             overflow: hidden;
             border-radius: 24px;
@@ -1704,10 +1737,11 @@ def render_timeline(timeline_df: pd.DataFrame):
         city = str(row.get("เมือง", "")).strip() or "-"
         country = str(row.get("ประเทศ", "")).strip() or "-"
         last_class = " is-last" if i == len(rows) - 1 else ""
+        delay = i * 110
 
         rows_html.append(
             f"""
-            <div class="timeline-row">
+            <div class="timeline-row" style="animation-delay:{delay}ms;">
                 <div class="timeline-rail">
                     <div class="timeline-rail-dot"></div>
                     <div class="timeline-rail-line{last_class}"></div>
