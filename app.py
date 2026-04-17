@@ -1895,7 +1895,9 @@ def render_dashboard(data_dict: dict):
         st.warning("ไม่พบทริปที่ตรงกับคำค้นหรือ filter")
         return
 
-    selected_trip = st.selectbox("เลือกชื่อทริป", filtered_trip_names)
+    selected_trip_override = st.session_state.pop("selected_trip_override", None)
+    selected_trip_index = filtered_trip_names.index(selected_trip_override) if selected_trip_override in filtered_trip_names else 0
+    selected_trip = st.selectbox("เลือกชื่อทริป", filtered_trip_names, index=selected_trip_index)
     total_cost = compute_trip_total(data_dict, selected_trip)
     trip_places = get_trip_places_df(data_dict, selected_trip)
     overview = get_trip_overview_stats(data_dict, selected_trip)
@@ -2103,7 +2105,9 @@ def render_places_form(existing_trip_names: list[str]):
                 append_row("Places", [country, city, format_datetime_for_sheet(date_value, time_value), trip_name])
                 reset_city_state("places")
                 st.session_state["places_reset_trip_input"] = True
-                st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
+                st.session_state["selected_trip_override"] = trip_name
+                st.session_state["page_override"] = "Dashboard"
+                st.session_state["flash_success"] = "บันทึกข้อมูลสถานที่เรียบร้อยแล้ว"
                 st.rerun()
 
     form_shell_close()
@@ -2148,7 +2152,9 @@ def render_transport_form(existing_trip_names: list[str]):
             else:
                 append_row("Transport", [travel_type, line, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
                 st.session_state["transport_reset_trip_input"] = True
-                st.success("บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว")
+                st.session_state["selected_trip_override"] = trip_name
+                st.session_state["page_override"] = "Dashboard"
+                st.session_state["flash_success"] = "บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว"
                 st.rerun()
 
     form_shell_close()
@@ -2171,7 +2177,9 @@ def render_hotels_form(existing_trip_names: list[str]):
                 st.error("กรุณากรอกชื่อโรงแรมและชื่อทริป")
             else:
                 append_row("Hotels", [hotel_name, room_type, price, trip_name])
-                st.success("บันทึกข้อมูลที่พักเรียบร้อยแล้ว")
+                st.session_state["selected_trip_override"] = str(trip_name).strip()
+                st.session_state["page_override"] = "Dashboard"
+                st.session_state["flash_success"] = "บันทึกข้อมูลที่พักเรียบร้อยแล้ว"
                 st.rerun()
     form_shell_close()
 
@@ -2186,15 +2194,20 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
         with col2:
             price = st.number_input("ราคา", min_value=0.0, step=50.0, key=f"price_{key_suffix}")
             trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key=f"trip_{key_suffix}") if existing_trip_names else st.text_input("ชื่อทริป", key=f"trip_text_{key_suffix}")
+
         submitted = st.form_submit_button("บันทึก", use_container_width=True)
         if submitted:
+            item_name = str(item_name).strip()
+            trip_name = str(trip_name).strip()
+
             if not item_name or not trip_name:
                 st.error("กรุณากรอกชื่อรายการและชื่อทริป")
             else:
                 append_row(sheet_key, [item_type, item_name, price, trip_name])
-                st.success("บันทึกข้อมูลเรียบร้อยแล้ว")
+                st.session_state["selected_trip_override"] = trip_name
+                st.session_state["page_override"] = "Dashboard"
+                st.session_state["flash_success"] = f"บันทึก{title.replace('เพิ่มข้อมูล', '').strip()}เรียบร้อยแล้ว"
                 st.rerun()
-    form_shell_close()
 
 
 def render_all_tables(data_dict: dict):
@@ -2236,6 +2249,10 @@ def main():
             st.error("เชื่อม Google Sheets ไม่สำเร็จ")
         st.exception(e)
         st.stop()
+
+    flash_success = st.session_state.pop("flash_success", None)
+    if flash_success:
+        st.success(flash_success)
 
     render_top_metrics(data_dict)
     st.markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
