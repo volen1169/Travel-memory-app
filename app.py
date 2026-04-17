@@ -312,7 +312,15 @@ def append_row(sheet_key: str, row_values: list):
 
 
 def to_number(series: pd.Series) -> pd.Series:
-    return pd.to_numeric(series, errors="coerce").fillna(0)
+    cleaned = (
+        series.astype(str)
+        .str.replace(",", "", regex=False)
+        .str.replace("฿", "", regex=False)
+        .str.replace("บาท", "", regex=False)
+        .str.strip()
+    )
+    cleaned = cleaned.replace({"": None, "nan": None, "None": None})
+    return pd.to_numeric(cleaned, errors="coerce").fillna(0)
 
 
 def get_trip_names(data_dict: dict) -> list[str]:
@@ -460,7 +468,7 @@ def display_table(df: pd.DataFrame, currency_cols: list[str] | None = None):
     currency_cols = currency_cols or []
     for col in currency_cols:
         if col in show_df.columns:
-            show_df[col] = pd.to_numeric(show_df[col], errors="coerce").fillna(0).map(lambda x: f"฿ {x:,.2f}")
+            show_df[col] = to_number(show_df[col]).map(lambda x: f"฿ {x:,.2f}")
     st.dataframe(show_df, use_container_width=True, hide_index=True)
     st.caption(f"จำนวนรายการ: {len(df)}")
 
