@@ -774,6 +774,196 @@ def inject_custom_css():
             line-height: 1.6;
         }
 
+        .timeline-shell {
+            position: relative;
+            display: grid;
+            gap: 18px;
+            margin-top: 0.75rem;
+        }
+
+        .timeline-row {
+            position: relative;
+            display: grid;
+            grid-template-columns: 68px minmax(0, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        .timeline-rail {
+            position: relative;
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-rail-line {
+            position: absolute;
+            top: 28px;
+            bottom: -28px;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(125,211,252,0.95), rgba(99,102,241,0.18));
+            border-radius: 999px;
+        }
+
+        .timeline-rail-line.is-last {
+            display: none;
+        }
+
+        .timeline-rail-dot {
+            position: relative;
+            z-index: 2;
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #7dd3fc 0%, #6366f1 100%);
+            box-shadow:
+                0 0 0 6px rgba(99,102,241,0.08),
+                0 10px 24px rgba(99,102,241,0.22);
+            margin-top: 8px;
+        }
+
+        .timeline-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            padding: 18px 18px 16px 18px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.98));
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 30px rgba(15,23,42,0.045);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99,102,241,0.24);
+            box-shadow: 0 18px 40px rgba(69,104,255,0.12);
+        }
+
+        .timeline-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-a) 0%, var(--accent-b) 32%, var(--accent-c) 72%, var(--accent-d) 100%);
+            opacity: 0.96;
+        }
+
+        .timeline-card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: start;
+            margin-bottom: 0.65rem;
+        }
+
+        .timeline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(239,246,255,0.98), rgba(238,242,255,0.98));
+            border: 1px solid rgba(147,197,253,0.40);
+            color: #3155ff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .timeline-city {
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-country {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .daily-shell {
+            display: grid;
+            gap: 16px;
+            margin-top: 0.75rem;
+        }
+
+        .daily-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            padding: 20px 20px 18px 20px;
+            background:
+                radial-gradient(circle at top right, rgba(125,211,252,0.12), transparent 22%),
+                linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.98));
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 12px 30px rgba(15,23,42,0.045);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .daily-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99,102,241,0.24);
+            box-shadow: 0 18px 40px rgba(69,104,255,0.12);
+        }
+
+        .daily-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-a) 0%, var(--accent-b) 32%, var(--accent-c) 72%, var(--accent-d) 100%);
+            opacity: 0.96;
+        }
+
+        .daily-date {
+            color: var(--text);
+            font-size: 1.28rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.95rem;
+        }
+
+        .daily-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .daily-stat {
+            padding: 0;
+        }
+
+        .daily-stat-label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.18rem;
+        }
+
+        .daily-stat-value {
+            color: var(--text);
+            font-size: 1.02rem;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .timeline-row {
+                grid-template-columns: 48px minmax(0, 1fr);
+                gap: 12px;
+            }
+
+            .daily-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
         .quick-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1502,7 +1692,9 @@ def render_timeline(timeline_df: pd.DataFrame):
         st.info("ยังไม่มี timeline ของทริปนี้")
         return
 
-    for i, (_, row) in enumerate(timeline_df.iterrows()):
+    rows_html = ['<div class="timeline-shell">']
+    rows = timeline_df.to_dict("records")
+    for i, row in enumerate(rows):
         dt = row.get("datetime")
         if pd.isna(dt):
             dt_text = str(row.get("วัน-เวลา", "")).strip() or "-"
@@ -1511,114 +1703,29 @@ def render_timeline(timeline_df: pd.DataFrame):
 
         city = str(row.get("เมือง", "")).strip() or "-"
         country = str(row.get("ประเทศ", "")).strip() or "-"
+        last_class = " is-last" if i == len(rows) - 1 else ""
 
-        st.markdown('<div class="detail-item">', unsafe_allow_html=True)
-        c1, c2 = st.columns([0.12, 0.88], gap="small")
-        with c1:
-            st.markdown(
-                """
-                <div style="display:flex;justify-content:center;align-items:flex-start;height:100%;">
-                    <div style="width:18px;height:18px;border-radius:999px;background:linear-gradient(135deg,#7dd3fc 0%,#6366f1 100%);box-shadow:0 8px 18px rgba(99,102,241,0.22);margin-top:6px;"></div>
+        rows_html.append(
+            f"""
+            <div class="timeline-row">
+                <div class="timeline-rail">
+                    <div class="timeline-rail-dot"></div>
+                    <div class="timeline-rail-line{last_class}"></div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        with c2:
-            st.markdown(f'<div class="timeline-date">{dt_text}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="timeline-title">{city}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="timeline-note">{country}</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-
-
-def open_quick_add_popup(target: str):
-    st.session_state["quick_add_popup"] = target
-
-
-@st.dialog("Quick add", width="large")
-def quick_add_popup(existing_trip_names: list[str]):
-    target = st.session_state.get("quick_add_popup", "Food")
-    config = {
-        "Food": {
-            "emoji": "🍜",
-            "title": "เพิ่มค่าอาหารอย่างรวดเร็ว",
-            "sheet_key": "Food",
-            "type_label": "ประเภท",
-            "type_options": ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"],
-            "name_label": "ชื่อร้าน / รายการ",
-            "price_label": "ราคา",
-            "success": "บันทึกค่าอาหารเรียบร้อยแล้ว",
-        },
-        "Transport": {
-            "emoji": "✈️",
-            "title": "เพิ่มการเดินทางอย่างรวดเร็ว",
-            "sheet_key": "Transport",
-            "type_label": "ประเภท",
-            "type_options": ["เครื่องบิน", "รถไฟ", "MRT", "Taxi", "Uber", "รถบัส", "เรือ", "อื่นๆ"],
-            "name_label": "สาย / ผู้ให้บริการ",
-            "price_label": "ราคา",
-            "success": "บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว",
-        },
-        "Hotels": {
-            "emoji": "🏨",
-            "title": "เพิ่มที่พักอย่างรวดเร็ว",
-            "sheet_key": "Hotels",
-            "type_label": "ประเภทห้อง",
-            "type_options": ["Standard", "Superior", "Deluxe", "Suite", "Twin", "Double", "อื่นๆ"],
-            "name_label": "ชื่อโรงแรม",
-            "price_label": "ราคา",
-            "success": "บันทึกข้อมูลที่พักเรียบร้อยแล้ว",
-        },
-    }
-    cfg = config.get(target, config["Food"])
-
-    st.markdown(f'<div class="quick-popup-note">{cfg["emoji"]} {cfg["title"]} — กรอกไม่กี่ช่องแล้วบันทึกได้ทันที</div>', unsafe_allow_html=True)
-
-    with st.form(f'quick_add_popup_{target}', clear_on_submit=True):
-        c1, c2 = st.columns(2, gap="large")
-        with c1:
-            item_type = st.selectbox(cfg["type_label"], cfg["type_options"], key=f'popup_type_{target}')
-            item_name = st.text_input(cfg["name_label"], key=f'popup_name_{target}')
-        with c2:
-            price = st.number_input(cfg["price_label"], min_value=0.0, step=50.0, key=f'popup_price_{target}')
-            if existing_trip_names:
-                trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key=f'popup_trip_{target}')
-            else:
-                trip_name = st.text_input("ชื่อทริป", key=f'popup_trip_text_{target}')
-
-        if target == "Transport":
-            d1, d2 = st.columns(2, gap="large")
-            with d1:
-                flight_no = st.text_input("ไฟลท์ / หมายเลข", key=f'popup_flight_{target}')
-            with d2:
-                date_value = st.date_input("วันที่เดินทาง", key=f'popup_date_{target}')
-                time_value = st.time_input("เวลาเดินทาง", key=f'popup_time_{target}')
-        else:
-            flight_no = ""
-            date_value = None
-            time_value = None
-
-        submitted = st.form_submit_button("บันทึกทันที", use_container_width=True)
-
-        if submitted:
-            item_name = str(item_name).strip()
-            trip_name = str(trip_name).strip()
-
-            if not item_name or not trip_name:
-                st.error("กรุณากรอกชื่อรายการและชื่อทริปให้ครบ")
-            else:
-                if target == "Food":
-                    append_row("Food", [item_type, item_name, price, trip_name])
-                elif target == "Transport":
-                    append_row("Transport", [item_type, item_name, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
-                elif target == "Hotels":
-                    append_row("Hotels", [item_name, item_type, price, trip_name])
-
-                st.session_state["selected_trip_override"] = trip_name
-                st.session_state["requested_page"] = "Dashboard"
-                st.session_state["flash_success"] = cfg["success"]
-                st.session_state.pop("quick_add_popup", None)
-                st.rerun()
+                <div class="timeline-card">
+                    <div class="timeline-card-top">
+                        <div>
+                            <div class="timeline-city">{city}</div>
+                            <div class="timeline-country">{country}</div>
+                        </div>
+                        <div class="timeline-badge">🕒 {dt_text}</div>
+                    </div>
+                </div>
+            </div>
+            """
+        )
+    rows_html.append("</div>")
+    st.markdown("".join(rows_html), unsafe_allow_html=True)
 
 
 def render_quick_add():
@@ -1776,17 +1883,26 @@ def render_daily_summary(daily_df: pd.DataFrame):
         st.info("ยังไม่มีข้อมูลเพียงพอสำหรับมุมมองรายวัน")
         return
 
-    cards = ['<div class="list-stack">']
+    cards = ['<div class="daily-shell">']
     for _, row in daily_df.iterrows():
         day = row["date"].strftime("%d %b %Y") if pd.notna(row["date"]) else "ไม่ทราบวันที่"
         cards.append(
             f"""
-            <div class="detail-item">
-                <div class="detail-main">{day}</div>
-                <div class="detail-grid">
-                    <div><div class="detail-field-label">จำนวนกิจกรรม</div><div class="detail-field-value">{int(row["จำนวนกิจกรรม"])} รายการ</div></div>
-                    <div><div class="detail-field-label">ค่าใช้จ่ายรวม</div><div class="detail-field-value detail-price">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div></div>
-                    <div style="grid-column:1 / -1;"><div class="detail-field-label">รายการเด่น</div><div class="detail-field-value">{row["รายการ"] or "-"}</div></div>
+            <div class="daily-card">
+                <div class="daily-date">{day}</div>
+                <div class="daily-grid">
+                    <div class="daily-stat">
+                        <div class="daily-stat-label">จำนวนกิจกรรม</div>
+                        <div class="daily-stat-value">{int(row["จำนวนกิจกรรม"])} รายการ</div>
+                    </div>
+                    <div class="daily-stat">
+                        <div class="daily-stat-label">ค่าใช้จ่ายรวม</div>
+                        <div class="daily-stat-value">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div>
+                    </div>
+                    <div class="daily-stat">
+                        <div class="daily-stat-label">รายการเด่น</div>
+                        <div class="daily-stat-value">{row["รายการ"] or "-"}</div>
+                    </div>
                 </div>
             </div>
             """
