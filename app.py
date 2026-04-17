@@ -547,6 +547,10 @@ def render_dashboard(data_dict: dict):
 
 
 def render_places_form(existing_trip_names: list[str]):
+    if st.session_state.pop("places_reset_trip_input", False):
+        st.session_state.pop("places_new_trip_name", None)
+        st.session_state.pop("places_trip_name", None)
+
     section_header("?? เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
     col1, col2 = st.columns(2)
     with col1:
@@ -578,12 +582,17 @@ def render_places_form(existing_trip_names: list[str]):
                 st.error("กรุณาเลือก ประเทศ เมือง/จังหวัด/รัฐ และชื่อทริป ให้ครบ")
             else:
                 append_row("Places", [country, city, format_datetime_for_sheet(date_value, time_value), trip_name])
-                st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
                 reset_city_state("places")
-                st.session_state["places_new_trip_name"] = ""
+                st.session_state["places_reset_trip_input"] = True
+                st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
+                st.rerun()
 
 
 def render_transport_form(existing_trip_names: list[str]):
+    if st.session_state.pop("transport_reset_trip_input", False):
+        st.session_state.pop("transport_new_trip_name", None)
+        st.session_state.pop("transport_trip_name", None)
+
     section_header("?? เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
     trip_mode = st.radio(
         "เลือกวิธีกรอกชื่อทริป",
@@ -614,8 +623,9 @@ def render_transport_form(existing_trip_names: list[str]):
                 st.error("กรุณากรอก สาย/ผู้ให้บริการ และชื่อทริป")
             else:
                 append_row("Transport", [travel_type, line, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
+                st.session_state["transport_reset_trip_input"] = True
                 st.success("บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว")
-                st.session_state["transport_new_trip_name"] = ""
+                st.rerun()
 
 
 def render_hotels_form(existing_trip_names: list[str]):
