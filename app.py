@@ -781,6 +781,24 @@ def inject_custom_css():
             margin-top: 0.65rem;
         }
 
+        .quick-popup-note {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 0.9rem;
+        }
+
+        .quick-popup-success {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(236,253,245,0.98), rgba(240,253,250,0.98));
+            border: 1px solid rgba(52,211,153,0.28);
+            color: #065f46;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+
         .search-shell {
             margin-bottom: 0.9rem;
         }
@@ -1512,28 +1530,113 @@ def render_timeline(timeline_df: pd.DataFrame):
         st.markdown('</div>', unsafe_allow_html=True)
 
 
+
+def open_quick_add_popup(target: str):
+    st.session_state["quick_add_popup"] = target
+
+
+@st.dialog("Quick add", width="large")
+def quick_add_popup(existing_trip_names: list[str]):
+    target = st.session_state.get("quick_add_popup", "Food")
+    config = {
+        "Food": {
+            "emoji": "🍜",
+            "title": "เพิ่มค่าอาหารอย่างรวดเร็ว",
+            "sheet_key": "Food",
+            "type_label": "ประเภท",
+            "type_options": ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"],
+            "name_label": "ชื่อร้าน / รายการ",
+            "price_label": "ราคา",
+            "success": "บันทึกค่าอาหารเรียบร้อยแล้ว",
+        },
+        "Transport": {
+            "emoji": "✈️",
+            "title": "เพิ่มการเดินทางอย่างรวดเร็ว",
+            "sheet_key": "Transport",
+            "type_label": "ประเภท",
+            "type_options": ["เครื่องบิน", "รถไฟ", "MRT", "Taxi", "Uber", "รถบัส", "เรือ", "อื่นๆ"],
+            "name_label": "สาย / ผู้ให้บริการ",
+            "price_label": "ราคา",
+            "success": "บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว",
+        },
+        "Hotels": {
+            "emoji": "🏨",
+            "title": "เพิ่มที่พักอย่างรวดเร็ว",
+            "sheet_key": "Hotels",
+            "type_label": "ประเภทห้อง",
+            "type_options": ["Standard", "Superior", "Deluxe", "Suite", "Twin", "Double", "อื่นๆ"],
+            "name_label": "ชื่อโรงแรม",
+            "price_label": "ราคา",
+            "success": "บันทึกข้อมูลที่พักเรียบร้อยแล้ว",
+        },
+    }
+    cfg = config.get(target, config["Food"])
+
+    st.markdown(f'<div class="quick-popup-note">{cfg["emoji"]} {cfg["title"]} — กรอกไม่กี่ช่องแล้วบันทึกได้ทันที</div>', unsafe_allow_html=True)
+
+    with st.form(f'quick_add_popup_{target}', clear_on_submit=True):
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            item_type = st.selectbox(cfg["type_label"], cfg["type_options"], key=f'popup_type_{target}')
+            item_name = st.text_input(cfg["name_label"], key=f'popup_name_{target}')
+        with c2:
+            price = st.number_input(cfg["price_label"], min_value=0.0, step=50.0, key=f'popup_price_{target}')
+            if existing_trip_names:
+                trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key=f'popup_trip_{target}')
+            else:
+                trip_name = st.text_input("ชื่อทริป", key=f'popup_trip_text_{target}')
+
+        if target == "Transport":
+            d1, d2 = st.columns(2, gap="large")
+            with d1:
+                flight_no = st.text_input("ไฟลท์ / หมายเลข", key=f'popup_flight_{target}')
+            with d2:
+                date_value = st.date_input("วันที่เดินทาง", key=f'popup_date_{target}')
+                time_value = st.time_input("เวลาเดินทาง", key=f'popup_time_{target}')
+        else:
+            flight_no = ""
+            date_value = None
+            time_value = None
+
+        submitted = st.form_submit_button("บันทึกทันที", use_container_width=True)
+
+        if submitted:
+            item_name = str(item_name).strip()
+            trip_name = str(trip_name).strip()
+
+            if not item_name or not trip_name:
+                st.error("กรุณากรอกชื่อรายการและชื่อทริปให้ครบ")
+            else:
+                if target == "Food":
+                    append_row("Food", [item_type, item_name, price, trip_name])
+                elif target == "Transport":
+                    append_row("Transport", [item_type, item_name, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
+                elif target == "Hotels":
+                    append_row("Hotels", [item_name, item_type, price, trip_name])
+
+                st.session_state["selected_trip_override"] = trip_name
+                st.session_state["requested_page"] = "Dashboard"
+                st.session_state["flash_success"] = cfg["success"]
+                st.session_state.pop("quick_add_popup", None)
+                st.rerun()
+
+
 def render_quick_add():
     st.markdown('<div class="quick-grid">', unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3, gap="large")
     with c1:
-        if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True):
-            st.session_state["quick_add_target"] = "🍜 อาหารและของกิน"
-            st.session_state["requested_page"] = "เพิ่มข้อมูล"
-            st.session_state["requested_input_section"] = "🍜 อาหารและของกิน"
-            st.rerun()
+        if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True, key="quick_food_btn"):
+            open_quick_add_popup("Food")
     with c2:
-        if st.button("➕ เพิ่มการเดินทาง", use_container_width=True):
-            st.session_state["quick_add_target"] = "✈️ การเดินทาง"
-            st.session_state["requested_page"] = "เพิ่มข้อมูล"
-            st.session_state["requested_input_section"] = "✈️ การเดินทาง"
-            st.rerun()
+        if st.button("➕ เพิ่มการเดินทาง", use_container_width=True, key="quick_transport_btn"):
+            open_quick_add_popup("Transport")
     with c3:
-        if st.button("➕ เพิ่มที่พัก", use_container_width=True):
-            st.session_state["quick_add_target"] = "🏨 ที่พัก"
-            st.session_state["requested_page"] = "เพิ่มข้อมูล"
-            st.session_state["requested_input_section"] = "🏨 ที่พัก"
-            st.rerun()
+        if st.button("➕ เพิ่มที่พัก", use_container_width=True, key="quick_hotel_btn"):
+            open_quick_add_popup("Hotels")
     st.markdown("</div>", unsafe_allow_html=True)
+
+    if st.session_state.get("quick_add_popup"):
+        quick_add_popup(get_trip_names(load_all_data()))
 
 
 def render_donut_chart(summary_df: pd.DataFrame):
