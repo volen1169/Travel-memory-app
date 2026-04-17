@@ -134,6 +134,41 @@ def inject_custom_css():
             font-size: 0.95rem;
             margin-bottom: 0.75rem;
         }
+        .panel-card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 22px;
+            padding: 18px 18px 12px 18px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+            height: 100%;
+        }
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #0f172a;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.15rem;
+        }
+        .panel-subtitle {
+            color: #64748b;
+            font-size: 0.92rem;
+            margin-bottom: 0.95rem;
+        }
+        .empty-state {
+            border-radius: 18px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px dashed rgba(59, 130, 246, 0.24);
+            padding: 22px 18px;
+            color: #1e3a8a;
+            font-weight: 700;
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
         div[data-testid="stDataFrame"] {
             border: 1px solid rgba(148,163,184,.16);
             border-radius: 18px;
@@ -405,6 +440,21 @@ def section_header(title: str, subtitle: str = ""):
     )
 
 
+def panel_open(title: str, subtitle: str = ""):
+    st.markdown(
+        f"""
+        <div class="panel-card">
+            <div class="panel-title">{title}</div>
+            <div class="panel-subtitle">{subtitle}</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def panel_close():
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def display_table(df: pd.DataFrame, currency_cols: list[str] | None = None):
     show_df = df.copy()
     currency_cols = currency_cols or []
@@ -461,17 +511,19 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
-    left, right = st.columns([1.05, 1])
+    left, right = st.columns([1.1, 0.9], gap="large")
     with left:
-        section_header("💰 สรุปค่าใช้จ่ายรายหมวด", "ช่วยดูได้ทันทีว่าใช้งบไปกับอะไรบ้าง")
+        panel_open("💰 สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
         display_table(summary_df, currency_cols=["ยอดรวม"])
+        panel_close()
     with right:
-        section_header("📈 กราฟค่าใช้จ่าย", "แสดงเฉพาะหมวดที่มีค่าใช้จ่ายมากกว่า 0")
+        panel_open("📈 กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
             st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
         else:
-            st.info("ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย")
+            st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
+        panel_close()
 
     section_header("🧾 รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
