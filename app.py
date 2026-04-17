@@ -2259,10 +2259,19 @@ def main():
 
     render_top_metrics(data_dict)
     st.markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
-    st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
+
     page_options = ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด", "จัดการข้อมูล"]
-    if "page_menu" not in st.session_state or st.session_state["page_menu"] not in page_options:
-        st.session_state["requested_page"] = "Dashboard"
+    requested_page = st.session_state.pop("requested_page", None)
+    if requested_page in page_options:
+        st.session_state["page_menu"] = requested_page
+    elif "page_menu" not in st.session_state or st.session_state["page_menu"] not in page_options:
+        st.session_state["page_menu"] = "Dashboard"
+
+    requested_input_section = st.session_state.pop("requested_input_section", None)
+    if requested_input_section:
+        st.session_state["active_input_section"] = requested_input_section
+
+    st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
     page = st.radio("เมนู", page_options, horizontal=True, key="page_menu")
     st.markdown('</div>', unsafe_allow_html=True)
     existing_trip_names = get_trip_names(data_dict)
