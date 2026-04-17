@@ -249,35 +249,24 @@ def get_subdivisions_by_country(country_name: str):
 def render_country_city_dropdown(prefix: str = "default"):
     country_options = get_all_countries() + ["Other / อื่นๆ"]
 
-    selected_country = st.selectbox(
-        "ประเทศ",
-        options=country_options,
-        key=f"country_{prefix}"
-    )
-
-    prev_country_key = f"prev_country_{prefix}"
+    country_key = f"country_{prefix}"
     city_key = f"city_{prefix}"
     custom_country_key = f"custom_country_{prefix}"
     custom_city_key = f"custom_city_{prefix}"
     city_text_key = f"city_text_{prefix}"
     custom_subdivision_key = f"custom_subdivision_{prefix}"
 
-    if prev_country_key not in st.session_state:
-        st.session_state[prev_country_key] = selected_country
+    def _reset_location_fields():
+        for key in [city_key, custom_country_key, custom_city_key, city_text_key, custom_subdivision_key]:
+            if key in st.session_state:
+                del st.session_state[key]
 
-    if st.session_state[prev_country_key] != selected_country:
-        if city_key in st.session_state:
-            del st.session_state[city_key]
-        if custom_country_key in st.session_state:
-            del st.session_state[custom_country_key]
-        if custom_city_key in st.session_state:
-            del st.session_state[custom_city_key]
-        if city_text_key in st.session_state:
-            del st.session_state[city_text_key]
-        if custom_subdivision_key in st.session_state:
-            del st.session_state[custom_subdivision_key]
-
-        st.session_state[prev_country_key] = selected_country
+    selected_country = st.selectbox(
+        "ประเทศ",
+        options=country_options,
+        key=country_key,
+        on_change=_reset_location_fields,
+    )
 
     if selected_country == "Other / อื่นๆ":
         custom_country = st.text_input("กรอกชื่อประเทศ", key=custom_country_key)
@@ -287,21 +276,22 @@ def render_country_city_dropdown(prefix: str = "default"):
     subdivision_options = get_subdivisions_by_country(selected_country)
 
     if subdivision_options:
+        city_options = subdivision_options + ["Other / อื่นๆ"]
         selected_city = st.selectbox(
             "เมือง / จังหวัด / รัฐ",
-            options=subdivision_options + ["Other / อื่นๆ"],
-            key=city_key
+            options=city_options,
+            key=city_key,
         )
 
         if selected_city == "Other / อื่นๆ":
             selected_city = st.text_input(
                 "กรอกเมือง / จังหวัด / รัฐ",
-                key=custom_subdivision_key
+                key=custom_subdivision_key,
             )
     else:
         selected_city = st.text_input(
             "เมือง / จังหวัด / รัฐ",
-            key=city_text_key
+            key=city_text_key,
         )
 
     return selected_country, selected_city
@@ -385,26 +375,27 @@ def render_dashboard(data_dict: dict):
 def render_places_form(existing_trip_names: list[str]):
     st.markdown("### 📍 เพิ่มข้อมูลสถานที่")
 
+    col1, col2 = st.columns(2)
+
+    with col1:
+        country, city = render_country_city_dropdown(prefix="places")
+
+    with col2:
+        date_value = st.date_input("วันที่", key="places_date")
+        time_value = st.time_input("เวลา", value=datetime.now().time(), key="places_time")
+
     with st.form("places_form", clear_on_submit=True):
-        col1, col2 = st.columns(2)
-
-        with col1:
-            country, city = render_country_city_dropdown(prefix="places")
-
-        with col2:
-            date_value = st.date_input("วันที่")
-            time_value = st.time_input("เวลา", value=datetime.now().time())
-
         trip_mode = st.radio(
             "เลือกวิธีกรอกชื่อทริป",
             ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
-            horizontal=True
+            horizontal=True,
+            key="places_trip_mode",
         )
 
         if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
-            trip_name = st.selectbox("ชื่อทริป", existing_trip_names)
+            trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="places_trip_name")
         else:
-            trip_name = st.text_input("ชื่อทริปใหม่")
+            trip_name = st.text_input("ชื่อทริปใหม่", key="places_trip_name_new")
 
         submitted = st.form_submit_button("บันทึกสถานที่", use_container_width=True)
 
