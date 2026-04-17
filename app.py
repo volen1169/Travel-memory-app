@@ -102,7 +102,7 @@ def inject_custom_css():
         :root {
             --bg: #f6f9fc;
             --panel: rgba(255,255,255,0.94);
-            --panel-strong: rgba(255,255,255,0.98);
+            --panel-strong: rgba(255,255,255,0.985);
             --text: #0a2540;
             --muted: #5b6b7f;
             --line: rgba(226,232,240,0.96);
@@ -123,28 +123,28 @@ def inject_custom_css():
 
         .stApp {
             background:
-                radial-gradient(circle at top left, rgba(96,165,250,0.12), transparent 24%),
-                radial-gradient(circle at top right, rgba(56,189,248,0.08), transparent 20%),
+                radial-gradient(circle at top left, rgba(96,165,250,0.13), transparent 24%),
+                radial-gradient(circle at top right, rgba(56,189,248,0.10), transparent 20%),
                 linear-gradient(180deg, #f8fbff 0%, #f4f7fb 52%, #eef4fb 100%);
             color: var(--text);
         }
 
         .main .block-container {
             max-width: 1320px;
-            padding-top: 1.4rem;
-            padding-bottom: 3.8rem;
+            padding-top: 1.5rem;
+            padding-bottom: 4rem;
         }
 
         [data-testid="stSidebar"] {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(246,250,255,0.98) 100%);
+                linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(246,250,255,0.98) 100%);
             border-right: 1px solid var(--line);
             box-shadow: 10px 0 32px rgba(15,23,42,0.04);
         }
 
         [data-testid="stSidebar"] .block-container {
-            padding-top: 1.45rem;
-            padding-bottom: 1.45rem;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
         }
 
         .hero-card {
@@ -153,13 +153,13 @@ def inject_custom_css():
             background:
                 radial-gradient(circle at 84% 18%, rgba(255,255,255,0.25), transparent 16%),
                 radial-gradient(circle at 16% 100%, rgba(255,255,255,0.14), transparent 18%),
-                linear-gradient(135deg, #0a2540 0%, #1b3b72 40%, #3259ff 100%);
+                linear-gradient(135deg, #081a33 0%, #173b70 44%, #3155ff 100%);
             border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 36px;
-            padding: 38px 42px 36px 42px;
+            border-radius: 38px;
+            padding: 42px 44px 38px 44px;
             color: white;
-            box-shadow: 0 28px 74px rgba(37,99,235,0.20);
-            margin-bottom: 1.8rem;
+            box-shadow: 0 30px 82px rgba(37,99,235,0.20);
+            margin-bottom: 1.9rem;
         }
 
         .hero-card::before {
@@ -168,7 +168,7 @@ def inject_custom_css():
             inset: -20% auto auto -8%;
             width: 360px;
             height: 360px;
-            background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 62%);
+            background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 62%);
             pointer-events: none;
         }
 
@@ -192,7 +192,7 @@ def inject_custom_css():
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 14px;
+            padding: 9px 15px;
             border-radius: 999px;
             background: rgba(255,255,255,0.12);
             border: 1px solid rgba(255,255,255,0.14);
@@ -204,16 +204,16 @@ def inject_custom_css():
         }
 
         .hero-title {
-            font-size: 3.15rem;
+            font-size: 3.25rem;
             font-weight: 900;
             line-height: 0.98;
             letter-spacing: -0.055em;
-            margin-bottom: 0.65rem;
+            margin-bottom: 0.7rem;
         }
 
         .hero-subtitle {
             font-size: 1.04rem;
-            line-height: 1.78;
+            line-height: 1.82;
             max-width: 920px;
             color: rgba(255,255,255,0.94);
         }
@@ -223,7 +223,9 @@ def inject_custom_css():
         .panel-card,
         .tm-metric,
         .summary-card,
-        .detail-item {
+        .detail-item,
+        .form-shell,
+        .subtle-shell {
             position: relative;
             overflow: hidden;
             background: var(--panel);
@@ -238,7 +240,8 @@ def inject_custom_css():
         .panel-card:hover,
         .tm-metric:hover,
         .summary-card:hover,
-        .detail-item:hover {
+        .detail-item:hover,
+        .form-shell:hover {
             transform: translateY(-4px);
             border-color: rgba(99,102,241,0.24);
             box-shadow: var(--shadow-hover);
@@ -249,7 +252,8 @@ def inject_custom_css():
         .panel-card::after,
         .tm-metric::after,
         .summary-card::after,
-        .detail-item::after {
+        .detail-item::after,
+        .form-shell::after {
             content: "";
             position: absolute;
             inset: -1px;
@@ -264,28 +268,30 @@ def inject_custom_css():
         .panel-card:hover::after,
         .tm-metric:hover::after,
         .summary-card:hover::after,
-        .detail-item:hover::after {
+        .detail-item:hover::after,
+        .form-shell:hover::after {
             opacity: 1;
         }
 
         .sidebar-card { border-radius: 24px; padding: 18px 18px 16px 18px; margin-bottom: 16px; }
         .sidebar-title { font-size: 1.65rem; font-weight: 900; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.45rem; }
-        .sidebar-subtitle, .sidebar-list, .section-subtitle, .panel-subtitle, .tm-metric-note { color: var(--muted); }
+        .sidebar-subtitle, .sidebar-list, .section-subtitle, .panel-subtitle, .tm-metric-note, .shell-subtitle { color: var(--muted); }
         .sidebar-check { color: var(--text); font-weight: 800; margin-bottom: 0.65rem; }
         .sidebar-list { padding-left: 1.1rem; margin: 0; line-height: 1.8; }
 
         .tm-metric {
             border-radius: 28px;
             padding: 24px 24px 20px 24px;
-            min-height: 148px;
-            margin-bottom: 0.4rem;
+            min-height: 152px;
+            margin-bottom: 0.55rem;
         }
 
         .tm-metric::before,
         .section-card::before,
         .panel-card::before,
         .summary-card::before,
-        .detail-item::before {
+        .detail-item::before,
+        .form-shell::before {
             content: "";
             position: absolute;
             inset: 0 0 auto 0;
@@ -312,11 +318,42 @@ def inject_custom_css():
             border-radius: var(--radius-xl);
             padding: 24px 24px 20px 24px;
             min-height: 100%;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.5rem;
         }
 
         .panel-title { color: var(--text); font-size: 1.32rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.28rem; position: relative; z-index: 2; }
         .panel-subtitle { font-size: 0.95rem; line-height: 1.58; margin-bottom: 1.15rem; position: relative; z-index: 2; }
+
+        .form-shell {
+            border-radius: 28px;
+            padding: 24px 24px 22px 24px;
+            margin: 0.9rem 0 1.2rem 0;
+            background: var(--panel-strong);
+        }
+
+        .shell-title {
+            font-size: 1.12rem;
+            font-weight: 900;
+            color: var(--text);
+            margin-bottom: 0.22rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shell-subtitle {
+            font-size: 0.93rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtle-shell {
+            border-radius: 22px;
+            padding: 18px 18px 12px 18px;
+            margin-bottom: 1rem;
+            background: rgba(255,255,255,0.72);
+        }
 
         .summary-grid {
             display: grid;
@@ -402,15 +439,38 @@ def inject_custom_css():
             z-index: 2;
         }
 
-        /* Better spacing between native Streamlit columns */
+        .page-switch [data-baseweb="radio"] {
+            background: transparent !important;
+            gap: 12px;
+        }
+
+        .page-switch label {
+            background: rgba(255,255,255,0.82);
+            border: 1px solid rgba(226,232,240,0.98);
+            border-radius: 999px;
+            padding: 10px 16px !important;
+            box-shadow: 0 8px 18px rgba(15,23,42,0.04);
+            transition: all 170ms ease;
+        }
+
+        .page-switch label:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px rgba(37,99,235,0.08);
+        }
+
+        .page-switch input:checked + div,
+        .page-switch label[data-checked="true"] {
+            color: #3155ff !important;
+        }
+
         div[data-testid="stHorizontalBlock"] > div {
-            padding-top: 2px;
-            padding-bottom: 2px;
+            padding-top: 3px;
+            padding-bottom: 3px;
         }
 
         .stTabs [data-baseweb="tab-list"] {
             gap: 12px;
-            padding-bottom: 0.4rem;
+            padding-bottom: 0.45rem;
         }
 
         .stTabs [data-baseweb="tab"] {
@@ -444,41 +504,25 @@ def inject_custom_css():
             color: #334155 !important;
         }
 
-
-        /* Input glow on focus */
-        .stTextInput input:focus,
-        .stNumberInput input:focus,
-        .stDateInput input:focus,
-        .stTimeInput input:focus,
-        textarea:focus {
-            border-color: rgba(99, 102, 241, 0.55) !important;
-            box-shadow:
-                0 0 0 4px rgba(99, 102, 241, 0.12),
-                0 8px 24px rgba(99, 102, 241, 0.10) !important;
-            outline: none !important;
-            transition: all 160ms ease;
-        }
-
-        div[data-baseweb="select"] > div:focus-within {
-            border-color: rgba(99, 102, 241, 0.55) !important;
-            box-shadow:
-                0 0 0 4px rgba(99, 102, 241, 0.12),
-                0 8px 24px rgba(99, 102, 241, 0.10) !important;
-            transition: all 160ms ease;
-            border-radius: 16px;
-        }
-
-        .stTextInput input,
-        .stNumberInput input,
-        .stDateInput input,
-        .stTimeInput input,
-        textarea,
+        .stTextInput input, .stNumberInput input, .stDateInput input input, .stTimeInput input, textarea,
         div[data-baseweb="select"] > div {
             border-radius: 16px !important;
             transition: all 160ms ease !important;
         }
 
-        .stButton > button, .stDownloadButton > button {
+        .stTextInput input:focus, .stNumberInput input:focus, .stDateInput input:focus, .stTimeInput input:focus, textarea:focus {
+            border-color: rgba(99, 102, 241, 0.55) !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 8px 24px rgba(99, 102, 241, 0.10) !important;
+            outline: none !important;
+        }
+
+        div[data-baseweb="select"] > div:focus-within {
+            border-color: rgba(99, 102, 241, 0.55) !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 8px 24px rgba(99, 102, 241, 0.10) !important;
+            border-radius: 16px;
+        }
+
+        .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button {
             border-radius: 999px;
             border: 1px solid rgba(147,197,253,0.45);
             background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
@@ -486,16 +530,15 @@ def inject_custom_css():
             font-weight: 800;
             box-shadow: 0 10px 24px rgba(37,99,235,0.08);
             transition: all 170ms ease;
-            min-height: 44px;
+            min-height: 46px;
         }
 
-        .stButton > button:hover, .stDownloadButton > button:hover {
+        .stButton > button:hover, .stDownloadButton > button:hover, .stFormSubmitButton > button:hover {
             transform: translateY(-1px);
             box-shadow: 0 14px 26px rgba(37,99,235,0.14);
             border-color: rgba(96,165,250,0.42);
         }
 
-        /* Smooth chart wrapper styling */
         .chart-shell {
             position: relative;
             min-height: 340px;
@@ -518,9 +561,9 @@ def inject_custom_css():
         }
 
         @media (max-width: 900px) {
-            .hero-title { font-size: 2.3rem; }
+            .hero-title { font-size: 2.38rem; }
             .summary-grid, .detail-grid { grid-template-columns: 1fr; }
-            .panel-card, .section-card { padding-left: 20px; padding-right: 20px; }
+            .panel-card, .section-card, .form-shell { padding-left: 20px; padding-right: 20px; }
         }
         </style>
         """,
@@ -726,6 +769,21 @@ def metric_card(label: str, value: str, note: str = ""):
         """,
         unsafe_allow_html=True,
     )
+
+
+def form_shell_open(title: str, subtitle: str = ""):
+    st.markdown(
+        f"""
+        <div class="form-shell">
+            <div class="shell-title">{title}</div>
+            <div class="shell-subtitle">{subtitle}</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def form_shell_close():
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def section_header(title: str, subtitle: str = ""):
@@ -1009,15 +1067,18 @@ def render_places_form(existing_trip_names: list[str]):
         st.session_state.pop("places_new_trip_name", None)
         st.session_state.pop("places_trip_name", None)
 
-    section_header("เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
-    col1, col2 = st.columns(2)
+    section_header("📍 เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริปในหน้าตาที่อ่านง่ายขึ้น")
+    form_shell_open("ข้อมูลสถานที่", "เลือกประเทศ เมือง และตั้งชื่อทริปให้เรียบร้อยก่อนบันทึก")
+
+    col1, col2 = st.columns(2, gap="large")
     with col1:
         country, city = render_country_city_dropdown(prefix="places")
     with col2:
         date_value = st.date_input("วันที่", key="places_date")
         time_value = st.time_input("เวลา", value=datetime.now().time(), key="places_time")
 
-    st.markdown('<div style="height: 12px;"></div>', unsafe_allow_html=True)
+    st.markdown('<div style="height: 8px;"></div>', unsafe_allow_html=True)
+
     trip_mode = st.radio(
         "เลือกวิธีกรอกชื่อทริป",
         ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
@@ -1042,13 +1103,17 @@ def render_places_form(existing_trip_names: list[str]):
                 st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
                 st.rerun()
 
+    form_shell_close()
+
 
 def render_transport_form(existing_trip_names: list[str]):
     if st.session_state.pop("transport_reset_trip_input", False):
         st.session_state.pop("transport_new_trip_name", None)
         st.session_state.pop("transport_trip_name", None)
 
-    section_header("เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
+    section_header("✈️ เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลาในฟอร์มที่ดูสะอาดขึ้น")
+    form_shell_open("ข้อมูลการเดินทาง", "กรอกวิธีเดินทาง ราคา และเวลา เพื่อให้ระบบรวมค่าใช้จ่ายได้แม่นยำ")
+
     trip_mode = st.radio(
         "เลือกวิธีกรอกชื่อทริป",
         ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
@@ -1061,7 +1126,7 @@ def render_transport_form(existing_trip_names: list[str]):
         trip_name = st.text_input("ชื่อทริปใหม่", key="transport_new_trip_name")
 
     with st.form("transport_form", clear_on_submit=True):
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, gap="large")
         with col1:
             travel_type = st.selectbox("ประเภท", ["เครื่องบิน", "รถไฟ", "MRT", "Taxi", "Uber", "รถบัส", "เรือ", "อื่นๆ"])
             line = st.text_input("สาย / ผู้ให้บริการ")
@@ -1071,6 +1136,7 @@ def render_transport_form(existing_trip_names: list[str]):
         with col3:
             date_value = st.date_input("วันที่เดินทาง")
             time_value = st.time_input("เวลาเดินทาง", key="transport_time", value=datetime.now().time())
+
         submitted = st.form_submit_button("บันทึกการเดินทาง", use_container_width=True)
         if submitted:
             trip_name = str(trip_name).strip()
@@ -1082,11 +1148,14 @@ def render_transport_form(existing_trip_names: list[str]):
                 st.success("บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว")
                 st.rerun()
 
+    form_shell_close()
+
 
 def render_hotels_form(existing_trip_names: list[str]):
     section_header("🏨 เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
+    form_shell_open("ข้อมูลที่พัก", "เพิ่มโรงแรมและราคาที่พักให้พร้อมใช้งานในแดชบอร์ด")
     with st.form("hotels_form", clear_on_submit=True):
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns(2, gap="large")
         with col1:
             hotel_name = st.text_input("ชื่อโรงแรม")
             room_type = st.text_input("ประเภทห้อง")
@@ -1100,6 +1169,8 @@ def render_hotels_form(existing_trip_names: list[str]):
             else:
                 append_row("Hotels", [hotel_name, room_type, price, trip_name])
                 st.success("บันทึกข้อมูลที่พักเรียบร้อยแล้ว")
+                st.rerun()
+    form_shell_close()
 
 
 def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str], existing_trip_names: list[str], key_suffix: str):
@@ -1119,6 +1190,8 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
             else:
                 append_row(sheet_key, [item_type, item_name, price, trip_name])
                 st.success("บันทึกข้อมูลเรียบร้อยแล้ว")
+                st.rerun()
+    form_shell_close()
 
 
 def render_all_tables(data_dict: dict):
@@ -1159,8 +1232,10 @@ def main():
         st.stop()
 
     render_top_metrics(data_dict)
-    st.markdown("<div style='height: 12px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
+    st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
     page = st.radio("เมนู", ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด"], horizontal=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     existing_trip_names = get_trip_names(data_dict)
 
     if page == "Dashboard":
