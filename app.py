@@ -8,7 +8,7 @@ from gspread.exceptions import APIError
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-st.set_page_config(page_title="?? ?? Travel Memory Dashboard", layout="wide")
+st.set_page_config(page_title="🌍 🌍 Travel Memory Dashboard", layout="wide")
 
 SHEET_ID = st.secrets["google_sheets"]["sheet_id"]
 
@@ -45,12 +45,12 @@ DISPLAY_NAMES = {
 }
 
 SECTION_ICONS = {
-    "Places": "??",
-    "Transport": "??",
-    "Hotels": "??",
-    "Food": "??",
-    "Packages": "??",
-    "Others": "??",
+    "Places": "📍",
+    "Transport": "✈️",
+    "Hotels": "🏨",
+    "Food": "🍜",
+    "Packages": "📶",
+    "Others": "💸",
 }
 
 COST_SHEETS = ["Transport", "Hotels", "Food", "Packages", "Others"]
@@ -438,7 +438,32 @@ def inject_custom_css():
             overflow: hidden;
         }
 
-        .chart-shell::before {
+        
+        .emoji-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.96));
+            border: 1px solid rgba(191,219,254,0.65);
+            box-shadow: 0 10px 24px rgba(37,99,235,0.08);
+            margin-bottom: 1rem;
+        }
+
+        .emoji-pill img {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+
+        .emoji-pill span {
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+.chart-shell::before {
             content: "";
             position: absolute;
             inset: 0;
@@ -760,6 +785,28 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
     st.caption(f"จำนวนรายการ: {len(df)}")
 
 
+def twemoji_url(emoji: str) -> str:
+    codepoints = []
+    for ch in emoji:
+        cp = ord(ch)
+        if cp == 0xFE0F:
+            continue
+        codepoints.append(f"{cp:x}")
+    return "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/" + "-".join(codepoints) + ".svg"
+
+
+def render_tab_badge(emoji: str, title: str):
+    st.markdown(
+        f"""
+        <div class="emoji-pill">
+            <img src="{twemoji_url(emoji)}" alt="{title}">
+            <span>{title}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_sidebar_info():
     st.sidebar.markdown(
         """
@@ -784,7 +831,7 @@ def render_sidebar_info():
         """,
         unsafe_allow_html=True,
     )
-    if st.sidebar.button("?? Refresh data", use_container_width=True):
+    if st.sidebar.button("🔄 Refresh data", use_container_width=True):
         load_all_data.clear()
         st.rerun()
 
@@ -806,7 +853,7 @@ def render_top_metrics(data_dict: dict):
 def render_dashboard(data_dict: dict):
     from streamlit.components.v1 import html as st_html
 
-    section_header("?? Dashboard", "สรุปทริปแบบ Mixpanel / Stripe / Linear ที่อ่านง่าย ดูโปร และเห็นภาพรวมเร็ว")
+    section_header("📊 Dashboard", "สรุปทริปแบบ Mixpanel / Stripe / Linear ที่อ่านง่าย ดูโปร และเห็นภาพรวมเร็ว")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -830,12 +877,12 @@ def render_dashboard(data_dict: dict):
 
     left, right = st.columns([1.08, 0.92], gap="large")
     with left:
-        panel_open("?? สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
+        panel_open("💳 สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
         render_summary_cards(summary_df)
         panel_close()
 
     with right:
-        panel_open("?? กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
+        panel_open("📈 กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
             labels = chart_df["หมวด"].astype(str).tolist()
@@ -922,11 +969,12 @@ def render_dashboard(data_dict: dict):
 
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
-    section_header("??? รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
-    detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
+    section_header("🗂️ รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
+    detail_tabs = st.tabs([DISPLAY_NAMES[k] for k in SHEET_ALIASES])
 
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
+            render_tab_badge(SECTION_ICONS[key], DISPLAY_NAMES[key])
             df = data_dict[key]
             filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip] if not df.empty else pd.DataFrame(columns=df.columns)
             currency_cols = ["ราคา"] if "ราคา" in filtered.columns else []
@@ -1016,7 +1064,7 @@ def render_transport_form(existing_trip_names: list[str]):
 
 
 def render_hotels_form(existing_trip_names: list[str]):
-    section_header("?? เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
+    section_header("🏨 เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
     with st.form("hotels_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
         with col1:
@@ -1055,9 +1103,10 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
 
 def render_all_tables(data_dict: dict):
     section_header("ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
-    tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
+    tabs = st.tabs([DISPLAY_NAMES[k] for k in SHEET_ALIASES])
     for tab, key in zip(tabs, SHEET_ALIASES):
         with tab:
+            render_tab_badge(SECTION_ICONS[key], DISPLAY_NAMES[key])
             df = data_dict[key]
             if df.empty:
                 st.info("ยังไม่มีข้อมูลในหมวดนี้")
@@ -1099,19 +1148,25 @@ def main():
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
         section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
-        input_tabs = st.tabs(["?? สถานที่", "?? การเดินทาง", "?? ที่พัก", "?? อาหารและของกิน", "?? แพ็กเกจและซิม", "?? ค่าใช้จ่ายอื่นๆ"])
+        input_tabs = st.tabs(["สถานที่", "การเดินทาง", "ที่พัก", "อาหารและของกิน", "แพ็กเกจและซิม", "ค่าใช้จ่ายอื่นๆ"])
         with input_tabs[0]:
+            render_tab_badge("📍", "สถานที่")
             render_places_form(existing_trip_names)
         with input_tabs[1]:
+            render_tab_badge("✈️", "การเดินทาง")
             render_transport_form(existing_trip_names)
         with input_tabs[2]:
+            render_tab_badge("🏨", "ที่พัก")
             render_hotels_form(existing_trip_names)
         with input_tabs[3]:
-            render_simple_cost_form("Food", "?? เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
+            render_tab_badge("🍜", "อาหารและของกิน")
+            render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
         with input_tabs[4]:
-            render_simple_cost_form("Packages", "?? เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
+            render_tab_badge("📶", "แพ็กเกจและซิม")
+            render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
         with input_tabs[5]:
-            render_simple_cost_form("Others", "?? เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
+            render_tab_badge("💸", "ค่าใช้จ่ายอื่นๆ")
+            render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     else:
         render_all_tables(data_dict)
 
