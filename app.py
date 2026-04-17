@@ -60,17 +60,13 @@ def normalize_dataframe(df: pd.DataFrame, sheet_key: str) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame(columns=expected)
 
-    # ลบคอลัมน์ว่าง
     df = df.loc[:, [c for c in df.columns if str(c).strip() != ""]]
 
-    # เติมคอลัมน์ที่ขาด
     for col in expected:
         if col not in df.columns:
             df[col] = ""
 
-    # เรียงตาม expected
     df = df[expected]
-
     return df
 
 
@@ -110,7 +106,6 @@ def load_all_data():
                 header_row_index = i
                 break
 
-        # ถ้าไม่เจอ header ที่ตรง ให้ลองใช้แถวแรกแทน
         if header_row_index is None:
             first_row = [str(x).strip() for x in all_values[0][:len(expected_headers)]]
             if first_row == expected_headers:
@@ -205,16 +200,17 @@ def format_datetime_for_sheet(date_value, time_value=None) -> str:
     return combined.strftime("%Y-%m-%d %H:%M")
 
 
+@st.cache_data(show_spinner=False)
 def get_all_countries():
     countries = []
     for country in pycountry.countries:
         name = getattr(country, "name", None)
         if name:
             countries.append(name)
-
     return sorted(set(countries))
 
 
+@st.cache_data(show_spinner=False)
 def get_subdivisions_by_country(country_name: str):
     if not country_name:
         return []
@@ -259,9 +255,33 @@ def render_country_city_dropdown(prefix: str = "default"):
         key=f"country_{prefix}"
     )
 
+    prev_country_key = f"prev_country_{prefix}"
+    city_key = f"city_{prefix}"
+    custom_country_key = f"custom_country_{prefix}"
+    custom_city_key = f"custom_city_{prefix}"
+    city_text_key = f"city_text_{prefix}"
+    custom_subdivision_key = f"custom_subdivision_{prefix}"
+
+    if prev_country_key not in st.session_state:
+        st.session_state[prev_country_key] = selected_country
+
+    if st.session_state[prev_country_key] != selected_country:
+        if city_key in st.session_state:
+            del st.session_state[city_key]
+        if custom_country_key in st.session_state:
+            del st.session_state[custom_country_key]
+        if custom_city_key in st.session_state:
+            del st.session_state[custom_city_key]
+        if city_text_key in st.session_state:
+            del st.session_state[city_text_key]
+        if custom_subdivision_key in st.session_state:
+            del st.session_state[custom_subdivision_key]
+
+        st.session_state[prev_country_key] = selected_country
+
     if selected_country == "Other / อื่นๆ":
-        custom_country = st.text_input("กรอกชื่อประเทศ", key=f"custom_country_{prefix}")
-        custom_city = st.text_input("กรอกเมือง / จังหวัด / รัฐ", key=f"custom_city_{prefix}")
+        custom_country = st.text_input("กรอกชื่อประเทศ", key=custom_country_key)
+        custom_city = st.text_input("กรอกเมือง / จังหวัด / รัฐ", key=custom_city_key)
         return custom_country, custom_city
 
     subdivision_options = get_subdivisions_by_country(selected_country)
@@ -270,18 +290,18 @@ def render_country_city_dropdown(prefix: str = "default"):
         selected_city = st.selectbox(
             "เมือง / จังหวัด / รัฐ",
             options=subdivision_options + ["Other / อื่นๆ"],
-            key=f"city_{prefix}"
+            key=city_key
         )
 
         if selected_city == "Other / อื่นๆ":
             selected_city = st.text_input(
                 "กรอกเมือง / จังหวัด / รัฐ",
-                key=f"custom_subdivision_{prefix}"
+                key=custom_subdivision_key
             )
     else:
         selected_city = st.text_input(
             "เมือง / จังหวัด / รัฐ",
-            key=f"city_text_{prefix}"
+            key=city_text_key
         )
 
     return selected_country, selected_city
