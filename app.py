@@ -62,65 +62,75 @@ def inject_custom_css():
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-        html, body, [class*="css"]  {
+        html, body, [class*="css"] {
             font-family: 'Inter', sans-serif;
         }
 
         .stApp {
             background:
-                radial-gradient(circle at top left, rgba(96,165,250,0.16), transparent 26%),
-                radial-gradient(circle at top right, rgba(45,212,191,0.12), transparent 22%),
-                linear-gradient(180deg, #f8fbff 0%, #f3f7fc 52%, #edf3fb 100%);
+                radial-gradient(circle at top left, rgba(59,130,246,0.10), transparent 24%),
+                radial-gradient(circle at top right, rgba(14,165,233,0.08), transparent 18%),
+                linear-gradient(180deg, #f6f9fc 0%, #f3f7fb 55%, #eef4fb 100%);
             color: #0f172a;
         }
 
         .main .block-container {
             max-width: 1280px;
-            padding-top: 1.2rem;
+            padding-top: 1.25rem;
             padding-bottom: 3rem;
         }
 
         [data-testid="stSidebar"] {
             background:
-                linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,249,255,0.98) 100%);
-            border-right: 1px solid rgba(148, 163, 184, 0.14);
-            box-shadow: 10px 0 30px rgba(15, 23, 42, 0.04);
+                linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(246,250,255,0.98) 100%);
+            border-right: 1px solid rgba(226,232,240,0.90);
+            box-shadow: 10px 0 28px rgba(15,23,42,0.035);
         }
 
         [data-testid="stSidebar"] .block-container {
-            padding-top: 1.4rem;
-            padding-bottom: 1.4rem;
+            padding-top: 1.35rem;
+            padding-bottom: 1.35rem;
         }
 
         .hero-card {
             position: relative;
             overflow: hidden;
             background:
-                radial-gradient(circle at 84% 18%, rgba(255,255,255,0.22), transparent 16%),
-                radial-gradient(circle at 18% 105%, rgba(255,255,255,0.16), transparent 18%),
-                linear-gradient(135deg, #0f172a 0%, #1d4ed8 54%, #38bdf8 100%);
+                radial-gradient(circle at 84% 18%, rgba(255,255,255,0.24), transparent 16%),
+                radial-gradient(circle at 16% 100%, rgba(255,255,255,0.14), transparent 18%),
+                linear-gradient(135deg, #0a2540 0%, #1b3b72 42%, #3259ff 100%);
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 34px;
-            padding: 34px 38px 32px 38px;
+            padding: 36px 40px 34px 40px;
             color: white;
-            box-shadow: 0 24px 70px rgba(37, 99, 235, 0.22);
+            box-shadow: 0 26px 70px rgba(37, 99, 235, 0.18);
             margin-bottom: 1.4rem;
-            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: -30% auto auto -10%;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 60%);
+            pointer-events: none;
         }
 
         .hero-card::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.10) 45%, transparent 70%);
-            transform: translateX(-120%);
-            animation: shine 6.5s ease-in-out infinite;
+            background: linear-gradient(120deg, transparent 28%, rgba(255,255,255,0.10) 49%, transparent 71%);
+            transform: translateX(-125%);
+            animation: stripeShine 7s ease-in-out infinite;
             pointer-events: none;
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-120%); }
-            55% { transform: translateX(120%); }
-            100% { transform: translateX(120%); }
+        @keyframes stripeShine {
+            0% { transform: translateX(-125%); }
+            52% { transform: translateX(125%); }
+            100% { transform: translateX(125%); }
         }
 
         .hero-kicker {
@@ -129,25 +139,26 @@ def inject_custom_css():
             gap: 8px;
             padding: 8px 14px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.14);
-            border: 1px solid rgba(255,255,255,0.16);
-            font-size: 0.82rem;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 0.80rem;
             font-weight: 800;
+            letter-spacing: 0.02em;
             margin-bottom: 0.95rem;
             backdrop-filter: blur(8px);
         }
 
         .hero-title {
-            font-size: 3rem;
+            font-size: 3.15rem;
             font-weight: 900;
-            line-height: 1.02;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.6rem;
+            line-height: 0.98;
+            letter-spacing: -0.055em;
+            margin-bottom: 0.65rem;
         }
 
         .hero-subtitle {
-            font-size: 1.03rem;
-            line-height: 1.75;
+            font-size: 1.02rem;
+            line-height: 1.78;
             max-width: 920px;
             color: rgba(255,255,255,0.94);
         }
@@ -160,41 +171,34 @@ def inject_custom_css():
         .detail-item {
             position: relative;
             overflow: hidden;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: 0 14px 34px rgba(15,23,42,0.045);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-card:hover,
+        .section-card:hover,
+        .panel-card:hover,
+        .tm-metric:hover,
+        .summary-card:hover,
+        .detail-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99,102,241,0.22);
+            box-shadow: 0 18px 42px rgba(37,99,235,0.09);
         }
 
         .sidebar-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,255,0.96));
-            border: 1px solid rgba(226,232,240,0.95);
             border-radius: 24px;
             padding: 18px 18px 16px 18px;
-            box-shadow: 0 12px 34px rgba(15,23,42,0.05);
             margin-bottom: 14px;
         }
 
-        .sidebar-card::before,
-        .section-card::before,
-        .panel-card::before,
-        .tm-metric::before,
-        .summary-card::before,
-        .detail-item::before {
-            content: "";
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(191,219,254,0.55), rgba(255,255,255,0.9));
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
         .sidebar-title {
-            font-size: 1.7rem;
+            font-size: 1.65rem;
             font-weight: 900;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
             color: #0f172a;
             margin-bottom: 0.45rem;
         }
@@ -216,82 +220,72 @@ def inject_custom_css():
         .sidebar-list {
             padding-left: 1.1rem;
             margin: 0;
-            line-height: 1.75;
+            line-height: 1.78;
         }
 
         .tm-metric {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
-            border: 1px solid rgba(226, 232, 240, 0.94);
             border-radius: 26px;
             padding: 22px 22px 18px 22px;
             min-height: 136px;
-            box-shadow: 0 14px 38px rgba(15, 23, 42, 0.055);
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-            backdrop-filter: blur(8px);
         }
 
-        .tm-metric:hover,
-        .summary-card:hover,
-        .detail-item:hover,
-        .panel-card:hover,
-        .section-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 46px rgba(37, 99, 235, 0.10);
-            border-color: rgba(96,165,250,0.26);
+        .tm-metric::before,
+        .section-card::before,
+        .panel-card::before,
+        .summary-card::before,
+        .detail-item::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7dd3fc 0%, #60a5fa 30%, #6366f1 70%, #8b5cf6 100%);
+            opacity: 0.95;
         }
 
         .tm-metric-label {
             color: #475569;
             font-size: 0.92rem;
             font-weight: 700;
-            margin-bottom: 0.65rem;
+            margin-bottom: 0.68rem;
         }
 
         .tm-metric-value {
             color: #0f172a;
-            font-size: 2.55rem;
+            font-size: 2.65rem;
             font-weight: 900;
             line-height: 1.0;
-            letter-spacing: -0.05em;
+            letter-spacing: -0.055em;
             margin-bottom: 0.35rem;
         }
 
         .tm-metric-note {
             font-size: 0.92rem;
-            line-height: 1.45;
+            line-height: 1.48;
         }
 
         .section-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
-            border: 1px solid rgba(226,232,240,0.96);
             border-radius: 28px;
             padding: 22px 24px 18px 24px;
-            box-shadow: 0 12px 36px rgba(15,23,42,0.05);
             margin-bottom: 1rem;
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
         }
 
         .section-title {
             color: #0f172a;
-            font-size: 1.6rem;
+            font-size: 1.62rem;
             font-weight: 900;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.25rem;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.22rem;
         }
 
         .section-subtitle {
             font-size: 0.98rem;
-            line-height: 1.6;
+            line-height: 1.62;
         }
 
         .panel-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,252,0.96));
-            border: 1px solid rgba(226,232,240,0.96);
             border-radius: 28px;
             padding: 22px 22px 18px 22px;
-            box-shadow: 0 12px 34px rgba(15,23,42,0.05);
             min-height: 100%;
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
         }
 
         .panel-title {
@@ -299,7 +293,7 @@ def inject_custom_css():
             font-size: 1.28rem;
             font-weight: 900;
             letter-spacing: -0.03em;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.24rem;
         }
 
         .panel-subtitle {
@@ -312,16 +306,13 @@ def inject_custom_css():
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px;
-            margin-top: 0.3rem;
+            margin-top: 0.35rem;
         }
 
         .summary-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
-            border: 1px solid rgba(226, 232, 240, 0.96);
             border-radius: 24px;
             padding: 18px 18px 16px 18px;
-            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.05);
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            min-height: 150px;
         }
 
         .summary-card-top {
@@ -339,8 +330,8 @@ def inject_custom_css():
         }
 
         .summary-card-count {
-            color: #2563eb;
-            background: linear-gradient(180deg, rgba(219,234,254,0.8), rgba(239,246,255,0.95));
+            color: #3155ff;
+            background: linear-gradient(180deg, rgba(232,240,255,0.95), rgba(241,245,255,0.95));
             border: 1px solid rgba(147,197,253,0.45);
             border-radius: 999px;
             padding: 5px 10px;
@@ -351,16 +342,17 @@ def inject_custom_css():
 
         .summary-card-value {
             color: #0f172a;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1.0;
+            letter-spacing: -0.05em;
+            line-height: 1.02;
             margin-bottom: 0.22rem;
         }
 
         .summary-card-note {
             color: #64748b;
             font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         .list-stack {
@@ -369,12 +361,8 @@ def inject_custom_css():
         }
 
         .detail-item {
-            background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.98));
-            border: 1px solid rgba(226,232,240,0.96);
             border-radius: 24px;
             padding: 16px 17px 15px 17px;
-            box-shadow: 0 12px 32px rgba(15,23,42,0.05);
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
         }
 
         .detail-main {
@@ -417,39 +405,43 @@ def inject_custom_css():
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 240px;
+            min-height: 248px;
             border-radius: 24px;
-            background:
-                linear-gradient(180deg, rgba(248,250,252,0.95), rgba(241,245,249,0.92));
+            background: linear-gradient(180deg, rgba(248,250,252,0.96), rgba(241,245,249,0.94));
             border: 1px dashed rgba(148,163,184,0.38);
             color: #64748b;
             text-align: center;
-            line-height: 1.8;
+            line-height: 1.85;
             font-weight: 600;
             padding: 24px;
         }
 
         .stTabs [data-baseweb="tab-list"] {
             gap: 10px;
-            padding-bottom: 0.2rem;
+            padding-bottom: 0.25rem;
         }
 
         .stTabs [data-baseweb="tab"] {
             height: 48px;
             white-space: nowrap;
-            background: rgba(255,255,255,0.76);
+            background: rgba(255,255,255,0.84);
             border-radius: 999px;
             border: 1px solid rgba(226,232,240,0.98);
             color: #334155;
             font-weight: 800;
             padding: 0 18px;
             transition: all 170ms ease;
-            box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+            box-shadow: 0 8px 18px rgba(15,23,42,0.04);
+        }
+
+        .stTabs [data-baseweb="tab"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px rgba(37,99,235,0.08);
         }
 
         .stTabs [aria-selected="true"] {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            color: #1d4ed8 !important;
+            color: #3155ff !important;
             border-color: rgba(96,165,250,0.30) !important;
             box-shadow: 0 10px 22px rgba(37,99,235,0.10);
         }
@@ -463,7 +455,7 @@ def inject_custom_css():
         .stButton > button, .stDownloadButton > button {
             border-radius: 999px;
             border: 1px solid rgba(147,197,253,0.45);
-            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
             color: #0f172a;
             font-weight: 800;
             box-shadow: 0 10px 24px rgba(37,99,235,0.08);
@@ -477,13 +469,8 @@ def inject_custom_css():
         }
 
         @media (max-width: 900px) {
-            .hero-title {
-                font-size: 2.2rem;
-            }
-            .summary-grid,
-            .detail-grid {
-                grid-template-columns: 1fr;
-            }
+            .hero-title { font-size: 2.28rem; }
+            .summary-grid, .detail-grid { grid-template-columns: 1fr; }
         }
         </style>
         """,
@@ -719,24 +706,26 @@ def panel_close():
 
 
 def render_summary_cards(summary_df: pd.DataFrame):
-    cards = []
+    html_parts = []
     for _, row in summary_df.iterrows():
-        amount = to_number(pd.Series([row.get("ยอดรวม", 0)])).iloc[0]
+        amount = float(to_number(pd.Series([row.get("ยอดรวม", 0)])).iloc[0])
         count = int(to_number(pd.Series([row.get("จำนวนรายการ", 0)])).iloc[0])
-        cards.append(
-            f"""
-            <div class="summary-card">
-                <div class="summary-card-top">
-                    <div class="summary-card-name">{row.get("หมวด", "")}</div>
-                    <div class="summary-card-count">{count} รายการ</div>
-                </div>
-                <div class="summary-card-value">฿ {amount:,.2f}</div>
-                <div class="summary-card-note">ยอดรวมของหมวดนี้ในทริปที่เลือก</div>
-            </div>
-            """
+        category = str(row.get("หมวด", "")).strip()
+
+        card_html = (
+            '<div class="summary-card">'
+            '<div class="summary-card-top">'
+            f'<div class="summary-card-name">{category}</div>'
+            f'<div class="summary-card-count">{count} รายการ</div>'
+            '</div>'
+            f'<div class="summary-card-value">฿ {amount:,.2f}</div>'
+            '<div class="summary-card-note">ยอดรวมของหมวดนี้ในทริปที่เลือก</div>'
+            '</div>'
         )
+        html_parts.append(card_html)
+
     st.markdown(
-        f'<div class="summary-grid">{"".join(cards)}</div>',
+        f'<div class="summary-grid">{"".join(html_parts)}</div>',
         unsafe_allow_html=True,
     )
 
@@ -747,10 +736,9 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
         st.info("ทริปนี้ยังไม่มีข้อมูลในหมวดนี้")
         return
 
-    cards = []
+    cards_html = []
     for _, row in df.iterrows():
         row_dict = row.to_dict()
-
         main_value = ""
         for candidate in ["ชื่อ", "ชื่อโรงแรม", "ประเภท", "ประเทศ", "ชื่อทริป"]:
             val = str(row_dict.get(candidate, "")).strip()
@@ -760,38 +748,34 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
         if not main_value:
             main_value = "รายการ"
 
-        fields_html = []
+        field_parts = []
         for col, raw in row_dict.items():
             if col == "ชื่อทริป":
                 continue
-            val = str(raw).strip()
+
             if col in currency_cols:
-                amount = to_number(pd.Series([raw])).iloc[0]
-                val_html = f'<div class="detail-field-value detail-price">฿ {amount:,.2f}</div>'
+                amount = float(to_number(pd.Series([raw])).iloc[0])
+                value_html = f'<div class="detail-field-value detail-price">฿ {amount:,.2f}</div>'
             else:
-                val_html = f'<div class="detail-field-value">{val if val else "-"}</div>'
-            fields_html.append(
-                f"""
-                <div class="detail-field">
-                    <div class="detail-field-label">{col}</div>
-                    {val_html}
-                </div>
-                """
+                value = str(raw).strip() or "-"
+                value_html = f'<div class="detail-field-value">{value}</div>'
+
+            field_parts.append(
+                '<div class="detail-field">'
+                f'<div class="detail-field-label">{col}</div>'
+                f'{value_html}'
+                '</div>'
             )
 
-        cards.append(
-            f"""
-            <div class="detail-item">
-                <div class="detail-main">{main_value}</div>
-                <div class="detail-grid">
-                    {''.join(fields_html)}
-                </div>
-            </div>
-            """
+        cards_html.append(
+            '<div class="detail-item">'
+            f'<div class="detail-main">{main_value}</div>'
+            f'<div class="detail-grid">{"".join(field_parts)}</div>'
+            '</div>'
         )
 
     st.markdown(
-        f'<div class="list-stack">{"".join(cards)}</div>',
+        f'<div class="list-stack">{"".join(cards_html)}</div>',
         unsafe_allow_html=True,
     )
     st.caption(f"จำนวนรายการ: {len(df)}")
@@ -841,7 +825,7 @@ def render_top_metrics(data_dict: dict):
 
 
 def render_dashboard(data_dict: dict):
-    section_header("Dashboard", "สรุปทริปแบบอ่านง่าย พร้อมค่าใช้จ่ายและรายละเอียดแต่ละหมวด")
+    section_header("Dashboard", "สรุปทริปแบบ Stripe-style ที่อ่านง่าย ดูทันสมัย และเห็นภาพรวมเร็ว")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -861,13 +845,14 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
-    left, right = st.columns([1.05, 0.95], gap="large")
+    left, right = st.columns([1.08, 0.92], gap="large")
     with left:
-        panel_open("สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ SaaS ช่วยให้อ่านเร็วและดูทันสมัยกว่าเดิม")
+        panel_open("สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ไม่ใช้ตารางและอ่านได้ในพริบตา")
         render_summary_cards(summary_df)
         panel_close()
+
     with right:
-        panel_open("กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
+        panel_open("กราฟค่าใช้จ่าย", "ช่วยให้เห็นทันทีว่าหมวดไหนใช้มากที่สุด")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
             st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
@@ -878,8 +863,9 @@ def render_dashboard(data_dict: dict):
             )
         panel_close()
 
-    section_header("รายละเอียดแต่ละหมวด", "แสดงข้อมูลเป็นการ์ดสไตล์ startup dashboard แทนการใช้ตาราง")
+    section_header("รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
+
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
             df = data_dict[key]
