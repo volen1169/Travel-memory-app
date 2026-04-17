@@ -438,32 +438,7 @@ def inject_custom_css():
             overflow: hidden;
         }
 
-        
-        .emoji-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.96));
-            border: 1px solid rgba(191,219,254,0.65);
-            box-shadow: 0 10px 24px rgba(37,99,235,0.08);
-            margin-bottom: 1rem;
-        }
-
-        .emoji-pill img {
-            width: 18px;
-            height: 18px;
-            display: block;
-        }
-
-        .emoji-pill span {
-            color: var(--text);
-            font-size: 0.95rem;
-            font-weight: 800;
-        }
-
-.chart-shell::before {
+        .chart-shell::before {
             content: "";
             position: absolute;
             inset: 0;
@@ -785,28 +760,6 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
     st.caption(f"จำนวนรายการ: {len(df)}")
 
 
-def twemoji_url(emoji: str) -> str:
-    codepoints = []
-    for ch in emoji:
-        cp = ord(ch)
-        if cp == 0xFE0F:
-            continue
-        codepoints.append(f"{cp:x}")
-    return "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/" + "-".join(codepoints) + ".svg"
-
-
-def render_tab_badge(emoji: str, title: str):
-    st.markdown(
-        f"""
-        <div class="emoji-pill">
-            <img src="{twemoji_url(emoji)}" alt="{title}">
-            <span>{title}</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def render_sidebar_info():
     st.sidebar.markdown(
         """
@@ -970,11 +923,10 @@ def render_dashboard(data_dict: dict):
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
     section_header("🗂️ รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
-    detail_tabs = st.tabs([DISPLAY_NAMES[k] for k in SHEET_ALIASES])
+    detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
 
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
-            render_tab_badge(SECTION_ICONS[key], DISPLAY_NAMES[key])
             df = data_dict[key]
             filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip] if not df.empty else pd.DataFrame(columns=df.columns)
             currency_cols = ["ราคา"] if "ราคา" in filtered.columns else []
@@ -1103,10 +1055,9 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
 
 def render_all_tables(data_dict: dict):
     section_header("ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
-    tabs = st.tabs([DISPLAY_NAMES[k] for k in SHEET_ALIASES])
+    tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(tabs, SHEET_ALIASES):
         with tab:
-            render_tab_badge(SECTION_ICONS[key], DISPLAY_NAMES[key])
             df = data_dict[key]
             if df.empty:
                 st.info("ยังไม่มีข้อมูลในหมวดนี้")
@@ -1148,24 +1099,18 @@ def main():
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
         section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
-        input_tabs = st.tabs(["สถานที่", "การเดินทาง", "ที่พัก", "อาหารและของกิน", "แพ็กเกจและซิม", "ค่าใช้จ่ายอื่นๆ"])
+        input_tabs = st.tabs(["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"])
         with input_tabs[0]:
-            render_tab_badge("📍", "สถานที่")
             render_places_form(existing_trip_names)
         with input_tabs[1]:
-            render_tab_badge("✈️", "การเดินทาง")
             render_transport_form(existing_trip_names)
         with input_tabs[2]:
-            render_tab_badge("🏨", "ที่พัก")
             render_hotels_form(existing_trip_names)
         with input_tabs[3]:
-            render_tab_badge("🍜", "อาหารและของกิน")
             render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
         with input_tabs[4]:
-            render_tab_badge("📶", "แพ็กเกจและซิม")
             render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
         with input_tabs[5]:
-            render_tab_badge("💸", "ค่าใช้จ่ายอื่นๆ")
             render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     else:
         render_all_tables(data_dict)
