@@ -45,12 +45,12 @@ DISPLAY_NAMES = {
 }
 
 SECTION_ICONS = {
-    "Places": "📍",
-    "Transport": "✈️",
-    "Hotels": "🏨",
-    "Food": "🍜",
-    "Packages": "📶",
-    "Others": "💸",
+    "Places": "??",
+    "Transport": "??",
+    "Hotels": "??",
+    "Food": "??",
+    "Packages": "??",
+    "Others": "??",
 }
 
 COST_SHEETS = ["Transport", "Hotels", "Food", "Packages", "Others"]
@@ -474,12 +474,12 @@ def display_table(df: pd.DataFrame, currency_cols: list[str] | None = None):
 
 
 def render_sidebar_info():
-    st.sidebar.markdown("## 🌍 Travel Memory")
+    st.sidebar.markdown("## ?? Travel Memory")
     st.sidebar.markdown("จัดเก็บทริป ค่าใช้จ่าย และการเดินทางผ่าน Google Sheets แบบดูง่ายขึ้น")
     st.sidebar.markdown("---")
     st.sidebar.markdown("**เช็กเบื้องต้นเมื่อเปิดแอปไม่ขึ้น**")
     st.sidebar.markdown("1. sheet_id ถูกต้อง\n2. ชื่อแต่ละชีตถูกต้อง\n3. share ให้ service account แล้ว\n4. เปิด Google Sheets API / Drive API แล้ว")
-    if st.sidebar.button("🔄 Refresh data", use_container_width=True):
+    if st.sidebar.button("?? Refresh data", use_container_width=True):
         load_all_data.clear()
         st.rerun()
 
@@ -499,7 +499,7 @@ def render_top_metrics(data_dict: dict):
 
 
 def render_dashboard(data_dict: dict):
-    section_header("📊 Dashboard", "สรุปทริปแบบอ่านง่าย พร้อมค่าใช้จ่ายและรายละเอียดแต่ละหมวด")
+    section_header("?? Dashboard", "สรุปทริปแบบอ่านง่าย พร้อมค่าใช้จ่ายและรายละเอียดแต่ละหมวด")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -521,11 +521,11 @@ def render_dashboard(data_dict: dict):
 
     left, right = st.columns([1.1, 0.9], gap="large")
     with left:
-        panel_open("💰 สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
+        panel_open("?? สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
         display_table(summary_df, currency_cols=["ยอดรวม"])
         panel_close()
     with right:
-        panel_open("📈 กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
+        panel_open("?? กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
         if summary_df["ยอดรวม"].sum() > 0:
             chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
             st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
@@ -533,7 +533,7 @@ def render_dashboard(data_dict: dict):
             st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
         panel_close()
 
-    section_header("🧾 รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
+    section_header("?? รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
@@ -547,7 +547,7 @@ def render_dashboard(data_dict: dict):
 
 
 def render_places_form(existing_trip_names: list[str]):
-    section_header("📍 เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
+    section_header("?? เพิ่มข้อมูลสถานที่", "บันทึกประเทศ เมือง วันเวลา และผูกกับชื่อทริป")
     col1, col2 = st.columns(2)
     with col1:
         country, city = render_country_city_dropdown(prefix="places")
@@ -555,24 +555,47 @@ def render_places_form(existing_trip_names: list[str]):
         date_value = st.date_input("วันที่", key="places_date")
         time_value = st.time_input("เวลา", value=datetime.now().time(), key="places_time")
 
-    with st.form("places_form", clear_on_submit=True):
-        trip_mode = st.radio("เลือกวิธีกรอกชื่อทริป", ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"], horizontal=True, key="places_trip_mode")
+    trip_card = st.container()
+    with trip_card:
+        st.markdown('<div class="section-card" style="padding-bottom: 1rem;">', unsafe_allow_html=True)
+        trip_mode = st.radio(
+            "เลือกวิธีกรอกชื่อทริป",
+            ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
+            horizontal=True,
+            key="places_trip_mode",
+        )
         if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
             trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="places_trip_name")
         else:
             trip_name = st.text_input("ชื่อทริปใหม่", key="places_new_trip_name")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with st.form("places_form", clear_on_submit=True):
         submitted = st.form_submit_button("บันทึกสถานที่", use_container_width=True)
         if submitted:
+            trip_name = str(trip_name).strip()
             if not country or not city or not trip_name:
                 st.error("กรุณาเลือก ประเทศ เมือง/จังหวัด/รัฐ และชื่อทริป ให้ครบ")
             else:
                 append_row("Places", [country, city, format_datetime_for_sheet(date_value, time_value), trip_name])
                 st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
                 reset_city_state("places")
+                st.session_state["places_new_trip_name"] = ""
 
 
 def render_transport_form(existing_trip_names: list[str]):
-    section_header("✈️ เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
+    section_header("?? เพิ่มข้อมูลการเดินทาง", "เก็บประเภทการเดินทาง ผู้ให้บริการ ราคา และเวลา")
+    trip_mode = st.radio(
+        "เลือกวิธีกรอกชื่อทริป",
+        ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
+        horizontal=True,
+        key="transport_trip_mode",
+    )
+    if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
+        trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="transport_trip_name")
+    else:
+        trip_name = st.text_input("ชื่อทริปใหม่", key="transport_new_trip_name")
+
     with st.form("transport_form", clear_on_submit=True):
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -584,22 +607,19 @@ def render_transport_form(existing_trip_names: list[str]):
         with col3:
             date_value = st.date_input("วันที่เดินทาง")
             time_value = st.time_input("เวลาเดินทาง", key="transport_time", value=datetime.now().time())
-        trip_mode = st.radio("เลือกวิธีกรอกชื่อทริป", ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"], horizontal=True)
-        if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
-            trip_name = st.selectbox("ชื่อทริป", existing_trip_names)
-        else:
-            trip_name = st.text_input("ชื่อทริปใหม่")
         submitted = st.form_submit_button("บันทึกการเดินทาง", use_container_width=True)
         if submitted:
+            trip_name = str(trip_name).strip()
             if not line or not trip_name:
                 st.error("กรุณากรอก สาย/ผู้ให้บริการ และชื่อทริป")
             else:
                 append_row("Transport", [travel_type, line, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
                 st.success("บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว")
+                st.session_state["transport_new_trip_name"] = ""
 
 
 def render_hotels_form(existing_trip_names: list[str]):
-    section_header("🏨 เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
+    section_header("?? เพิ่มข้อมูลที่พัก", "บันทึกโรงแรม ประเภทห้อง ราคา และเชื่อมกับทริป")
     with st.form("hotels_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
         with col1:
@@ -637,7 +657,7 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
 
 
 def render_all_tables(data_dict: dict):
-    section_header("📋 ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
+    section_header("?? ดูข้อมูลทุกชีต", "จัดรูปแบบตารางให้อ่านง่ายขึ้น และแยกตามหมวดข้อมูล")
     tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(tabs, SHEET_ALIASES):
         with tab:
@@ -654,7 +674,7 @@ def main():
     st.markdown(
         """
         <div class="hero-card">
-            <div class="hero-title">🌍 Travel Memory Dashboard</div>
+            <div class="hero-title">?? Travel Memory Dashboard</div>
             <div class="hero-subtitle">เก็บประวัติทริป ค่าใช้จ่าย การเดินทาง ที่พัก และข้อมูลอื่น ๆ ผ่าน Google Sheets ในรูปแบบที่อ่านง่ายขึ้น</div>
         </div>
         """,
@@ -681,8 +701,8 @@ def main():
     if page == "Dashboard":
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
-        section_header("➕ เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
-        input_tabs = st.tabs(["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"])
+        section_header("? เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
+        input_tabs = st.tabs(["?? สถานที่", "?? การเดินทาง", "?? ที่พัก", "?? อาหารและของกิน", "?? แพ็กเกจและซิม", "?? ค่าใช้จ่ายอื่นๆ"])
         with input_tabs[0]:
             render_places_form(existing_trip_names)
         with input_tabs[1]:
@@ -690,11 +710,11 @@ def main():
         with input_tabs[2]:
             render_hotels_form(existing_trip_names)
         with input_tabs[3]:
-            render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
+            render_simple_cost_form("Food", "?? เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
         with input_tabs[4]:
-            render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
+            render_simple_cost_form("Packages", "?? เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
         with input_tabs[5]:
-            render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
+            render_simple_cost_form("Others", "?? เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     else:
         render_all_tables(data_dict)
 
