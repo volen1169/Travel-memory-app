@@ -781,6 +781,31 @@ def inject_custom_css():
             margin-bottom: 0.9rem;
         }
 
+        .quick-target-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(239,246,255,0.98), rgba(238,242,255,0.98));
+            border: 1px solid rgba(147,197,253,0.42);
+            box-shadow: 0 10px 24px rgba(37,99,235,0.08);
+            margin-bottom: 1rem;
+        }
+
+        .quick-target-banner-title {
+            color: var(--text);
+            font-size: 0.98rem;
+            font-weight: 900;
+        }
+
+        .quick-target-banner-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+
         @media (max-width: 900px) {
             .kpi-row, .insight-grid, .quick-grid {
                 grid-template-columns: 1fr;
@@ -1433,6 +1458,31 @@ def render_donut_chart(summary_df: pd.DataFrame):
     st_html(donut_html, height=340)
 
 
+
+def render_quick_target_banner(target: str):
+    target_map = {
+        "📍 สถานที่": ("📍", "สถานที่", "เลื่อนลงไปที่แท็บสถานที่เพื่อบันทึกประเทศ เมือง และวันเวลา"),
+        "✈️ การเดินทาง": ("✈️", "การเดินทาง", "เลื่อนลงไปที่แท็บการเดินทางเพื่อบันทึกไฟลท์ รถไฟ หรือค่าเดินทาง"),
+        "🏨 ที่พัก": ("🏨", "ที่พัก", "เลื่อนลงไปที่แท็บที่พักเพื่อเพิ่มโรงแรมและราคาที่พัก"),
+        "🍜 อาหารและของกิน": ("🍜", "อาหารและของกิน", "เลื่อนลงไปที่แท็บอาหารและของกินเพื่อเพิ่มรายการนี้ได้ทันที"),
+        "📶 แพ็กเกจและซิม": ("📶", "แพ็กเกจและซิม", "เลื่อนลงไปที่แท็บแพ็กเกจและซิมเพื่อเพิ่มรายการ"),
+        "💸 ค่าใช้จ่ายอื่นๆ": ("💸", "ค่าใช้จ่ายอื่นๆ", "เลื่อนลงไปที่แท็บค่าใช้จ่ายอื่นๆ เพื่อบันทึกรายการ"),
+    }
+    emoji, title, note = target_map.get(target, ("⚡", "เพิ่มข้อมูล", "เลือกแท็บที่ต้องการด้านล่าง"))
+    st.markdown(
+        f"""
+        <div class="quick-target-banner">
+            <div style="font-size:1.25rem;">{emoji}</div>
+            <div>
+                <div class="quick-target-banner-title">Quick add พร้อมแล้ว: {title}</div>
+                <div class="quick-target-banner-note">{note}</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_dashboard(data_dict: dict):
     from streamlit.components.v1 import html as st_html
 
@@ -1793,22 +1843,34 @@ def main():
         render_dashboard(data_dict)
     elif page == "เพิ่มข้อมูล":
         section_header("เพิ่มข้อมูล", "เลือกหมวดที่ต้องการบันทึก แล้วกรอกข้อมูลในฟอร์มด้านล่าง")
+
         input_tab_names = ["📍 สถานที่", "✈️ การเดินทาง", "🏨 ที่พัก", "🍜 อาหารและของกิน", "📶 แพ็กเกจและซิม", "💸 ค่าใช้จ่ายอื่นๆ"]
         quick_target = st.session_state.pop("quick_add_target", None)
+
         if quick_target and quick_target in input_tab_names:
-            st.info(f"พร้อมเพิ่มข้อมูลในหมวด {quick_target}")
-        input_tabs = st.tabs(input_tab_names)
-        with input_tabs[0]:
+            st.session_state["active_input_section"] = quick_target
+            render_quick_target_banner(quick_target)
+
+        current_section = st.radio(
+            "เลือกหมวดที่ต้องการเพิ่มข้อมูล",
+            input_tab_names,
+            horizontal=True,
+            key="active_input_section"
+        )
+
+        st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+
+        if current_section == "📍 สถานที่":
             render_places_form(existing_trip_names)
-        with input_tabs[1]:
+        elif current_section == "✈️ การเดินทาง":
             render_transport_form(existing_trip_names)
-        with input_tabs[2]:
+        elif current_section == "🏨 ที่พัก":
             render_hotels_form(existing_trip_names)
-        with input_tabs[3]:
+        elif current_section == "🍜 อาหารและของกิน":
             render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
-        with input_tabs[4]:
+        elif current_section == "📶 แพ็กเกจและซิม":
             render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
-        with input_tabs[5]:
+        elif current_section == "💸 ค่าใช้จ่ายอื่นๆ":
             render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     else:
         render_all_tables(data_dict)
