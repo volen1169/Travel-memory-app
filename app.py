@@ -1017,20 +1017,17 @@ def render_places_form(existing_trip_names: list[str]):
         date_value = st.date_input("วันที่", key="places_date")
         time_value = st.time_input("เวลา", value=datetime.now().time(), key="places_time")
 
-    trip_card = st.container()
-    with trip_card:
-        st.markdown('<div class="section-card" style="padding-bottom: 1rem;">', unsafe_allow_html=True)
-        trip_mode = st.radio(
-            "เลือกวิธีกรอกชื่อทริป",
-            ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
-            horizontal=True,
-            key="places_trip_mode",
-        )
-        if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
-            trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="places_trip_name")
-        else:
-            trip_name = st.text_input("ชื่อทริปใหม่", key="places_new_trip_name")
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div style="height: 12px;"></div>', unsafe_allow_html=True)
+    trip_mode = st.radio(
+        "เลือกวิธีกรอกชื่อทริป",
+        ["เลือกจากทริปเดิม", "สร้างชื่อทริปใหม่"],
+        horizontal=True,
+        key="places_trip_mode",
+    )
+    if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
+        trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="places_trip_name")
+    else:
+        trip_name = st.text_input("ชื่อทริปใหม่", key="places_new_trip_name")
 
     with st.form("places_form", clear_on_submit=True):
         submitted = st.form_submit_button("บันทึกสถานที่", use_container_width=True)
@@ -1180,9 +1177,9 @@ def main():
         with input_tabs[3]:
             render_simple_cost_form("Food", "🍜 เพิ่มข้อมูลอาหารและของกิน", ["ร้านอาหาร", "คาเฟ่", "ของหวาน", "street food", "ของฝาก", "อื่นๆ"], existing_trip_names, "food")
         with input_tabs[4]:
-            render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง","อื่นๆ"], existing_trip_names, "packages")
+            render_simple_cost_form("Packages", "📶 เพิ่มข้อมูลแพ็กเกจและซิม", ["SIM", "แพ็กเกจทัวร์", "บัตรเดินทาง", "ประกัน", "อื่นๆ"], existing_trip_names, "packages")
         with input_tabs[5]:
-            render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "แลกเงิน", "ของใช้ส่วนตัว", "ประกัน", "อื่นๆ"], existing_trip_names, "others")
+            render_simple_cost_form("Others", "💸 เพิ่มข้อมูลค่าใช้จ่ายอื่นๆ", ["ค่าเข้า", "ประกัน", "ของใช้ส่วนตัว", "ค่าธรรมเนียม", "อื่นๆ"], existing_trip_names, "others")
     else:
         render_all_tables(data_dict)
 
