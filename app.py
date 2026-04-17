@@ -1,7 +1,11 @@
+
 import streamlit as st
 import pandas as pd
 import gspread
 import pycountry
+import time
+import random
+from gspread.exceptions import APIError
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
@@ -44,6 +48,31 @@ DISPLAY_NAMES = {
 COST_SHEETS = ["Transport", "Hotels", "Food", "Packages", "Others"]
 
 
+def is_quota_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    return "quota exceeded" in text or "429" in text or "rate limit" in text
+
+
+def call_with_retry(func, *args, max_retries: int = 5, base_sleep: float = 1.2, **kwargs):
+    last_error = None
+
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+        except APIError as e:
+            last_error = e
+            if not is_quota_error(e) or attempt == max_retries - 1:
+                raise
+            sleep_s = base_sleep * (2 ** attempt) + random.uniform(0, 0.5)
+            time.sleep(sleep_s)
+        except Exception as e:
+            last_error = e
+            raise
+
+    if last_error:
+        raise last_error
+
+
 @st.cache_resource(show_spinner=False)
 def connect_gsheet():
     credentials = Credentials.from_service_account_info(
@@ -51,7 +80,7 @@ def connect_gsheet():
         scopes=SCOPE,
     )
     client = gspread.authorize(credentials)
-    return client.open_by_key(SHEET_ID)
+    return call_with_retry(client.open_by_key, SHEET_ID)
 
 
 def normalize_dataframe(df: pd.DataFrame, sheet_key: str) -> pd.DataFrame:
@@ -70,28 +99,33 @@ def normalize_dataframe(df: pd.DataFrame, sheet_key: str) -> pd.DataFrame:
     return df
 
 
-def find_worksheet(spreadsheet, sheet_key: str):
+def get_worksheet_map(spreadsheet):
+    worksheets = call_with_retry(spreadsheet.worksheets)
+    return {ws.title: ws for ws in worksheets}
+
+
+def find_worksheet(sheet_map: dict, sheet_key: str):
     aliases = SHEET_ALIASES[sheet_key]
-    available_titles = [ws.title for ws in spreadsheet.worksheets()]
 
     for title in aliases:
-        if title in available_titles:
-            return spreadsheet.worksheet(title)
+        if title in sheet_map:
+            return sheet_map[title]
 
     raise ValueError(
         f"ไม่พบชีตสำหรับ {sheet_key}. กรุณาตั้งชื่อชีตเป็นหนึ่งในนี้: {', '.join(aliases)}"
     )
 
 
-@st.cache_data(ttl=10, show_spinner=False)
+@st.cache_data(show_spinner=False)
 def load_all_data():
     spreadsheet = connect_gsheet()
+    sheet_map = get_worksheet_map(spreadsheet)
     data = {}
 
     for key in SHEET_ALIASES:
-        ws = find_worksheet(spreadsheet, key)
+        ws = find_worksheet(sheet_map, key)
         expected_headers = EXPECTED_HEADERS[key]
-        all_values = ws.get_all_values()
+        all_values = call_with_retry(ws.get_all_values)
 
         if not all_values:
             df = pd.DataFrame(columns=expected_headers)
@@ -135,8 +169,9 @@ def load_all_data():
 
 def append_row(sheet_key: str, row_values: list):
     spreadsheet = connect_gsheet()
-    ws = find_worksheet(spreadsheet, sheet_key)
-    ws.append_row(row_values, value_input_option="USER_ENTERED")
+    sheet_map = get_worksheet_map(spreadsheet)
+    ws = find_worksheet(sheet_map, sheet_key)
+    call_with_retry(ws.append_row, row_values, value_input_option="USER_ENTERED")
     load_all_data.clear()
 
 
@@ -246,27 +281,33 @@ def get_subdivisions_by_country(country_name: str):
     return sorted(set(subdivisions))
 
 
+def reset_city_state(prefix: str):
+    for key in [
+        f"city_{prefix}",
+        f"custom_city_{prefix}",
+        f"city_text_{prefix}",
+        f"custom_subdivision_{prefix}",
+    ]:
+        if key in st.session_state:
+            del st.session_state[key]
+
+
 def render_country_city_dropdown(prefix: str = "default"):
     country_options = get_all_countries() + ["Other / อื่นๆ"]
-
-    country_key = f"country_{prefix}"
-    city_key = f"city_{prefix}"
-    custom_country_key = f"custom_country_{prefix}"
-    custom_city_key = f"custom_city_{prefix}"
-    city_text_key = f"city_text_{prefix}"
-    custom_subdivision_key = f"custom_subdivision_{prefix}"
-
-    def _reset_location_fields():
-        for key in [city_key, custom_country_key, custom_city_key, city_text_key, custom_subdivision_key]:
-            if key in st.session_state:
-                del st.session_state[key]
 
     selected_country = st.selectbox(
         "ประเทศ",
         options=country_options,
-        key=country_key,
-        on_change=_reset_location_fields,
+        key=f"country_{prefix}",
+        on_change=reset_city_state,
+        args=(prefix,),
     )
+
+    custom_country_key = f"custom_country_{prefix}"
+    custom_city_key = f"custom_city_{prefix}"
+    city_key = f"city_{prefix}"
+    city_text_key = f"city_text_{prefix}"
+    custom_subdivision_key = f"custom_subdivision_{prefix}"
 
     if selected_country == "Other / อื่นๆ":
         custom_country = st.text_input("กรอกชื่อประเทศ", key=custom_country_key)
@@ -276,10 +317,9 @@ def render_country_city_dropdown(prefix: str = "default"):
     subdivision_options = get_subdivisions_by_country(selected_country)
 
     if subdivision_options:
-        city_options = subdivision_options + ["Other / อื่นๆ"]
         selected_city = st.selectbox(
             "เมือง / จังหวัด / รัฐ",
-            options=city_options,
+            options=subdivision_options + ["Other / อื่นๆ"],
             key=city_key,
         )
 
@@ -395,7 +435,7 @@ def render_places_form(existing_trip_names: list[str]):
         if trip_mode == "เลือกจากทริปเดิม" and existing_trip_names:
             trip_name = st.selectbox("ชื่อทริป", existing_trip_names, key="places_trip_name")
         else:
-            trip_name = st.text_input("ชื่อทริปใหม่", key="places_trip_name_new")
+            trip_name = st.text_input("ชื่อทริปใหม่", key="places_new_trip_name")
 
         submitted = st.form_submit_button("บันทึกสถานที่", use_container_width=True)
 
@@ -408,6 +448,7 @@ def render_places_form(existing_trip_names: list[str]):
                     [country, city, format_datetime_for_sheet(date_value, time_value), trip_name],
                 )
                 st.success("บันทึกข้อมูลสถานที่เรียบร้อยแล้ว")
+                reset_city_state("places")
 
 
 def render_transport_form(existing_trip_names: list[str]):
@@ -535,7 +576,10 @@ def main():
     try:
         data_dict = load_all_data()
     except Exception as e:
-        st.error("เชื่อม Google Sheets ไม่สำเร็จ")
+        if is_quota_error(e):
+            st.error("Google Sheets ใช้งานเกินโควต้าชั่วคราว กรุณารอสักครู่แล้วกด Refresh data อีกครั้ง")
+        else:
+            st.error("เชื่อม Google Sheets ไม่สำเร็จ")
         st.exception(e)
         st.stop()
 
