@@ -8,7 +8,7 @@ from gspread.exceptions import APIError
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-st.set_page_config(page_title="Travel Memory Dashboard", layout="wide")
+st.set_page_config(page_title="?? ?? Travel Memory Dashboard", layout="wide")
 
 SHEET_ID = st.secrets["google_sheets"]["sheet_id"]
 
@@ -62,58 +62,76 @@ def inject_custom_css():
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+        :root {
+            --bg: #f6f9fc;
+            --panel: rgba(255,255,255,0.94);
+            --panel-strong: rgba(255,255,255,0.98);
+            --text: #0a2540;
+            --muted: #5b6b7f;
+            --line: rgba(226,232,240,0.96);
+            --shadow: 0 18px 38px rgba(15, 23, 42, 0.055);
+            --shadow-hover: 0 22px 55px rgba(69, 104, 255, 0.14);
+            --radius-xl: 30px;
+            --radius-lg: 24px;
+            --radius-md: 20px;
+            --accent-a: #7dd3fc;
+            --accent-b: #60a5fa;
+            --accent-c: #6366f1;
+            --accent-d: #8b5cf6;
+        }
+
         html, body, [class*="css"] {
             font-family: 'Inter', sans-serif;
         }
 
         .stApp {
             background:
-                radial-gradient(circle at top left, rgba(59,130,246,0.10), transparent 24%),
-                radial-gradient(circle at top right, rgba(14,165,233,0.08), transparent 18%),
-                linear-gradient(180deg, #f6f9fc 0%, #f3f7fb 55%, #eef4fb 100%);
-            color: #0f172a;
+                radial-gradient(circle at top left, rgba(96,165,250,0.12), transparent 24%),
+                radial-gradient(circle at top right, rgba(56,189,248,0.08), transparent 20%),
+                linear-gradient(180deg, #f8fbff 0%, #f4f7fb 52%, #eef4fb 100%);
+            color: var(--text);
         }
 
         .main .block-container {
-            max-width: 1280px;
-            padding-top: 1.25rem;
-            padding-bottom: 3rem;
+            max-width: 1320px;
+            padding-top: 1.4rem;
+            padding-bottom: 3.8rem;
         }
 
         [data-testid="stSidebar"] {
             background:
                 linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(246,250,255,0.98) 100%);
-            border-right: 1px solid rgba(226,232,240,0.90);
-            box-shadow: 10px 0 28px rgba(15,23,42,0.035);
+            border-right: 1px solid var(--line);
+            box-shadow: 10px 0 32px rgba(15,23,42,0.04);
         }
 
         [data-testid="stSidebar"] .block-container {
-            padding-top: 1.35rem;
-            padding-bottom: 1.35rem;
+            padding-top: 1.45rem;
+            padding-bottom: 1.45rem;
         }
 
         .hero-card {
             position: relative;
             overflow: hidden;
             background:
-                radial-gradient(circle at 84% 18%, rgba(255,255,255,0.24), transparent 16%),
+                radial-gradient(circle at 84% 18%, rgba(255,255,255,0.25), transparent 16%),
                 radial-gradient(circle at 16% 100%, rgba(255,255,255,0.14), transparent 18%),
-                linear-gradient(135deg, #0a2540 0%, #1b3b72 42%, #3259ff 100%);
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 34px;
-            padding: 36px 40px 34px 40px;
+                linear-gradient(135deg, #0a2540 0%, #1b3b72 40%, #3259ff 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 36px;
+            padding: 38px 42px 36px 42px;
             color: white;
-            box-shadow: 0 26px 70px rgba(37, 99, 235, 0.18);
-            margin-bottom: 1.4rem;
+            box-shadow: 0 28px 74px rgba(37,99,235,0.20);
+            margin-bottom: 1.8rem;
         }
 
         .hero-card::before {
             content: "";
             position: absolute;
-            inset: -30% auto auto -10%;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 60%);
+            inset: -20% auto auto -8%;
+            width: 360px;
+            height: 360px;
+            background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 62%);
             pointer-events: none;
         }
 
@@ -121,7 +139,7 @@ def inject_custom_css():
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(120deg, transparent 28%, rgba(255,255,255,0.10) 49%, transparent 71%);
+            background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.12) 49%, transparent 69%);
             transform: translateX(-125%);
             animation: stripeShine 7s ease-in-out infinite;
             pointer-events: none;
@@ -144,7 +162,7 @@ def inject_custom_css():
             font-size: 0.80rem;
             font-weight: 800;
             letter-spacing: 0.02em;
-            margin-bottom: 0.95rem;
+            margin-bottom: 1rem;
             backdrop-filter: blur(8px);
         }
 
@@ -157,7 +175,7 @@ def inject_custom_css():
         }
 
         .hero-subtitle {
-            font-size: 1.02rem;
+            font-size: 1.04rem;
             line-height: 1.78;
             max-width: 920px;
             color: rgba(255,255,255,0.94);
@@ -171,10 +189,10 @@ def inject_custom_css():
         .detail-item {
             position: relative;
             overflow: hidden;
-            background: rgba(255,255,255,0.94);
-            border: 1px solid rgba(226,232,240,0.96);
-            box-shadow: 0 14px 34px rgba(15,23,42,0.045);
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
             backdrop-filter: blur(10px);
         }
 
@@ -184,49 +202,46 @@ def inject_custom_css():
         .tm-metric:hover,
         .summary-card:hover,
         .detail-item:hover {
-            transform: translateY(-3px);
-            border-color: rgba(99,102,241,0.22);
-            box-shadow: 0 18px 42px rgba(37,99,235,0.09);
+            transform: translateY(-4px);
+            border-color: rgba(99,102,241,0.24);
+            box-shadow: var(--shadow-hover);
         }
 
-        .sidebar-card {
-            border-radius: 24px;
-            padding: 18px 18px 16px 18px;
-            margin-bottom: 14px;
+        .sidebar-card::after,
+        .section-card::after,
+        .panel-card::after,
+        .tm-metric::after,
+        .summary-card::after,
+        .detail-item::after {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(125,211,252,0.18), rgba(99,102,241,0.08), rgba(139,92,246,0.18));
+            opacity: 0;
+            transition: opacity 180ms ease;
+            pointer-events: none;
         }
 
-        .sidebar-title {
-            font-size: 1.65rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            color: #0f172a;
-            margin-bottom: 0.45rem;
+        .sidebar-card:hover::after,
+        .section-card:hover::after,
+        .panel-card:hover::after,
+        .tm-metric:hover::after,
+        .summary-card:hover::after,
+        .detail-item:hover::after {
+            opacity: 1;
         }
 
-        .sidebar-subtitle,
-        .sidebar-list,
-        .section-subtitle,
-        .panel-subtitle,
-        .tm-metric-note {
-            color: #64748b;
-        }
-
-        .sidebar-check {
-            color: #0f172a;
-            font-weight: 800;
-            margin-bottom: 0.65rem;
-        }
-
-        .sidebar-list {
-            padding-left: 1.1rem;
-            margin: 0;
-            line-height: 1.78;
-        }
+        .sidebar-card { border-radius: 24px; padding: 18px 18px 16px 18px; margin-bottom: 16px; }
+        .sidebar-title { font-size: 1.65rem; font-weight: 900; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.45rem; }
+        .sidebar-subtitle, .sidebar-list, .section-subtitle, .panel-subtitle, .tm-metric-note { color: var(--muted); }
+        .sidebar-check { color: var(--text); font-weight: 800; margin-bottom: 0.65rem; }
+        .sidebar-list { padding-left: 1.1rem; margin: 0; line-height: 1.8; }
 
         .tm-metric {
-            border-radius: 26px;
-            padding: 22px 22px 18px 22px;
-            min-height: 136px;
+            border-radius: 28px;
+            padding: 24px 24px 20px 24px;
+            min-height: 148px;
+            margin-bottom: 0.4rem;
         }
 
         .tm-metric::before,
@@ -238,81 +253,48 @@ def inject_custom_css():
             position: absolute;
             inset: 0 0 auto 0;
             height: 3px;
-            background: linear-gradient(90deg, #7dd3fc 0%, #60a5fa 30%, #6366f1 70%, #8b5cf6 100%);
-            opacity: 0.95;
+            background: linear-gradient(90deg, var(--accent-a) 0%, var(--accent-b) 28%, var(--accent-c) 68%, var(--accent-d) 100%);
+            opacity: 0.96;
+            z-index: 1;
         }
 
-        .tm-metric-label {
-            color: #475569;
-            font-size: 0.92rem;
-            font-weight: 700;
-            margin-bottom: 0.68rem;
-        }
-
-        .tm-metric-value {
-            color: #0f172a;
-            font-size: 2.65rem;
-            font-weight: 900;
-            line-height: 1.0;
-            letter-spacing: -0.055em;
-            margin-bottom: 0.35rem;
-        }
-
-        .tm-metric-note {
-            font-size: 0.92rem;
-            line-height: 1.48;
-        }
+        .tm-metric-label { color: #475569; font-size: 0.92rem; font-weight: 700; margin-bottom: 0.72rem; position: relative; z-index: 2; }
+        .tm-metric-value { color: var(--text); font-size: 2.7rem; font-weight: 900; line-height: 1.0; letter-spacing: -0.055em; margin-bottom: 0.38rem; position: relative; z-index: 2; }
+        .tm-metric-note { font-size: 0.92rem; line-height: 1.48; position: relative; z-index: 2; }
 
         .section-card {
-            border-radius: 28px;
-            padding: 22px 24px 18px 24px;
-            margin-bottom: 1rem;
+            border-radius: var(--radius-xl);
+            padding: 26px 28px 22px 28px;
+            margin-bottom: 1.6rem;
         }
 
-        .section-title {
-            color: #0f172a;
-            font-size: 1.62rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            margin-bottom: 0.22rem;
-        }
-
-        .section-subtitle {
-            font-size: 0.98rem;
-            line-height: 1.62;
-        }
+        .section-title { color: var(--text); font-size: 1.68rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 0.24rem; position: relative; z-index: 2; }
+        .section-subtitle { font-size: 0.98rem; line-height: 1.62; position: relative; z-index: 2; }
 
         .panel-card {
-            border-radius: 28px;
-            padding: 22px 22px 18px 22px;
+            border-radius: var(--radius-xl);
+            padding: 24px 24px 20px 24px;
             min-height: 100%;
+            margin-bottom: 1.4rem;
         }
 
-        .panel-title {
-            color: #0f172a;
-            font-size: 1.28rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.24rem;
-        }
-
-        .panel-subtitle {
-            font-size: 0.95rem;
-            line-height: 1.55;
-            margin-bottom: 1rem;
-        }
+        .panel-title { color: var(--text); font-size: 1.32rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.28rem; position: relative; z-index: 2; }
+        .panel-subtitle { font-size: 0.95rem; line-height: 1.58; margin-bottom: 1.15rem; position: relative; z-index: 2; }
 
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
-            margin-top: 0.35rem;
+            gap: 20px;
+            margin-top: 0.65rem;
+            position: relative;
+            z-index: 2;
         }
 
         .summary-card {
             border-radius: 24px;
-            padding: 18px 18px 16px 18px;
-            min-height: 150px;
+            padding: 22px 22px 18px 22px;
+            min-height: 158px;
+            background: var(--panel-strong);
         }
 
         .summary-card-top {
@@ -320,111 +302,84 @@ def inject_custom_css():
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.7rem;
         }
 
-        .summary-card-name {
-            color: #0f172a;
-            font-size: 1rem;
-            font-weight: 800;
-        }
-
+        .summary-card-name { color: var(--text); font-size: 1rem; font-weight: 800; position: relative; z-index: 2; }
         .summary-card-count {
             color: #3155ff;
-            background: linear-gradient(180deg, rgba(232,240,255,0.95), rgba(241,245,255,0.95));
+            background: linear-gradient(180deg, rgba(232,240,255,0.96), rgba(241,245,255,0.96));
             border: 1px solid rgba(147,197,253,0.45);
             border-radius: 999px;
-            padding: 5px 10px;
+            padding: 6px 11px;
             font-size: 0.8rem;
             font-weight: 800;
             white-space: nowrap;
+            position: relative;
+            z-index: 2;
         }
 
-        .summary-card-value {
-            color: #0f172a;
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -0.05em;
-            line-height: 1.02;
-            margin-bottom: 0.22rem;
-        }
-
-        .summary-card-note {
-            color: #64748b;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
+        .summary-card-value { color: var(--text); font-size: 1.82rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1.02; margin-bottom: 0.28rem; position: relative; z-index: 2; }
+        .summary-card-note { color: var(--muted); font-size: 0.9rem; line-height: 1.52; position: relative; z-index: 2; }
 
         .list-stack {
             display: grid;
-            gap: 14px;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
         }
 
         .detail-item {
             border-radius: 24px;
-            padding: 16px 17px 15px 17px;
+            padding: 20px 22px 20px 22px;
+            background: var(--panel-strong);
         }
 
-        .detail-main {
-            color: #0f172a;
-            font-size: 1.08rem;
-            font-weight: 900;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-        }
-
+        .detail-main { color: var(--text); font-size: 1.1rem; font-weight: 900; margin-bottom: 0.85rem; letter-spacing: -0.02em; position: relative; z-index: 2; }
         .detail-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px 16px;
+            gap: 14px 18px;
+            position: relative;
+            z-index: 2;
         }
 
-        .detail-field-label {
-            color: #64748b;
-            font-size: 0.76rem;
-            font-weight: 800;
-            margin-bottom: 0.15rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .detail-field-value {
-            color: #0f172a;
-            font-size: 0.98rem;
-            font-weight: 600;
-            word-break: break-word;
-        }
-
-        .detail-price {
-            color: #0f172a;
-            font-size: 1.04rem;
-            font-weight: 900;
-        }
+        .detail-field-label { color: var(--muted); font-size: 0.76rem; font-weight: 800; margin-bottom: 0.18rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .detail-field-value { color: var(--text); font-size: 0.99rem; font-weight: 600; word-break: break-word; }
+        .detail-price { color: var(--text); font-size: 1.06rem; font-weight: 900; }
 
         .empty-state {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 248px;
+            min-height: 264px;
             border-radius: 24px;
             background: linear-gradient(180deg, rgba(248,250,252,0.96), rgba(241,245,249,0.94));
             border: 1px dashed rgba(148,163,184,0.38);
-            color: #64748b;
+            color: var(--muted);
             text-align: center;
             line-height: 1.85;
             font-weight: 600;
             padding: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Better spacing between native Streamlit columns */
+        div[data-testid="stHorizontalBlock"] > div {
+            padding-top: 2px;
+            padding-bottom: 2px;
         }
 
         .stTabs [data-baseweb="tab-list"] {
-            gap: 10px;
-            padding-bottom: 0.25rem;
+            gap: 12px;
+            padding-bottom: 0.4rem;
         }
 
         .stTabs [data-baseweb="tab"] {
-            height: 48px;
+            height: 50px;
             white-space: nowrap;
-            background: rgba(255,255,255,0.84);
+            background: rgba(255,255,255,0.86);
             border-radius: 999px;
             border: 1px solid rgba(226,232,240,0.98);
             color: #334155;
@@ -456,10 +411,11 @@ def inject_custom_css():
             border-radius: 999px;
             border: 1px solid rgba(147,197,253,0.45);
             background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
-            color: #0f172a;
+            color: var(--text);
             font-weight: 800;
             box-shadow: 0 10px 24px rgba(37,99,235,0.08);
             transition: all 170ms ease;
+            min-height: 44px;
         }
 
         .stButton > button:hover, .stDownloadButton > button:hover {
@@ -468,9 +424,32 @@ def inject_custom_css():
             border-color: rgba(96,165,250,0.42);
         }
 
+        /* Smooth chart wrapper styling */
+        .chart-shell {
+            position: relative;
+            min-height: 340px;
+            border-radius: 26px;
+            background:
+                radial-gradient(circle at top right, rgba(99,102,241,0.10), transparent 22%),
+                linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,252,0.96));
+            border: 1px solid rgba(226,232,240,0.96);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+            padding: 10px 12px 8px 12px;
+            overflow: hidden;
+        }
+
+        .chart-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(99,102,241,0.04), transparent 38%);
+            pointer-events: none;
+        }
+
         @media (max-width: 900px) {
-            .hero-title { font-size: 2.28rem; }
+            .hero-title { font-size: 2.3rem; }
             .summary-grid, .detail-grid { grid-template-columns: 1fr; }
+            .panel-card, .section-card { padding-left: 20px; padding-right: 20px; }
         }
         </style>
         """,
@@ -805,7 +784,7 @@ def render_sidebar_info():
         """,
         unsafe_allow_html=True,
     )
-    if st.sidebar.button("Refresh data", use_container_width=True):
+    if st.sidebar.button("?? Refresh data", use_container_width=True):
         load_all_data.clear()
         st.rerun()
 
@@ -825,7 +804,9 @@ def render_top_metrics(data_dict: dict):
 
 
 def render_dashboard(data_dict: dict):
-    section_header("Dashboard", "สรุปทริปแบบ Stripe-style ที่อ่านง่าย ดูทันสมัย และเห็นภาพรวมเร็ว")
+    from streamlit.components.v1 import html as st_html
+
+    section_header("?? Dashboard", "สรุปทริปแบบ Mixpanel / Stripe / Linear ที่อ่านง่าย ดูโปร และเห็นภาพรวมเร็ว")
     trip_names = get_trip_names(data_dict)
     if not trip_names:
         st.warning("ยังไม่มีข้อมูลทริปในระบบ")
@@ -837,7 +818,7 @@ def render_dashboard(data_dict: dict):
     trip_places = places_df[places_df["ชื่อทริป"].astype(str).str.strip() == selected_trip] if not places_df.empty else pd.DataFrame(columns=places_df.columns)
     summary_df = build_cost_summary(data_dict, selected_trip)
 
-    c1, c2, c3 = st.columns(3)
+    c1, c2, c3 = st.columns(3, gap="large")
     with c1:
         metric_card("ชื่อทริป", selected_trip, "ทริปที่กำลังดู")
     with c2:
@@ -845,17 +826,93 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
     left, right = st.columns([1.08, 0.92], gap="large")
     with left:
-        panel_open("สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ไม่ใช้ตารางและอ่านได้ในพริบตา")
+        panel_open("?? สรุปค่าใช้จ่ายรายหมวด", "การ์ดสรุปแบบ startup dashboard ที่มี hover glow และระยะห่างอ่านง่ายขึ้น")
         render_summary_cards(summary_df)
         panel_close()
 
     with right:
-        panel_open("กราฟค่าใช้จ่าย", "ช่วยให้เห็นทันทีว่าหมวดไหนใช้มากที่สุด")
+        panel_open("?? กราฟค่าใช้จ่าย", "กราฟแท่งโทน gradient พร้อม animation แบบ dashboard ยุคใหม่")
         if summary_df["ยอดรวม"].sum() > 0:
-            chart_df = summary_df[summary_df["ยอดรวม"] > 0].set_index("หมวด")
-            st.bar_chart(chart_df["ยอดรวม"], use_container_width=True)
+            chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
+            labels = chart_df["หมวด"].astype(str).tolist()
+            values = to_number(chart_df["ยอดรวม"]).tolist()
+
+            chart_html = f"""
+            <div class="chart-shell">
+              <div id="travel_cost_chart" style="width:100%;height:320px;"></div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+            <script>
+              const el = document.getElementById('travel_cost_chart');
+              const chart = echarts.init(el);
+              const option = {{
+                animation: true,
+                animationDuration: 900,
+                animationEasing: 'cubicOut',
+                animationDurationUpdate: 700,
+                grid: {{ left: 20, right: 12, top: 16, bottom: 28, containLabel: true }},
+                tooltip: {{
+                  trigger: 'axis',
+                  axisPointer: {{ type: 'shadow' }},
+                  backgroundColor: 'rgba(10,37,64,0.94)',
+                  borderWidth: 0,
+                  textStyle: {{ color: '#fff', fontFamily: 'Inter' }},
+                  formatter: function(params) {{
+                    const p = params[0];
+                    return `<div style="padding:2px 4px;"><b>${{p.name}}</b><br/>฿ ${{Number(p.value).toLocaleString(undefined, {{minimumFractionDigits:2, maximumFractionDigits:2}})}}</div>`;
+                  }}
+                }},
+                xAxis: {{
+                  type: 'category',
+                  data: {labels!r},
+                  axisTick: {{ show: false }},
+                  axisLine: {{ lineStyle: {{ color: 'rgba(148,163,184,0.35)' }} }},
+                  axisLabel: {{ color: '#5b6b7f', fontWeight: 600, fontFamily: 'Inter' }}
+                }},
+                yAxis: {{
+                  type: 'value',
+                  splitLine: {{ lineStyle: {{ color: 'rgba(226,232,240,0.85)' }} }},
+                  axisLine: {{ show: false }},
+                  axisTick: {{ show: false }},
+                  axisLabel: {{
+                    color: '#5b6b7f',
+                    fontWeight: 600,
+                    fontFamily: 'Inter',
+                    formatter: function(value) {{ return '฿ ' + Number(value).toLocaleString(); }}
+                  }}
+                }},
+                series: [{{
+                  data: {values!r},
+                  type: 'bar',
+                  barWidth: '46%',
+                  itemStyle: {{
+                    borderRadius: [12, 12, 4, 4],
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                      {{ offset: 0, color: '#7dd3fc' }},
+                      {{ offset: 0.45, color: '#60a5fa' }},
+                      {{ offset: 1, color: '#6366f1' }}
+                    ]),
+                    shadowBlur: 16,
+                    shadowColor: 'rgba(99,102,241,0.24)',
+                    shadowOffsetY: 8
+                  }},
+                  emphasis: {{
+                    itemStyle: {{
+                      shadowBlur: 22,
+                      shadowColor: 'rgba(99,102,241,0.32)'
+                    }}
+                  }}
+                }}]
+              }};
+              chart.setOption(option);
+              window.addEventListener('resize', function() {{ chart.resize(); }});
+            </script>
+            """
+            st_html(chart_html, height=340)
         else:
             st.markdown(
                 '<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>',
@@ -863,7 +920,9 @@ def render_dashboard(data_dict: dict):
             )
         panel_close()
 
-    section_header("รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง")
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    section_header("??? รายละเอียดแต่ละหมวด", "แต่ละรายการถูกแสดงเป็น card stack แบบ SaaS แทนตาราง พร้อม emoji ที่อ่านง่ายขึ้น")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
 
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
