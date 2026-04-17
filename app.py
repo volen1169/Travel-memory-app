@@ -567,13 +567,75 @@ def panel_close():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-def display_table(df: pd.DataFrame, currency_cols: list[str] | None = None):
-    show_df = df.copy()
+def render_summary_cards(summary_df: pd.DataFrame):
+    cards = []
+    for _, row in summary_df.iterrows():
+        amount = to_number(pd.Series([row.get("ยอดรวม", 0)])).iloc[0]
+        count = int(to_number(pd.Series([row.get("จำนวนรายการ", 0)])).iloc[0])
+        cards.append(
+            f"""
+            <div class="summary-card">
+                <div class="summary-card-top">
+                    <div class="summary-card-name">{row.get("หมวด", "")}</div>
+                    <div class="summary-card-count">{count} รายการ</div>
+                </div>
+                <div class="summary-card-value">฿ {amount:,.2f}</div>
+                <div class="summary-card-note">ยอดรวมของหมวดนี้ในทริปที่เลือก</div>
+            </div>
+            """
+        )
+    st.markdown(f'<div class="summary-grid">{"".join(cards)}</div>', unsafe_allow_html=True)
+
+
+def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None):
     currency_cols = currency_cols or []
-    for col in currency_cols:
-        if col in show_df.columns:
-            show_df[col] = to_number(show_df[col]).map(lambda x: f"฿ {x:,.2f}")
-    st.dataframe(show_df, use_container_width=True, hide_index=True)
+    if df.empty:
+        st.info("ทริปนี้ยังไม่มีข้อมูลในหมวดนี้")
+        return
+
+    cards = []
+    for _, row in df.iterrows():
+        row_dict = row.to_dict()
+        main_value = ""
+        for candidate in ["ชื่อ", "ชื่อโรงแรม", "ประเภท", "ประเทศ", "ชื่อทริป"]:
+            val = str(row_dict.get(candidate, "")).strip()
+            if val:
+                main_value = val
+                break
+        if not main_value:
+            main_value = "รายการ"
+
+        fields_html = []
+        for col, raw in row_dict.items():
+            if col == "ชื่อทริป":
+                continue
+            val = str(raw).strip()
+            if col in currency_cols:
+                amount = to_number(pd.Series([raw])).iloc[0]
+                val_html = f'<div class="detail-field-value detail-price">฿ {amount:,.2f}</div>'
+            else:
+                val_html = f'<div class="detail-field-value">{val if val else "-"}</div>'
+            fields_html.append(
+                f"""
+                <div class="detail-field">
+                    <div class="detail-field-label">{col}</div>
+                    {val_html}
+                </div>
+                """
+            )
+
+        cards.append(
+            f"""
+            <div class="detail-item">
+                <div class="detail-main">{main_value}</div>
+                <div class="detail-grid">
+                    {''.join(fields_html)}
+                </div>
+            </div>
+            """
+        )
+
+    st.markdown(f'<div class="list-stack">{"".join(cards)}</div>', unsafe_allow_html=True)
     st.caption(f"จำนวนรายการ: {len(df)}")
 
 
@@ -641,10 +703,10 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
-    left, right = st.columns([1.1, 0.9], gap="large")
+    left, right = st.columns([1.05, 0.95], gap="large")
     with left:
-        panel_open("สรุปค่าใช้จ่ายรายหมวด", "ดูจำนวนรายการและยอดรวมของแต่ละหมวดในทริปนี้")
-        display_table(summary_df, currency_cols=["ยอดรวม"])
+        panel_open("สรุปค่าใช้จ่ายรายหมวด", "เปลี่ยนจากตารางเป็นการ์ด เพื่อให้ดูง่ายและสวยขึ้น")
+        render_summary_cards(summary_df)
         panel_close()
     with right:
         panel_open("กราฟค่าใช้จ่าย", "ช่วยเห็นภาพเร็วว่าหมวดไหนใช้เงินมากที่สุด")
@@ -655,17 +717,14 @@ def render_dashboard(data_dict: dict):
             st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
         panel_close()
 
-    section_header("รายละเอียดแต่ละหมวด", "แยกดูข้อมูลของทริปนี้ในแต่ละชีต")
+    section_header("รายละเอียดแต่ละหมวด", "แสดงข้อมูลแต่ละรายการแบบการ์ด แทนการใช้ตาราง")
     detail_tabs = st.tabs([f"{SECTION_ICONS[k]} {DISPLAY_NAMES[k]}" for k in SHEET_ALIASES])
     for tab, key in zip(detail_tabs, SHEET_ALIASES):
         with tab:
             df = data_dict[key]
             filtered = df[df["ชื่อทริป"].astype(str).str.strip() == selected_trip] if not df.empty else pd.DataFrame(columns=df.columns)
-            if filtered.empty:
-                st.info("ทริปนี้ยังไม่มีข้อมูลในหมวดนี้")
-            else:
-                currency_cols = ["ราคา"] if "ราคา" in filtered.columns else []
-                display_table(filtered, currency_cols=currency_cols)
+            currency_cols = ["ราคา"] if "ราคา" in filtered.columns else []
+            render_detail_cards(filtered, currency_cols=currency_cols)
 
 
 def render_places_form(existing_trip_names: list[str]):
