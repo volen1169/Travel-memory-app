@@ -1518,20 +1518,20 @@ def render_quick_add():
     with c1:
         if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True):
             st.session_state["quick_add_target"] = "🍜 อาหารและของกิน"
-            st.session_state["page_menu"] = "เพิ่มข้อมูล"
-            st.session_state["active_input_section"] = "🍜 อาหารและของกิน"
+            st.session_state["requested_page"] = "เพิ่มข้อมูล"
+            st.session_state["requested_input_section"] = "🍜 อาหารและของกิน"
             st.rerun()
     with c2:
         if st.button("➕ เพิ่มการเดินทาง", use_container_width=True):
             st.session_state["quick_add_target"] = "✈️ การเดินทาง"
-            st.session_state["page_menu"] = "เพิ่มข้อมูล"
-            st.session_state["active_input_section"] = "✈️ การเดินทาง"
+            st.session_state["requested_page"] = "เพิ่มข้อมูล"
+            st.session_state["requested_input_section"] = "✈️ การเดินทาง"
             st.rerun()
     with c3:
         if st.button("➕ เพิ่มที่พัก", use_container_width=True):
             st.session_state["quick_add_target"] = "🏨 ที่พัก"
-            st.session_state["page_menu"] = "เพิ่มข้อมูล"
-            st.session_state["active_input_section"] = "🏨 ที่พัก"
+            st.session_state["requested_page"] = "เพิ่มข้อมูล"
+            st.session_state["requested_input_section"] = "🏨 ที่พัก"
             st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -2109,7 +2109,7 @@ def render_places_form(existing_trip_names: list[str]):
                 reset_city_state("places")
                 st.session_state["places_reset_trip_input"] = True
                 st.session_state["selected_trip_override"] = trip_name
-                st.session_state["page_menu"] = "Dashboard"
+                st.session_state["requested_page"] = "Dashboard"
                 st.session_state["flash_success"] = "บันทึกข้อมูลสถานที่เรียบร้อยแล้ว"
                 st.rerun()
 
@@ -2156,7 +2156,7 @@ def render_transport_form(existing_trip_names: list[str]):
                 append_row("Transport", [travel_type, line, price, flight_no, format_datetime_for_sheet(date_value, time_value), trip_name])
                 st.session_state["transport_reset_trip_input"] = True
                 st.session_state["selected_trip_override"] = trip_name
-                st.session_state["page_menu"] = "Dashboard"
+                st.session_state["requested_page"] = "Dashboard"
                 st.session_state["flash_success"] = "บันทึกข้อมูลการเดินทางเรียบร้อยแล้ว"
                 st.rerun()
 
@@ -2181,7 +2181,7 @@ def render_hotels_form(existing_trip_names: list[str]):
             else:
                 append_row("Hotels", [hotel_name, room_type, price, trip_name])
                 st.session_state["selected_trip_override"] = str(trip_name).strip()
-                st.session_state["page_menu"] = "Dashboard"
+                st.session_state["requested_page"] = "Dashboard"
                 st.session_state["flash_success"] = "บันทึกข้อมูลที่พักเรียบร้อยแล้ว"
                 st.rerun()
     form_shell_close()
@@ -2208,7 +2208,7 @@ def render_simple_cost_form(sheet_key: str, title: str, type_options: list[str],
             else:
                 append_row(sheet_key, [item_type, item_name, price, trip_name])
                 st.session_state["selected_trip_override"] = trip_name
-                st.session_state["page_menu"] = "Dashboard"
+                st.session_state["requested_page"] = "Dashboard"
                 st.session_state["flash_success"] = f"บันทึก{title.replace('เพิ่มข้อมูล', '').strip()}เรียบร้อยแล้ว"
                 st.rerun()
 
@@ -2262,7 +2262,7 @@ def main():
     st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
     page_options = ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด", "จัดการข้อมูล"]
     if "page_menu" not in st.session_state or st.session_state["page_menu"] not in page_options:
-        st.session_state["page_menu"] = "Dashboard"
+        st.session_state["requested_page"] = "Dashboard"
     page = st.radio("เมนู", page_options, horizontal=True, key="page_menu")
     st.markdown('</div>', unsafe_allow_html=True)
     existing_trip_names = get_trip_names(data_dict)
@@ -2276,7 +2276,6 @@ def main():
         quick_target = st.session_state.get("quick_add_target")
 
         if quick_target and quick_target in input_tab_names:
-            st.session_state["active_input_section"] = quick_target
             render_quick_target_banner(quick_target)
             st.session_state.pop("quick_add_target", None)
 
