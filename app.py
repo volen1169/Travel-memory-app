@@ -1088,112 +1088,123 @@ def inject_custom_css():
 
         @media (max-width: 768px) {
             .main .block-container {
-                padding-top: 0.6rem !important;
-                padding-bottom: 2rem !important;
-                padding-left: 0.8rem !important;
-                padding-right: 0.8rem !important;
+                padding-top: 0.45rem !important;
+                padding-bottom: 1.6rem !important;
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
             }
 
             .hero-card {
-                border-radius: 28px !important;
-                padding: 22px 20px 20px 20px !important;
-                margin-bottom: 1rem !important;
+                border-radius: 24px !important;
+                padding: 16px 16px 14px 16px !important;
+                margin-bottom: 0.85rem !important;
+                box-shadow: 0 20px 42px rgba(37,99,235,0.16) !important;
             }
 
             .hero-kicker {
-                font-size: 0.72rem !important;
-                padding: 7px 11px !important;
-                margin-bottom: 0.8rem !important;
+                font-size: 0.66rem !important;
+                padding: 6px 10px !important;
+                margin-bottom: 0.65rem !important;
             }
 
             .hero-title {
-                font-size: 2.15rem !important;
-                line-height: 1.02 !important;
-                letter-spacing: -0.04em !important;
-                margin-bottom: 0.5rem !important;
+                display: none !important;
             }
 
             .hero-subtitle {
-                font-size: 0.95rem !important;
-                line-height: 1.7 !important;
+                display: none !important;
             }
 
-            .section-card,
-            .panel-card,
-            .form-shell,
-            .tm-metric,
-            .summary-card,
-            .detail-item,
-            .daily-card,
-            .timeline-card {
-                border-radius: 22px !important;
+            .hero-title-mobile {
+                display: block !important;
+                font-size: 1.7rem !important;
+                font-weight: 900 !important;
+                line-height: 1.02 !important;
+                letter-spacing: -0.04em !important;
+                margin-bottom: 0.45rem !important;
+            }
+
+            .hero-subtitle-mobile {
+                display: block !important;
+                font-size: 0.88rem !important;
+                line-height: 1.55 !important;
+                color: rgba(255,255,255,0.92) !important;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 12px !important;
+                margin-bottom: 0.7rem !important;
+            }
+
+            .metrics-item {
+                border-radius: 18px !important;
+                padding: 14px 14px 12px 14px !important;
+            }
+
+            .metrics-item-label {
+                font-size: 0.82rem !important;
+                margin-bottom: 0.38rem !important;
+            }
+
+            .metrics-item-value {
+                font-size: 1.7rem !important;
+                margin-bottom: 0.15rem !important;
+            }
+
+            .metrics-item-note {
+                font-size: 0.8rem !important;
+                line-height: 1.35 !important;
             }
 
             .section-card,
             .panel-card,
             .form-shell,
             .subtle-shell {
-                padding: 18px 16px 16px 16px !important;
-                margin-bottom: 0.9rem !important;
+                padding: 14px 14px 12px 14px !important;
+                margin-bottom: 0.75rem !important;
+                border-radius: 18px !important;
             }
 
-            .section-title {
-                font-size: 1.28rem !important;
-                line-height: 1.2 !important;
+            .section-title,
+            .panel-title {
+                font-size: 1.1rem !important;
+                line-height: 1.15 !important;
             }
 
             .section-subtitle,
             .panel-subtitle,
             .shell-subtitle {
-                font-size: 0.9rem !important;
-                line-height: 1.55 !important;
-            }
-
-            .tm-metric {
-                min-height: auto !important;
-                padding: 18px 16px 16px 16px !important;
+                font-size: 0.84rem !important;
+                line-height: 1.45 !important;
                 margin-bottom: 0.7rem !important;
             }
 
-            .tm-metric-value {
-                font-size: 2.2rem !important;
-            }
-
             .trip-cover {
-                border-radius: 24px !important;
-                padding: 18px 16px 16px 16px !important;
-                margin-bottom: 0.9rem !important;
+                border-radius: 18px !important;
+                padding: 14px 14px 12px 14px !important;
+                margin-bottom: 0.75rem !important;
             }
 
             .trip-cover-title {
-                font-size: 1.6rem !important;
-                line-height: 1.1 !important;
+                font-size: 1.24rem !important;
+                line-height: 1.08 !important;
+                margin-bottom: 0.25rem !important;
             }
 
             .trip-cover-subtitle {
-                font-size: 0.92rem !important;
-                line-height: 1.6 !important;
-                margin-bottom: 0.8rem !important;
+                font-size: 0.82rem !important;
+                line-height: 1.45 !important;
+                margin-bottom: 0.65rem !important;
             }
 
             .trip-cover-meta {
-                gap: 8px !important;
+                gap: 6px !important;
             }
 
             .trip-meta-pill {
-                font-size: 0.76rem !important;
-                padding: 6px 10px !important;
-            }
-
-            .budget-shell {
-                padding: 15px 14px 14px 14px !important;
-                border-radius: 18px !important;
-            }
-
-            .budget-top {
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 6px !important;
+                font-size: 0.7rem !important;
+                padding: 5px 8px !important;
             }
 
             .summary-grid,
@@ -1202,74 +1213,132 @@ def inject_custom_css():
             .detail-grid,
             .daily-grid {
                 grid-template-columns: 1fr !important;
-                gap: 12px !important;
+                gap: 10px !important;
             }
 
             .summary-card,
             .insight-card,
             .daily-card,
-            .detail-item {
-                padding: 16px 14px 14px 14px !important;
+            .detail-item,
+            .timeline-card,
+            .budget-shell {
+                border-radius: 18px !important;
+                padding: 14px 13px 12px 13px !important;
             }
 
             .summary-card-value,
             .insight-value,
             .daily-date {
-                font-size: 1.3rem !important;
+                font-size: 1.15rem !important;
             }
 
             .timeline-shell {
-                gap: 12px !important;
+                gap: 10px !important;
+                margin-top: 0.45rem !important;
             }
 
             .timeline-row {
-                grid-template-columns: 34px minmax(0, 1fr) !important;
-                gap: 10px !important;
+                grid-template-columns: 24px minmax(0, 1fr) !important;
+                gap: 8px !important;
             }
 
             .timeline-rail-dot {
-                width: 14px !important;
-                height: 14px !important;
-                margin-top: 10px !important;
+                width: 12px !important;
+                height: 12px !important;
+                margin-top: 8px !important;
             }
 
             .timeline-rail-line {
-                top: 24px !important;
-                bottom: -20px !important;
-            }
-
-            .timeline-card {
-                padding: 14px 14px 12px 14px !important;
+                top: 20px !important;
+                bottom: -16px !important;
             }
 
             .timeline-card-top {
                 flex-direction: column !important;
                 align-items: flex-start !important;
-                gap: 8px !important;
+                gap: 6px !important;
+                margin-bottom: 0 !important;
             }
 
             .timeline-city {
-                font-size: 1rem !important;
+                font-size: 0.95rem !important;
+                margin-bottom: 0.1rem !important;
             }
 
             .timeline-country,
             .timeline-note {
-                font-size: 0.88rem !important;
+                font-size: 0.82rem !important;
+                line-height: 1.4 !important;
             }
 
             .timeline-badge {
-                font-size: 0.75rem !important;
-                padding: 6px 10px !important;
+                font-size: 0.68rem !important;
+                padding: 5px 8px !important;
+            }
+
+            .emoji-section-title {
+                margin-bottom: 0.45rem !important;
+                gap: 8px !important;
+            }
+
+            .emoji-section-title img {
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            .page-switch {
+                padding: 8px !important;
+                overflow-x: auto !important;
+            }
+
+            .page-switch [data-baseweb="radio"] {
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 6px !important;
+                scrollbar-width: none;
+            }
+
+            .page-switch [data-baseweb="radio"]::-webkit-scrollbar {
+                display: none;
             }
 
             .page-switch label {
-                width: 100% !important;
-                justify-content: center !important;
+                width: auto !important;
+                min-width: max-content !important;
+                padding: 8px 12px !important;
+                flex: 0 0 auto !important;
+            }
+
+            .stTabs [data-baseweb="tab-list"] {
+                gap: 6px !important;
+                overflow-x: auto !important;
+                padding-bottom: 0.2rem !important;
+                scrollbar-width: none;
+            }
+
+            .stTabs [data-baseweb="tab"] {
+                height: 38px !important;
+                padding: 0 12px !important;
+                font-size: 0.8rem !important;
+                border-radius: 999px !important;
+                flex: 0 0 auto !important;
+            }
+
+            .chart-shell {
+                min-height: 220px !important;
+                padding: 6px !important;
+                border-radius: 16px !important;
+            }
+
+            .stButton > button,
+            .stDownloadButton > button,
+            .stFormSubmitButton > button {
+                min-height: 40px !important;
+                font-size: 0.9rem !important;
             }
 
             div[data-testid="stHorizontalBlock"] {
-                flex-direction: column !important;
-                gap: 0.7rem !important;
+                gap: 0.55rem !important;
             }
 
             div[data-testid="stHorizontalBlock"] > div {
@@ -1277,44 +1346,8 @@ def inject_custom_css():
                 flex: 1 1 100% !important;
             }
 
-            .stTabs [data-baseweb="tab-list"] {
-                gap: 8px !important;
-                overflow-x: auto !important;
-                padding-bottom: 0.35rem !important;
-                scrollbar-width: none;
-            }
-
-            .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
-                display: none;
-            }
-
-            .stTabs [data-baseweb="tab"] {
-                height: 42px !important;
-                padding: 0 14px !important;
-                font-size: 0.88rem !important;
-                flex: 0 0 auto !important;
-            }
-
-            .stButton > button,
-            .stDownloadButton > button,
-            .stFormSubmitButton > button {
-                min-height: 44px !important;
-                font-size: 0.95rem !important;
-            }
-
-            .chart-shell {
-                min-height: 260px !important;
-                border-radius: 20px !important;
-                padding: 8px !important;
-            }
-
-            .emoji-section-title {
-                margin-bottom: 0.65rem !important;
-            }
-
-            .emoji-section-title img {
-                width: 20px !important;
-                height: 20px !important;
+            [data-testid="stSidebar"] {
+                display: none !important;
             }
         }
 
@@ -1790,16 +1823,27 @@ def render_sidebar_info():
 def render_top_metrics(data_dict: dict):
     trip_names = get_trip_names(data_dict)
     total_cost = sum(compute_trip_total(data_dict, trip) for trip in trip_names)
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        metric_card("จำนวนทริป", str(len(trip_names)), "ทริปทั้งหมดในระบบ")
-    with c2:
-        metric_card("สถานที่ทั้งหมด", str(len(data_dict["Places"])), "จุดหมายที่ถูกบันทึก")
-    with c3:
-        metric_card("รายการเดินทาง", str(len(data_dict["Transport"])), "รวมไฟลท์ รถไฟ และการเดินทาง")
-    with c4:
-        metric_card("ค่าใช้จ่ายรวม", f"฿ {total_cost:,.2f}", "รวมทุกหมวดค่าใช้จ่าย")
 
+    metrics = [
+        ("จำนวนทริป", str(len(trip_names)), "ทริปทั้งหมดในระบบ"),
+        ("สถานที่ทั้งหมด", str(len(data_dict["Places"])), "จุดหมายที่ถูกบันทึก"),
+        ("รายการเดินทาง", str(len(data_dict["Transport"])), "รวมไฟลท์ รถไฟ และการเดินทาง"),
+        ("ค่าใช้จ่ายรวม", f"฿ {total_cost:,.2f}", "รวมทุกหมวดค่าใช้จ่าย"),
+    ]
+
+    cards = ['<div class="metrics-grid">']
+    for label, value, note in metrics:
+        cards.append(
+            f"""
+            <div class="metrics-item">
+                <div class="metrics-item-label">{label}</div>
+                <div class="metrics-item-value">{value}</div>
+                <div class="metrics-item-note">{note}</div>
+            </div>
+            """
+        )
+    cards.append("</div>")
+    st.markdown("".join(cards), unsafe_allow_html=True)
 
 
 def parse_trip_datetime(value: str):
@@ -2708,8 +2752,11 @@ def main():
     st.markdown(
         """
         <div class="hero-card">
-            <div class="hero-kicker">Travel planner • Expense tracker</div><div class="hero-title">Travel Memory Dashboard</div>
+            <div class="hero-kicker">Travel planner • Expense tracker</div>
+            <div class="hero-title">Travel Memory Dashboard</div>
             <div class="hero-subtitle">เก็บประวัติทริป ค่าใช้จ่าย การเดินทาง ที่พัก และข้อมูลอื่น ๆ ผ่าน Google Sheets ในรูปแบบที่อ่านง่าย สะอาด และดูทันทีว่าแต่ละทริปใช้งบไปเท่าไร</div>
+            <div class="hero-title-mobile">Travel Memory</div>
+            <div class="hero-subtitle-mobile">บันทึกทริป ค่าใช้จ่าย และการเดินทาง ได้สะดวกขึ้นบนมือถือ</div>
         </div>
         """,
         unsafe_allow_html=True,
