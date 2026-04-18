@@ -1838,26 +1838,15 @@ def render_top_metrics(data_dict: dict):
     trip_names = get_trip_names(data_dict)
     total_cost = sum(compute_trip_total(data_dict, trip) for trip in trip_names)
 
-    metrics = [
-        ("จำนวนทริป", str(len(trip_names)), "ทริปทั้งหมดในระบบ"),
-        ("สถานที่ทั้งหมด", str(len(data_dict["Places"])), "จุดหมายที่ถูกบันทึก"),
-        ("รายการเดินทาง", str(len(data_dict["Transport"])), "รวมไฟลท์ รถไฟ และการเดินทาง"),
-        ("ค่าใช้จ่ายรวม", f"฿ {total_cost:,.2f}", "รวมทุกหมวดค่าใช้จ่าย"),
-    ]
-
-    cards = ['<div class="metrics-grid">']
-    for label, value, note in metrics:
-        cards.append(
-            f"""
-            <div class="metrics-item">
-                <div class="metrics-item-label">{label}</div>
-                <div class="metrics-item-value">{value}</div>
-                <div class="metrics-item-note">{note}</div>
-            </div>
-            """
-        )
-    cards.append("</div>")
-    ui_markdown("".join(cards), unsafe_allow_html=True)
+    c1, c2, c3, c4 = st.columns(4, gap="large")
+    with c1:
+        metric_card("จำนวนทริป", str(len(trip_names)), "ทริปทั้งหมดในระบบ")
+    with c2:
+        metric_card("สถานที่ทั้งหมด", str(len(data_dict["Places"])), "จุดหมายที่ถูกบันทึก")
+    with c3:
+        metric_card("รายการเดินทาง", str(len(data_dict["Transport"])), "รวมไฟลท์ รถไฟ และการเดินทาง")
+    with c4:
+        metric_card("ค่าใช้จ่ายรวม", f"฿ {total_cost:,.2f}", "รวมทุกหมวดค่าใช้จ่าย")
 
 
 def parse_trip_datetime(value: str):
