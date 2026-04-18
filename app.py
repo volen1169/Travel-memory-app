@@ -10,6 +10,17 @@ from datetime import datetime
 from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 
+
+def ui_markdown(*args, **kwargs):
+    kwargs.setdefault("unsafe_allow_html", True)
+    return ui_markdown(*args, **kwargs)
+
+
+def ui_sidebar_markdown(*args, **kwargs):
+    kwargs.setdefault("unsafe_allow_html", True)
+    return ui_sidebar_markdown(*args, **kwargs)
+
+
 st.set_page_config(page_title="🌍 Travel Memory Dashboard", layout="wide")
 
 SHEET_ID = st.secrets["google_sheets"]["sheet_id"]
@@ -98,7 +109,7 @@ def call_with_retry(func, *args, retries: int = 5, base_delay: float = 1.2, **kw
 
 
 def inject_custom_css():
-    st.markdown(
+    ui_markdown(
         """
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -1639,7 +1650,7 @@ def render_country_city_dropdown(prefix: str = "default"):
 
 
 def metric_card(label: str, value: str, note: str = ""):
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="tm-metric">
             <div class="tm-metric-label">{label}</div>
@@ -1652,7 +1663,7 @@ def metric_card(label: str, value: str, note: str = ""):
 
 
 def form_shell_open(title: str, subtitle: str = ""):
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="form-shell">
             <div class="shell-title">{title}</div>
@@ -1663,7 +1674,7 @@ def form_shell_open(title: str, subtitle: str = ""):
 
 
 def form_shell_close():
-    st.markdown("</div>", unsafe_allow_html=True)
+    ui_markdown("</div>", unsafe_allow_html=True)
 
 
 def twemoji_url(emoji: str) -> str:
@@ -1677,7 +1688,7 @@ def twemoji_url(emoji: str) -> str:
 
 
 def emoji_title(emoji: str, title: str):
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="emoji-section-title">
             <img src="{twemoji_url(emoji)}" alt="{title}">
@@ -1689,7 +1700,7 @@ def emoji_title(emoji: str, title: str):
 
 
 def section_header(title: str, subtitle: str = ""):
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="section-card">
             <div class="section-title">{title}</div>
@@ -1701,7 +1712,7 @@ def section_header(title: str, subtitle: str = ""):
 
 
 def panel_open(title: str, subtitle: str = ""):
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="panel-card">
             <div class="panel-title">{title}</div>
@@ -1712,7 +1723,7 @@ def panel_open(title: str, subtitle: str = ""):
 
 
 def panel_close():
-    st.markdown("</div>", unsafe_allow_html=True)
+    ui_markdown("</div>", unsafe_allow_html=True)
 
 
 def render_summary_cards(summary_df: pd.DataFrame):
@@ -1734,7 +1745,7 @@ def render_summary_cards(summary_df: pd.DataFrame):
         )
         html_parts.append(card_html)
 
-    st.markdown(
+    ui_markdown(
         f'<div class="summary-grid">{"".join(html_parts)}</div>',
         unsafe_allow_html=True,
     )
@@ -1784,7 +1795,7 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
             '</div>'
         )
 
-    st.markdown(
+    ui_markdown(
         f'<div class="list-stack">{"".join(cards_html)}</div>',
         unsafe_allow_html=True,
     )
@@ -1792,7 +1803,7 @@ def render_detail_cards(df: pd.DataFrame, currency_cols: list[str] | None = None
 
 
 def render_sidebar_info():
-    st.sidebar.markdown(
+    ui_sidebar_markdown(
         """
         <div class="sidebar-card">
             <div class="sidebar-title">Travel Memory</div>
@@ -1801,7 +1812,7 @@ def render_sidebar_info():
         """,
         unsafe_allow_html=True,
     )
-    st.sidebar.markdown(
+    ui_sidebar_markdown(
         """
         <div class="sidebar-card">
             <div class="sidebar-check">เช็กเบื้องต้นเมื่อเปิดแอปไม่ขึ้น</div>
@@ -1843,7 +1854,7 @@ def render_top_metrics(data_dict: dict):
             """
         )
     cards.append("</div>")
-    st.markdown("".join(cards), unsafe_allow_html=True)
+    ui_markdown("".join(cards), unsafe_allow_html=True)
 
 
 def parse_trip_datetime(value: str):
@@ -1918,7 +1929,7 @@ def render_trip_cover(trip_name: str, total_cost: float, overview: dict):
     duration_text = f"{duration_days} วัน" if duration_days else "ยังไม่ทราบจำนวนวัน"
     country = overview.get("country", "-")
 
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="trip-cover">
             <div class="trip-cover-title">{trip_name}</div>
@@ -1944,7 +1955,7 @@ def render_budget_progress(total_cost: float, budget_amount: float):
     elif budget_amount > 0 and percent >= 80:
         status = "ใกล้ชนงบ"
 
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="budget-shell">
             <div class="budget-top">
@@ -1973,7 +1984,7 @@ def render_insights(summary_df: pd.DataFrame, total_cost: float, overview: dict)
     top_amount = float(top_row["ยอดรวม"]) if top_row is not None else 0
     top_pct = (top_amount / total_cost * 100) if total_cost > 0 else 0
 
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="insight-grid">
             <div class="insight-card">
@@ -2013,11 +2024,11 @@ def render_timeline(timeline_df: pd.DataFrame):
         city = str(row.get("เมือง", "")).strip() or "-"
         country = str(row.get("ประเทศ", "")).strip() or "-"
 
-        st.markdown('<div class="timeline-row" style="animation-delay:{}ms;">'.format(i * 110), unsafe_allow_html=True)
+        ui_markdown('<div class="timeline-row" style="animation-delay:{}ms;">'.format(i * 110), unsafe_allow_html=True)
         rail_col, card_col = st.columns([0.08, 0.92], gap="small")
         with rail_col:
             line_class = "timeline-rail-line is-last" if i == len(rows) - 1 else "timeline-rail-line"
-            st.markdown(
+            ui_markdown(
                 f"""
                 <div class="timeline-rail">
                     <div class="timeline-rail-dot"></div>
@@ -2027,19 +2038,19 @@ def render_timeline(timeline_df: pd.DataFrame):
                 unsafe_allow_html=True,
             )
         with card_col:
-            st.markdown('<div class="timeline-card">', unsafe_allow_html=True)
+            ui_markdown('<div class="timeline-card">', unsafe_allow_html=True)
             top_left, top_right = st.columns([0.7, 0.3], gap="small")
             with top_left:
-                st.markdown(f'<div class="timeline-city">{city}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="timeline-country">{country}</div>', unsafe_allow_html=True)
+                ui_markdown(f'<div class="timeline-city">{city}</div>', unsafe_allow_html=True)
+                ui_markdown(f'<div class="timeline-country">{country}</div>', unsafe_allow_html=True)
             with top_right:
-                st.markdown(f'<div class="timeline-badge">🕒 {dt_text}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+                ui_markdown(f'<div class="timeline-badge">🕒 {dt_text}</div>', unsafe_allow_html=True)
+            ui_markdown('</div>', unsafe_allow_html=True)
+        ui_markdown('</div>', unsafe_allow_html=True)
 
 
 def render_quick_add():
-    st.markdown('<div class="quick-grid">', unsafe_allow_html=True)
+    ui_markdown('<div class="quick-grid">', unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3, gap="large")
     with c1:
         if st.button("➕ เพิ่มค่าอาหาร", use_container_width=True, key="quick_food_btn"):
@@ -2050,7 +2061,7 @@ def render_quick_add():
     with c3:
         if st.button("➕ เพิ่มที่พัก", use_container_width=True, key="quick_hotel_btn"):
             open_quick_add_popup("Hotels")
-    st.markdown("</div>", unsafe_allow_html=True)
+    ui_markdown("</div>", unsafe_allow_html=True)
 
     if st.session_state.get("quick_add_popup"):
         quick_add_popup(get_trip_names(load_all_data()))
@@ -2061,7 +2072,7 @@ def render_donut_chart(summary_df: pd.DataFrame):
 
     chart_df = summary_df[summary_df["ยอดรวม"] > 0].copy()
     if chart_df.empty:
-        st.markdown('<div class="empty-state">ยังไม่มีข้อมูลพอสำหรับ donut chart</div>', unsafe_allow_html=True)
+        ui_markdown('<div class="empty-state">ยังไม่มีข้อมูลพอสำหรับ donut chart</div>', unsafe_allow_html=True)
         return
 
     labels = chart_df["หมวด"].astype(str).tolist()
@@ -2128,7 +2139,7 @@ def render_quick_target_banner(target: str):
         "💸 ค่าใช้จ่ายอื่นๆ": ("💸", "ค่าใช้จ่ายอื่นๆ", "เลื่อนลงไปที่แท็บค่าใช้จ่ายอื่นๆ เพื่อบันทึกรายการ"),
     }
     emoji, title, note = target_map.get(target, ("⚡", "เพิ่มข้อมูล", "เลือกแท็บที่ต้องการด้านล่าง"))
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="quick-target-banner">
             <div style="font-size:1.25rem;">{emoji}</div>
@@ -2195,19 +2206,19 @@ def render_daily_summary(daily_df: pd.DataFrame):
 
     for _, row in daily_df.iterrows():
         day = row["date"].strftime("%d %b %Y") if pd.notna(row["date"]) else "ไม่ทราบวันที่"
-        st.markdown('<div class="daily-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="daily-date">{day}</div>', unsafe_allow_html=True)
+        ui_markdown('<div class="daily-card">', unsafe_allow_html=True)
+        ui_markdown(f'<div class="daily-date">{day}</div>', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3, gap="large")
         with c1:
-            st.markdown('<div class="daily-stat-label">จำนวนกิจกรรม</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="daily-stat-value">{int(row["จำนวนกิจกรรม"])} รายการ</div>', unsafe_allow_html=True)
+            ui_markdown('<div class="daily-stat-label">จำนวนกิจกรรม</div>', unsafe_allow_html=True)
+            ui_markdown(f'<div class="daily-stat-value">{int(row["จำนวนกิจกรรม"])} รายการ</div>', unsafe_allow_html=True)
         with c2:
-            st.markdown('<div class="daily-stat-label">ค่าใช้จ่ายรวม</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="daily-stat-value">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div>', unsafe_allow_html=True)
+            ui_markdown('<div class="daily-stat-label">ค่าใช้จ่ายรวม</div>', unsafe_allow_html=True)
+            ui_markdown(f'<div class="daily-stat-value">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div>', unsafe_allow_html=True)
         with c3:
-            st.markdown('<div class="daily-stat-label">รายการเด่น</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="daily-stat-value">{row["รายการ"] or "-"}</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+            ui_markdown('<div class="daily-stat-label">รายการเด่น</div>', unsafe_allow_html=True)
+            ui_markdown(f'<div class="daily-stat-value">{row["รายการ"] or "-"}</div>', unsafe_allow_html=True)
+        ui_markdown('</div>', unsafe_allow_html=True)
 
 
 def build_trip_comparison(data_dict: dict) -> pd.DataFrame:
@@ -2239,7 +2250,7 @@ def render_trip_comparison(data_dict: dict, selected_trip: str):
 
     top5 = comp_df.head(5).copy()
     top5["ค่าใช้จ่ายรวม_fmt"] = top5["ค่าใช้จ่ายรวม"].map(lambda x: f"฿ {x:,.2f}")
-    st.markdown(
+    ui_markdown(
         f"""
         <div class="insight-grid">
             <div class="insight-card">
@@ -2435,7 +2446,7 @@ def render_dashboard(data_dict: dict):
     with c3:
         metric_card("ค่าใช้จ่ายของทริป", f"฿ {total_cost:,.2f}", "รวมทุกหมวดของทริปนี้")
 
-    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+    ui_markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
     stored_budget, stored_note, _ = get_budget_for_trip(selected_trip)
 
@@ -2547,7 +2558,7 @@ def render_dashboard(data_dict: dict):
             """
             st_html(chart_html, height=340)
         else:
-            st.markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
+            ui_markdown('<div class="empty-state">ทริปนี้ยังไม่มีข้อมูลค่าใช้จ่าย<br>ลองเพิ่มค่าเดินทาง ที่พัก หรือค่าอาหารก่อน</div>', unsafe_allow_html=True)
         panel_close()
 
     with chart_right:
@@ -2603,7 +2614,7 @@ def render_places_form(existing_trip_names: list[str]):
         date_value = st.date_input("วันที่", key="places_date")
         time_value = st.time_input("เวลา", value=datetime.now().time(), key="places_time")
 
-    st.markdown('<div style="height: 8px;"></div>', unsafe_allow_html=True)
+    ui_markdown('<div style="height: 8px;"></div>', unsafe_allow_html=True)
 
     trip_mode = st.radio(
         "เลือกวิธีกรอกชื่อทริป",
@@ -2749,7 +2760,7 @@ def render_all_tables(data_dict: dict):
 
 def main():
     inject_custom_css()
-    st.markdown(
+    ui_markdown(
         """
         <div class="hero-card">
             <div class="hero-kicker">Travel planner • Expense tracker</div>
@@ -2779,7 +2790,7 @@ def main():
         st.success(flash_success)
 
     render_top_metrics(data_dict)
-    st.markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
+    ui_markdown("<div style='height: 14px'></div>", unsafe_allow_html=True)
 
     page_options = ["Dashboard", "เพิ่มข้อมูล", "ดูข้อมูลทั้งหมด", "จัดการข้อมูล"]
     requested_page = st.session_state.pop("requested_page", None)
@@ -2792,9 +2803,9 @@ def main():
     if requested_input_section:
         st.session_state["active_input_section"] = requested_input_section
 
-    st.markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
+    ui_markdown('<div class="subtle-shell page-switch">', unsafe_allow_html=True)
     page = st.radio("เมนู", page_options, horizontal=True, key="page_menu")
-    st.markdown('</div>', unsafe_allow_html=True)
+    ui_markdown('</div>', unsafe_allow_html=True)
     existing_trip_names = get_trip_names(data_dict)
 
     if page == "Dashboard":
@@ -2816,7 +2827,7 @@ def main():
             key="active_input_section"
         )
 
-        st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+        ui_markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
         if current_section == "📍 สถานที่":
             render_places_form(existing_trip_names)
