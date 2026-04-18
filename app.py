@@ -1085,6 +1085,239 @@ def inject_custom_css():
             .summary-grid, .detail-grid { grid-template-columns: 1fr; }
             .panel-card, .section-card, .form-shell { padding-left: 20px; padding-right: 20px; }
         }
+
+        @media (max-width: 768px) {
+            .main .block-container {
+                padding-top: 0.6rem !important;
+                padding-bottom: 2rem !important;
+                padding-left: 0.8rem !important;
+                padding-right: 0.8rem !important;
+            }
+
+            .hero-card {
+                border-radius: 28px !important;
+                padding: 22px 20px 20px 20px !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .hero-kicker {
+                font-size: 0.72rem !important;
+                padding: 7px 11px !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            .hero-title {
+                font-size: 2.15rem !important;
+                line-height: 1.02 !important;
+                letter-spacing: -0.04em !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem !important;
+                line-height: 1.7 !important;
+            }
+
+            .section-card,
+            .panel-card,
+            .form-shell,
+            .tm-metric,
+            .summary-card,
+            .detail-item,
+            .daily-card,
+            .timeline-card {
+                border-radius: 22px !important;
+            }
+
+            .section-card,
+            .panel-card,
+            .form-shell,
+            .subtle-shell {
+                padding: 18px 16px 16px 16px !important;
+                margin-bottom: 0.9rem !important;
+            }
+
+            .section-title {
+                font-size: 1.28rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .section-subtitle,
+            .panel-subtitle,
+            .shell-subtitle {
+                font-size: 0.9rem !important;
+                line-height: 1.55 !important;
+            }
+
+            .tm-metric {
+                min-height: auto !important;
+                padding: 18px 16px 16px 16px !important;
+                margin-bottom: 0.7rem !important;
+            }
+
+            .tm-metric-value {
+                font-size: 2.2rem !important;
+            }
+
+            .trip-cover {
+                border-radius: 24px !important;
+                padding: 18px 16px 16px 16px !important;
+                margin-bottom: 0.9rem !important;
+            }
+
+            .trip-cover-title {
+                font-size: 1.6rem !important;
+                line-height: 1.1 !important;
+            }
+
+            .trip-cover-subtitle {
+                font-size: 0.92rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            .trip-cover-meta {
+                gap: 8px !important;
+            }
+
+            .trip-meta-pill {
+                font-size: 0.76rem !important;
+                padding: 6px 10px !important;
+            }
+
+            .budget-shell {
+                padding: 15px 14px 14px 14px !important;
+                border-radius: 18px !important;
+            }
+
+            .budget-top {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 6px !important;
+            }
+
+            .summary-grid,
+            .insight-grid,
+            .quick-grid,
+            .detail-grid,
+            .daily-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .summary-card,
+            .insight-card,
+            .daily-card,
+            .detail-item {
+                padding: 16px 14px 14px 14px !important;
+            }
+
+            .summary-card-value,
+            .insight-value,
+            .daily-date {
+                font-size: 1.3rem !important;
+            }
+
+            .timeline-shell {
+                gap: 12px !important;
+            }
+
+            .timeline-row {
+                grid-template-columns: 34px minmax(0, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            .timeline-rail-dot {
+                width: 14px !important;
+                height: 14px !important;
+                margin-top: 10px !important;
+            }
+
+            .timeline-rail-line {
+                top: 24px !important;
+                bottom: -20px !important;
+            }
+
+            .timeline-card {
+                padding: 14px 14px 12px 14px !important;
+            }
+
+            .timeline-card-top {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+
+            .timeline-city {
+                font-size: 1rem !important;
+            }
+
+            .timeline-country,
+            .timeline-note {
+                font-size: 0.88rem !important;
+            }
+
+            .timeline-badge {
+                font-size: 0.75rem !important;
+                padding: 6px 10px !important;
+            }
+
+            .page-switch label {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+
+            div[data-testid="stHorizontalBlock"] {
+                flex-direction: column !important;
+                gap: 0.7rem !important;
+            }
+
+            div[data-testid="stHorizontalBlock"] > div {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+
+            .stTabs [data-baseweb="tab-list"] {
+                gap: 8px !important;
+                overflow-x: auto !important;
+                padding-bottom: 0.35rem !important;
+                scrollbar-width: none;
+            }
+
+            .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
+                display: none;
+            }
+
+            .stTabs [data-baseweb="tab"] {
+                height: 42px !important;
+                padding: 0 14px !important;
+                font-size: 0.88rem !important;
+                flex: 0 0 auto !important;
+            }
+
+            .stButton > button,
+            .stDownloadButton > button,
+            .stFormSubmitButton > button {
+                min-height: 44px !important;
+                font-size: 0.95rem !important;
+            }
+
+            .chart-shell {
+                min-height: 260px !important;
+                border-radius: 20px !important;
+                padding: 8px !important;
+            }
+
+            .emoji-section-title {
+                margin-bottom: 0.65rem !important;
+            }
+
+            .emoji-section-title img {
+                width: 20px !important;
+                height: 20px !important;
+            }
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
@@ -1725,7 +1958,6 @@ def render_timeline(timeline_df: pd.DataFrame):
         st.info("ยังไม่มี timeline ของทริปนี้")
         return
 
-    rows_html = ['<div class="timeline-shell">']
     rows = timeline_df.to_dict("records")
     for i, row in enumerate(rows):
         dt = row.get("datetime")
@@ -1736,30 +1968,30 @@ def render_timeline(timeline_df: pd.DataFrame):
 
         city = str(row.get("เมือง", "")).strip() or "-"
         country = str(row.get("ประเทศ", "")).strip() or "-"
-        last_class = " is-last" if i == len(rows) - 1 else ""
-        delay = i * 110
 
-        rows_html.append(
-            f"""
-            <div class="timeline-row" style="animation-delay:{delay}ms;">
+        st.markdown('<div class="timeline-row" style="animation-delay:{}ms;">'.format(i * 110), unsafe_allow_html=True)
+        rail_col, card_col = st.columns([0.08, 0.92], gap="small")
+        with rail_col:
+            line_class = "timeline-rail-line is-last" if i == len(rows) - 1 else "timeline-rail-line"
+            st.markdown(
+                f"""
                 <div class="timeline-rail">
                     <div class="timeline-rail-dot"></div>
-                    <div class="timeline-rail-line{last_class}"></div>
+                    <div class="{line_class}"></div>
                 </div>
-                <div class="timeline-card">
-                    <div class="timeline-card-top">
-                        <div>
-                            <div class="timeline-city">{city}</div>
-                            <div class="timeline-country">{country}</div>
-                        </div>
-                        <div class="timeline-badge">🕒 {dt_text}</div>
-                    </div>
-                </div>
-            </div>
-            """
-        )
-    rows_html.append("</div>")
-    st.markdown("".join(rows_html), unsafe_allow_html=True)
+                """,
+                unsafe_allow_html=True,
+            )
+        with card_col:
+            st.markdown('<div class="timeline-card">', unsafe_allow_html=True)
+            top_left, top_right = st.columns([0.7, 0.3], gap="small")
+            with top_left:
+                st.markdown(f'<div class="timeline-city">{city}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="timeline-country">{country}</div>', unsafe_allow_html=True)
+            with top_right:
+                st.markdown(f'<div class="timeline-badge">🕒 {dt_text}</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_quick_add():
@@ -1917,32 +2149,21 @@ def render_daily_summary(daily_df: pd.DataFrame):
         st.info("ยังไม่มีข้อมูลเพียงพอสำหรับมุมมองรายวัน")
         return
 
-    cards = ['<div class="daily-shell">']
     for _, row in daily_df.iterrows():
         day = row["date"].strftime("%d %b %Y") if pd.notna(row["date"]) else "ไม่ทราบวันที่"
-        cards.append(
-            f"""
-            <div class="daily-card">
-                <div class="daily-date">{day}</div>
-                <div class="daily-grid">
-                    <div class="daily-stat">
-                        <div class="daily-stat-label">จำนวนกิจกรรม</div>
-                        <div class="daily-stat-value">{int(row["จำนวนกิจกรรม"])} รายการ</div>
-                    </div>
-                    <div class="daily-stat">
-                        <div class="daily-stat-label">ค่าใช้จ่ายรวม</div>
-                        <div class="daily-stat-value">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div>
-                    </div>
-                    <div class="daily-stat">
-                        <div class="daily-stat-label">รายการเด่น</div>
-                        <div class="daily-stat-value">{row["รายการ"] or "-"}</div>
-                    </div>
-                </div>
-            </div>
-            """
-        )
-    cards.append("</div>")
-    st.markdown("".join(cards), unsafe_allow_html=True)
+        st.markdown('<div class="daily-card">', unsafe_allow_html=True)
+        st.markdown(f'<div class="daily-date">{day}</div>', unsafe_allow_html=True)
+        c1, c2, c3 = st.columns(3, gap="large")
+        with c1:
+            st.markdown('<div class="daily-stat-label">จำนวนกิจกรรม</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="daily-stat-value">{int(row["จำนวนกิจกรรม"])} รายการ</div>', unsafe_allow_html=True)
+        with c2:
+            st.markdown('<div class="daily-stat-label">ค่าใช้จ่ายรวม</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="daily-stat-value">฿ {float(row["ค่าใช้จ่ายรวม"]):,.2f}</div>', unsafe_allow_html=True)
+        with c3:
+            st.markdown('<div class="daily-stat-label">รายการเด่น</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="daily-stat-value">{row["รายการ"] or "-"}</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 def build_trip_comparison(data_dict: dict) -> pd.DataFrame:
