@@ -11,14 +11,17 @@ from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
+_st_markdown = st.markdown
+_st_sidebar_markdown = st.sidebar.markdown
+
 def ui_markdown(*args, **kwargs):
     kwargs.setdefault("unsafe_allow_html", True)
-    return ui_markdown(*args, **kwargs)
+    return _st_markdown(*args, **kwargs)
 
 
 def ui_sidebar_markdown(*args, **kwargs):
     kwargs.setdefault("unsafe_allow_html", True)
-    return ui_sidebar_markdown(*args, **kwargs)
+    return _st_sidebar_markdown(*args, **kwargs)
 
 
 st.set_page_config(page_title="🌍 Travel Memory Dashboard", layout="wide")
